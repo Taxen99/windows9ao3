@@ -1,0 +1,150 @@
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.window {
+	border: 2px inset black;
+	width: 500px;
+	height: 400px;
+	position: relative;
+	left: 0px;
+	top: 0px;
+}
+
+/* .window:has(.thing1:target) {
+	transform: translate(100px, 50px);
+} */
+
+.window span {
+	border: 1px solid black;
+}
+
+.window {
+	--anim-speed: 0.3s;
+}
+
+/* Q UP LEFT */
+.window:has(.mover:active .mover-hand-Q:hover) {
+	transition: left var(--anim-speed) linear, top var(--anim-speed) linear;
+	top: 0.001px;
+	left: 0.001px;
+}
+/* W UP */
+.window:has(.mover:active .mover-hand-W:hover) {
+	transition: top var(--anim-speed) linear, left 10s linear 2147483640s;
+	top: 0.001px;
+}
+/* E UP RIGHT */
+.window:has(.mover:active .mover-hand-E:hover) {
+	transition: left var(--anim-speed) linear, top var(--anim-speed) linear;
+	top: 0.001px;
+	left: 500px;
+}
+/* A LEFT */
+.window:has(.mover:active .mover-hand-A:hover) {
+	transition: left var(--anim-speed) linear, top 10s linear 2147483640s;
+	left: 0.001px;
+}
+/* D RIGHT */
+.window:has(.mover:active .mover-hand-D:hover) {
+	transition: left var(--anim-speed) linear, top 10s linear 2147483640s;
+	left: 500px;
+}
+/* Z DOWN LEFT */
+.window:has(.mover:active .mover-hand-Z:hover) {
+	transition: top var(--anim-speed) linear, left var(--anim-speed) linear;
+	top: 500px;
+	left: 0.001px;
+}
+/* X DOWN */
+.window:has(.mover:active .mover-hand-X:hover) {
+	transition: top var(--anim-speed) linear, left 10s linear 2147483640s;
+	top: 500px;
+}
+/* C DOWN RIGHT */
+.window:has(.mover:active .mover-hand-C:hover) {
+	transition: top var(--anim-speed) linear, left var(--anim-speed) linear;
+	top: 500px;
+	left: 500px;
+}
+
+.window {
+	transition: left 10s linear 2147483640s, top 10s linear 2147483640s;
+	display: flex;
+	flex-direction: column;
+}
+
+.window-titlebar {
+	border-bottom: 3px double black;
+	background-color: aquamarine;
+	display: flex;
+}
+
+.window-name {
+	background-color: beige;
+	display: flex;
+	align-items: center;
+}
+
+.window-name > p {
+	/* font-size: 19px; */
+	text-decoration: underline;
+}
+
+.window-content {
+	background-color: aqua;
+	width: 100%;
+	height: auto;
+	flex-grow: 1;
+}
+
+.mover {
+	width:  30px;
+	height: 30px;
+	/* border: 1px solid blue; */
+	position: relative;
+	display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start;
+	border-right: 1px solid black;
+}
+
+.mover-hand {
+	margin: 0;
+	padding: 0;
+	width:  10px;
+	height: 10px;
+	/* border: 1px solid red; */
+	/* position: absolute; */
+}
+
+.mover-hand-S {
+	z-index: -100;
+	background: red;
+}
+
+@media FUCKOFF {.mover-hand-left {
+	height: 90px;
+	/* top: 50%; */
+	left: 0;
+	/* transform: translateY(-50%); */
+}
+.mover-hand-right {
+	height: 90px;
+	/* top: 50%; */
+	right: 0;
+	/* transform: translateY(-50%); */
+}
+.mover-hand-up {
+	width: 90px;
+	top: 0;
+	/* left: 50%;
+	transform: translateX(-50%); */
+}
+.mover-hand-down {
+	width: 90px;
+	bottom: 0;
+	/* left: 50%;
+	transform: translateX(-50%); */
+}}
