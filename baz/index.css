@@ -3,14 +3,20 @@
 	padding: 0;
 }
 
-.window {
-	border: 2px inset black;
-	width: 500px;
-	height: 400px;
+.main {
 	position: relative;
-	left: 0px;
-	top: 0px;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	user-select: none;
+	font-family: sans-serif;
+	/* font-family: Arial, Helvetica, sans-serif; */
+	/* filter: url("filter.svg#vignette"); */
 }
+
+/*
+WINDOWS!!!
+*/
 
 /* .window:has(.thing1:target) {
 	transform: translate(100px, 50px);
@@ -21,102 +27,151 @@
 }
 
 .window {
-	--anim-speed: 0.3s;
+	--anim-speed-to: 0.5s;
+	--anim-speed-away: 3.0s;
+	--anim-max: 4000px;
 }
 
+/* @media FUCKOFF { */
+@media all {
 /* Q UP LEFT */
 .window:has(.mover:active .mover-hand-Q:hover) {
-	transition: left var(--anim-speed) linear, top var(--anim-speed) linear;
+	transition: left var(--anim-speed-to) linear, top var(--anim-speed-to) linear;
 	top: 0.001px;
 	left: 0.001px;
 }
 /* W UP */
 .window:has(.mover:active .mover-hand-W:hover) {
-	transition: top var(--anim-speed) linear, left 10s linear 2147483640s;
+	transition: top var(--anim-speed-to) linear, left 10s linear 2147483640s;
 	top: 0.001px;
 }
 /* E UP RIGHT */
 .window:has(.mover:active .mover-hand-E:hover) {
-	transition: left var(--anim-speed) linear, top var(--anim-speed) linear;
+	transition: left var(--anim-speed-away) linear, top var(--anim-speed-to) linear;
 	top: 0.001px;
-	left: 500px;
+	left: var(--anim-max);
 }
 /* A LEFT */
 .window:has(.mover:active .mover-hand-A:hover) {
-	transition: left var(--anim-speed) linear, top 10s linear 2147483640s;
+	transition: left var(--anim-speed-to) linear, top 10s linear 2147483640s;
 	left: 0.001px;
 }
 /* D RIGHT */
 .window:has(.mover:active .mover-hand-D:hover) {
-	transition: left var(--anim-speed) linear, top 10s linear 2147483640s;
-	left: 500px;
+	transition: left var(--anim-speed-away) linear, top 10s linear 2147483640s;
+	left: var(--anim-max);
 }
 /* Z DOWN LEFT */
 .window:has(.mover:active .mover-hand-Z:hover) {
-	transition: top var(--anim-speed) linear, left var(--anim-speed) linear;
-	top: 500px;
+	transition: top var(--anim-speed-away) linear, left var(--anim-speed-to) linear;
+	top: var(--anim-max);
 	left: 0.001px;
 }
 /* X DOWN */
 .window:has(.mover:active .mover-hand-X:hover) {
-	transition: top var(--anim-speed) linear, left 10s linear 2147483640s;
-	top: 500px;
+	transition: top var(--anim-speed-away) linear, left 10s linear 2147483640s;
+	top: var(--anim-max);
 }
 /* C DOWN RIGHT */
 .window:has(.mover:active .mover-hand-C:hover) {
-	transition: top var(--anim-speed) linear, left var(--anim-speed) linear;
-	top: 500px;
-	left: 500px;
+	transition: top var(--anim-speed-away) linear, left var(--anim-speed-away) linear;
+	top: var(--anim-max);
+	left: var(--anim-max);
+}
 }
 
 .window {
 	transition: left 10s linear 2147483640s, top 10s linear 2147483640s;
 	display: flex;
 	flex-direction: column;
+	/* border: 5px ridge whitesmoke; */
+	width: 500px;
+	height: 400px;
+	position: relative;
+	left: 0px;
+	top: 0px;
+	border: 3px ridge;
+	--win-border-c1: rgb(249, 249, 249);
+	--win-border-c2: rgb(153, 153, 153);
+	border-color: var(--win-border-c1) var(--win-border-c2) var(--win-border-c2) var(--win-border-c1);
 }
 
 .window-titlebar {
-	border-bottom: 3px double black;
-	background-color: aquamarine;
+	border-bottom: 1px solid gray;
+	background: linear-gradient(to right, rgb(126, 126, 126), rgb(187, 187, 187));
 	display: flex;
-}
-
-.window-name {
-	background-color: beige;
-	display: flex;
+	column-gap: 3px;
 	align-items: center;
 }
 
-.window-name > p {
-	/* font-size: 19px; */
-	text-decoration: underline;
+.window-name {
+	display: flex;
+	align-items: center;
+	color: white;
+	/* font-family: 'Courier New', Courier, monospace; */
+	font-weight: 200;
+	font-size: 14.5px;
+	padding-bottom: 0px;
 }
 
+.window-exiter {
+	margin-left: auto;
+	margin-right: 3px;
+	width: 18px;
+	height: 15px;
+	border: 3px outset;
+	--border-c1: rgb(249, 249, 249);
+	--border-c2: rgb(170, 170, 170);
+	border-color: var(--border-c1) var(--border-c2) var(--border-c2) var(--border-c1);
+	font-stretch: ultra-expanded;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: rgb(47, 47, 47);
+}
+.window-exiter:active {
+	border-style: inset;
+	border-color: var(--border-c2) var(--border-c1) var(--border-c1) var(--border-c2);
+}
+/* .window-exiter > p {
+	text-align: center;
+} */
+
 .window-content {
-	background-color: aqua;
+	background-color: #c6c6c6;
 	width: 100%;
 	height: auto;
 	flex-grow: 1;
 }
 
+.content-inner {
+	padding: 3px;
+}
+
 .mover {
-	width:  30px;
-	height: 30px;
+	--width: 25px;
+	--width3: calc(var(--width) / 3);
+
+	width:  var(--width);
+	height: var(--width);
 	/* border: 1px solid blue; */
 	position: relative;
-	display: flex;
+	/* display: flex;
 	flex-wrap: wrap;
-	align-content: flex-start;
-	border-right: 1px solid black;
+	align-content: flex-start; */
+	/* border-right: 1px solid black; */
+	background: url("https://win98icons.alexmeub.com/icons/png/computer_gear.png");
+	background-size: cover;
 }
 
 .mover-hand {
 	margin: 0;
 	padding: 0;
-	width:  10px;
-	height: 10px;
-	/* border: 1px solid red; */
-	/* position: absolute; */
+	position: absolute;
+	width: 1000px;
+	height: 1000px;
+	background: teal;
+	display: none;
 }
 
 .mover-hand-S {
@@ -124,27 +179,162 @@
 	background: red;
 }
 
-@media FUCKOFF {.mover-hand-left {
-	height: 90px;
-	/* top: 50%; */
-	left: 0;
-	/* transform: translateY(-50%); */
+.mover-hand {
+	background: plum;
+	z-index: 9999;
+	opacity: 0;
 }
-.mover-hand-right {
-	height: 90px;
-	/* top: 50%; */
-	right: 0;
-	/* transform: translateY(-50%); */
+
+.mover:active .mover-hand {
+	display: unset;
 }
-.mover-hand-up {
-	width: 90px;
+
+/* .mover-hand:not(.mover-hand-C) {
+	opacity: 0;
+} */
+
+/*FIXME: REMOVE!!!*/
+/* .window {
+	left: 200px !important;
+	top:  200px !important;
+} */
+
+/* Q UP LEFT */
+/* .mover-hand-Q, .mover-hand-E, .mover-hand-Z, .mover-hand-C {
+	width: 100px;
+	height: 100px;
+} */
+
+.mover-hand-W, .mover-hand-X {
+	width: var(--width3);
+}
+.mover-hand-A, .mover-hand-D {
+	height: var(--width3);
+}
+
+.mover-hand-Q, .mover-hand-W, .mover-hand-E {
+	bottom: 66%;
+}
+.mover-hand-A, .mover-hand-D {
+	bottom: 33%;
+}
+.mover-hand-Z, .mover-hand-X, .mover-hand-C {
+	top: 66%;
+}
+
+.mover-hand-Q, .mover-hand-A, .mover-hand-Z {
+	right: 66%;
+}
+.mover-hand-W, .mover-hand-X {
+	right: 33%;
+}
+.mover-hand-E, .mover-hand-D, .mover-hand-C {
+	left: 66%;
+}
+
+/*
+desktop!!!
+*/
+
+.desktop {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	/* TODO: remove? */
+	background: radial-gradient(#008080, #006060 90%);
+	/* background: #008080; */
+}
+
+.desktop-item {
+	/* border: 1px dotted black; */
+	width: 50px;
+	height: 60px;
+	display: flex;
+	/* justify-content: center; */
+	align-items: center;
+	/* flex-wrap: wrap; */
+	flex-direction: column;
+	padding: 2px;
+}
+
+.desktop-item:active .desktop-icon-name {
+	background-color: blue;
+}
+
+.desktop-icon {
+	margin: 0;
+	margin-top: 4px;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	display: block;
+	background: url("https://win98icons.alexmeub.com/icons/png/computer_gear.png");
+}
+
+.desktop-icon-name {
+	font-size: 10px;
+	font-weight: 100;
+	color: white;
+	text-align: center;
+	background-color: blue;
+}
+
+/*
+TINTS!!
+TODO: currently not used, remove?
+*/
+
+.screen-tints {
+	width: 0;
+	height: 0;
+	--l1: 1000000px;
+	/* --l1: 100px; */
+	--l2: 200px;
+	--c: #00000013;
+	display: none;
+}
+
+.screen-tint-A {
+	position: absolute;
 	top: 0;
-	/* left: 50%;
-	transform: translateX(-50%); */
+	left: 0;
+	width: 0;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
 }
-.mover-hand-down {
-	width: 90px;
+.screen-tint-B {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
+.screen-tint-C {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 0;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
+.screen-tint-D {
+	position: absolute;
 	bottom: 0;
-	/* left: 50%;
-	transform: translateX(-50%); */
-}}
+	left: 0;
+	width: 100vw;
+	height: 0;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}

@@ -1,2 +1,6 @@
 /target
 foo.*
+.DS_Store
+baz/windows98-icons
+*.zip
+testeeeee
