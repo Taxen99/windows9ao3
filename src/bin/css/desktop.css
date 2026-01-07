@@ -1,0 +1,164 @@
+/*
+desktop!!!
+*/
+
+.desktop {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	/* TODO: remove? */
+	background: radial-gradient(#008080, #006060 90%);
+	/* background: #008080; */
+}
+
+.desktop-item {
+	/* border: 1px dotted black; */
+	width: 50px;
+	height: 60px;
+	display: flex;
+	/* justify-content: center; */
+	align-items: center;
+	/* flex-wrap: wrap; */
+	flex-direction: column;
+	padding: 2px;
+	position: absolute;
+	overflow: hidden;
+}
+
+/* .desktop-item:active .desktop-icon-name {
+	background-color: rgb(55, 55, 255);
+	border: 0.5px dotted white;
+}
+.desktop-item:active .desktop-icon {
+	filter: sepia(1) saturate(500%) hue-rotate(190deg) brightness(90%) drop-shadow(0.2px 0.2px 0 #0000ff) drop-shadow(-0.2px -0.2px 0 #0000ff) drop-shadow(0.2px -0.2px 0 #0000ff) drop-shadow(-0.2px 0.2px 0 #0000ff);
+} */
+
+.desktop-item-double-clicker {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	/* background-color: #ff000099; */
+	transition: top 0s linear 0.3s;
+}
+
+.desktop-item:active .desktop-item-double-clicker:not(:active) {
+	top: 0;
+	transition: top 0s linear;
+}
+
+.desktop-item-double-clicker:active {
+	top: 101%;
+	transition: top 0s linear;
+	/* background-color: green; */
+}
+
+.desktop-item-animator {
+	position: absolute;
+	/* display: none; */
+	cursor: progress;
+	top: 300%;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	/* background-color: #ff000099; */
+	z-index: 9999999;
+	/* TODO: look at all the z-indixes. this one should be the highest probably, since its a temp overlay over the whole screen*/
+	transition: top 0.1s linear 0.3s;
+}
+
+.desktop-item-animator-helper {
+	position: absolute;
+	bottom: 100%;
+	left: 0;
+	/* z-index: 9999999; */
+	width: 100%;
+	height: 100%;
+	/* background-color: #26ff0099; */
+}
+
+.desktop-item:has(.desktop-item-double-clicker:active)+.desktop-item-animator {
+	transition: top 0s linear;
+	top: 0%;
+}
+
+.desktop-icon {
+	margin: 0;
+	margin-top: 4px;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	display: block;
+}
+
+.desktop-icon-name {
+	font-size: 10px;
+	font-weight: 100;
+	color: white;
+	text-align: center;
+	border: 0.5px dotted #00000000;
+}
+
+/*
+TINTS!!
+TODO: currently not used, remove?
+*/
+
+.screen-tints {
+	width: 0;
+	height: 0;
+	--l1: 1000000px;
+	/* --l1: 100px; */
+	--l2: 200px;
+	--c: #00000013;
+	display: none;
+}
+
+.screen-tint-A {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
+
+.screen-tint-B {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
+
+.screen-tint-C {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 0;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
+
+.screen-tint-D {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100vw;
+	height: 0;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
