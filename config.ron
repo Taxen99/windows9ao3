@@ -37,6 +37,9 @@ Config (
                             link: "Internet Explorer",
                             offset: Some((3, 3))
                         )),
+                        "My Pictures": Folder ((
+                            content: {}
+                        ))
                     },
                 )),
             }

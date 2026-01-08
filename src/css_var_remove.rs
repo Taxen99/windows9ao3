@@ -16,7 +16,7 @@ pub fn css_var_remove(css_file: &str) -> String {
         let name = name.trim();
         let value = value.trim();
         if vars.insert(name, value).is_some() {
-            panic!("duplicate var name");
+            panic!("duplicate var name {name}");
         }
     }
     let mut modified_css_file = css_file.to_owned();

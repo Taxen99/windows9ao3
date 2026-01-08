@@ -1,2 +1,3 @@
 - [ ] window close animation
 - [ ] window content proper
+- [ ] blue title bar for focus

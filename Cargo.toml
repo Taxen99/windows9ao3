@@ -7,3 +7,4 @@ edition = "2024"
 ron = "0.12.0"
 serde = { version = "1.0.228", features = ["serde_derive"] }
 toml = "0.9.10"
+enum-as-inner = "0.6.1"

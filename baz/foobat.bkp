@@ -1,0 +1,833 @@
+
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Document</title>
+                <link rel="stylesheet" href="style.css">
+                <!-- <link rel="stylesheet" href="foo.css"> -->
+            </head>
+            <body>
+                <div class="main"><div class="desktop">
+                                <div class="desktop-item desktop-item-18073141479183332128">
+                                    <div class="desktop-icon"></div>
+                                    <p class="desktop-icon-name">My Computer</p>
+                                    <div class="desktop-item-double-clicker"></div>
+                                </div>
+                                <div class="desktop-item-animator">
+                                    <div class="desktop-item-animator-helper"></div>
+                                </div>
+                                
+                                <div class="desktop-item desktop-item-6824116271661900671">
+                                    <div class="desktop-icon"></div>
+                                    <p class="desktop-icon-name">Internet ExplorerÖ</p>
+                                    <div class="desktop-item-double-clicker"></div>
+                                </div>
+                                <div class="desktop-item-animator">
+                                    <div class="desktop-item-animator-helper"></div>
+                                </div>
+                                
+                                <div class="desktop-item desktop-item-3077155343494820994">
+                                    <div class="desktop-icon"></div>
+                                    <p class="desktop-icon-name">My Pictures</p>
+                                    <div class="desktop-item-double-clicker"></div>
+                                </div>
+                                <div class="desktop-item-animator">
+                                    <div class="desktop-item-animator-helper"></div>
+                                </div>
+                                </div>
+                            <div class="window window-12658790935562795924">
+                                <div class="window-titlebar">
+                                    <div class="mover">
+                                        <div class="mover-hand mover-hand-Q mover-hand-up mover-hand-left "></div>
+                                        <div class="mover-hand mover-hand-W mover-hand-up "></div>
+                                        <div class="mover-hand mover-hand-E mover-hand-up mover-hand-right "></div>
+                                        <div class="mover-hand mover-hand-A mover-hand-left "></div>
+                                        <div class="mover-hand mover-hand-D mover-hand-right "></div>
+                                        <div class="mover-hand mover-hand-Z mover-hand-down mover-hand-left "></div>
+                                        <div class="mover-hand mover-hand-X mover-hand-down  "></div>
+                                        <div class="mover-hand mover-hand-C mover-hand-down mover-hand-right "></div>
+                                    </div>
+                                    <div class="window-name">
+                                        <p>Internet Explorer</p>
+                                    </div>
+                                    <div class="window-exiter"><p>X</p></div>
+                                </div>
+                                <div class="window-content">
+                                    <div class="content-inner">
+                                        <p>Internet Exploruvu!!!</p>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="window window-18073141479183332128">
+                                <div class="window-titlebar">
+                                    <div class="mover">
+                                        <div class="mover-hand mover-hand-Q mover-hand-up mover-hand-left "></div>
+                                        <div class="mover-hand mover-hand-W mover-hand-up "></div>
+                                        <div class="mover-hand mover-hand-E mover-hand-up mover-hand-right "></div>
+                                        <div class="mover-hand mover-hand-A mover-hand-left "></div>
+                                        <div class="mover-hand mover-hand-D mover-hand-right "></div>
+                                        <div class="mover-hand mover-hand-Z mover-hand-down mover-hand-left "></div>
+                                        <div class="mover-hand mover-hand-X mover-hand-down  "></div>
+                                        <div class="mover-hand mover-hand-C mover-hand-down mover-hand-right "></div>
+                                    </div>
+                                    <div class="window-name">
+                                        <p>My Computer</p>
+                                    </div>
+                                    <div class="window-exiter"><p>X</p></div>
+                                </div>
+                                <div class="window-content">
+                                    <!-- <div class="content-inner"> -->
+                                        <div class="window-header">
+                                            <div class="topbar menubar border-style-light-1">
+                                                <div class="menubar-item">
+                                                    File
+                                                </div>
+                                                <div class="menubar-item">Edit</div>
+                                                <div class="menubar-item">View</div>
+                                                <div class="menubar-item">Go</div>
+                                                <div class="menubar-item">Favorites</div>
+                                                <div class="menubar-item">Help</div>
+                                            </div>
+                                            <div class="topbar fe-address-bar border-style-light-1">
+                                                <p>Address</p>
+                                                <p class="border-style-dark-1">My Computer</p>
+                                            </div>
+                                        </div>
+                                        <div class="window-main">
+                                            <div class="fe-main">
+                                                <div class="fe-sideview border-style-light-1">
+                                                    <div class="fe-sideview-header">
+                                                        <p>All Folders</p>
+                                                    </div>
+                                                    <div class="fe-sideview-view">
+                                                        <div class="fe-svv-child">
+                                                            <div class="fe-svv-item">
+                                                                <div class="fe-svvi-group">
+                                                                    <div class="fe-svvi-expander"></div>
+                                                                    <div class="fe-svvi-line"></div>
+                                                                    <div class="fe-svvi-icon"></div>
+                                                                    <p>Foo</p>
+                                                                </div>
+                                                                <div class="fe-svv-child">
+                                                                    <div class="fe-svv-item">
+                                                                        <div class="fe-svvi-group">
+                                                                            <div class="fe-svvi-expander"></div>
+                                                                            <div class="fe-svvi-line"></div>
+                                                                            <div class="fe-svvi-icon"></div>
+                                                                            <p>QuxxxxxxxxxxxxxxxxZ</p>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="fe-svv-item">
+                                                                <div class="fe-svvi-group">
+                                                                    <div class="fe-svvi-expander"></div>
+                                                                    <div class="fe-svvi-line"></div>
+                                                                    <div class="fe-svvi-icon"></div>
+                                                                    <p>Bar</p>
+                                                                </div>
+                                                            </div>
+                                                            <div class="fe-svv-item">
+                                                                <div class="fe-svvi-group">
+                                                                    <div class="fe-svvi-expander"></div>
+                                                                    <div class="fe-svvi-line"></div>
+                                                                    <div class="fe-svvi-icon"></div>
+                                                                    <p>Baz</p>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="fe-view border-style-dark-1">
+                                                    <div class="desktop-item desktop-item-18073141479183332128">
+                                                        <div class="desktop-icon"></div>
+                                                        <p class="desktop-icon-name">My Computer</p>
+                                                        <div class="desktop-item-double-clicker"></div>
+                                                    </div>
+                                                    <div class="desktop-item-animator">
+                                                        <div class="desktop-item-animator-helper"></div>
+                                                    </div>
+                                                    
+                                                    <div class="desktop-item desktop-item-6824116271661900671">
+                                                        <div class="desktop-icon"></div>
+                                                        <p class="desktop-icon-name">Internet ExplorerÖ</p>
+                                                        <div class="desktop-item-double-clicker"></div>
+                                                    </div>
+                                                    <div class="desktop-item-animator">
+                                                        <div class="desktop-item-animator-helper"></div>
+                                                    </div>
+                                                    
+                                                    <div class="desktop-item desktop-item-3077155343494820994">
+                                                        <div class="desktop-icon"></div>
+                                                        <p class="desktop-icon-name">My Pictures</p>
+                                                        <div class="desktop-item-double-clicker"></div>
+                                                    </div>
+                                                    <div class="desktop-item-animator">
+                                                        <div class="desktop-item-animator-helper"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <!-- </div> -->
+                                </div>
+                            </div>
+                            </div>
+            </body>
+            </html>
+            
+
+			/*
+desktop!!!
+*/
+
+.desktop {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	/* TODO: remove? */
+	background: radial-gradient(#008080, #006060 90%);
+	/* background: #008080; */
+}
+
+.desktop-item {
+	/* border: 1px dotted black; */
+	width: 50px;
+	height: 60px;
+	display: flex;
+	/* justify-content: center; */
+	align-items: center;
+	/* flex-wrap: wrap; */
+	flex-direction: column;
+	padding: 2px;
+	position: absolute;
+	overflow: hidden;
+}
+
+/* .desktop-item:active .desktop-icon-name {
+	background-color: rgb(55, 55, 255);
+	border: 0.5px dotted white;
+}
+.desktop-item:active .desktop-icon {
+	filter: sepia(1) saturate(500%) hue-rotate(190deg) brightness(90%) drop-shadow(0.2px 0.2px 0 #0000ff) drop-shadow(-0.2px -0.2px 0 #0000ff) drop-shadow(0.2px -0.2px 0 #0000ff) drop-shadow(-0.2px 0.2px 0 #0000ff);
+} */
+
+.desktop-item-double-clicker {
+	position: absolute;
+	top: 100%;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	/* background-color: #ff000099; */
+	transition: top 0s linear 0.3s;
+}
+
+.desktop-item:active .desktop-item-double-clicker:not(:active) {
+	top: 0;
+	transition: top 0s linear;
+}
+
+.desktop-item-double-clicker:active {
+	top: 101%;
+	transition: top 0s linear;
+	/* background-color: green; */
+}
+
+.desktop-item-animator {
+	position: absolute;
+	/* display: none; */
+	cursor: progress;
+	top: 300%;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	/* background-color: #ff000099; */
+	z-index: 9999999;
+	/* TODO: look at all the z-indixes. this one should be the highest probably, since its a temp overlay over the whole screen*/
+	transition: top 0.1s linear 0.3s;
+}
+
+.desktop-item-animator-helper {
+	position: absolute;
+	bottom: 100%;
+	left: 0;
+	/* z-index: 9999999; */
+	width: 100%;
+	height: 100%;
+	/* background-color: #26ff0099; */
+}
+
+.desktop-item:has(.desktop-item-double-clicker:active)+.desktop-item-animator {
+	transition: top 0s linear;
+	top: 0%;
+}
+
+.desktop-icon {
+	margin: 0;
+	margin-top: 4px;
+	width: 32px;
+	height: 32px;
+	padding: 0;
+	display: block;
+}
+
+.desktop-icon-name {
+	font-size: 10px;
+	font-weight: 100;
+	color: white;
+	text-align: center;
+	border: 0.5px dotted #00000000;
+}
+
+/*
+TINTS!!
+TODO: currently not used, remove?
+*/
+
+.screen-tints {
+	width: 0;
+	height: 0;
+	--l1: 1000000px;
+	/* --l1: 100px; */
+	--l2: 200px;
+	--c: #00000013;
+	display: none;
+}
+
+.screen-tint-A {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 0;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
+
+.screen-tint-B {
+	position: absolute;
+	top: 0;
+	right: 0;
+	width: 0;
+	height: 100vh;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
+
+.screen-tint-C {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 0;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
+
+.screen-tint-D {
+	position: absolute;
+	bottom: 0;
+	left: 0;
+	width: 100vw;
+	height: 0;
+	padding: 0;
+	margin: 0;
+	box-shadow: 0 0 var(--l1) var(--l2) var(--c);
+	z-index: 999;
+}
+* {
+	margin: 0;
+	padding: 0;
+}
+
+.main {
+	position: relative;
+	width: 100vw;
+	height: 100vh;
+	overflow: hidden;
+	user-select: none;
+	font: medium sans-serif;
+	/* font-family: Arial, Helvetica, sans-serif; */
+	/* filter: url("filter.svg#vignette"); */
+}
+/*
+WINDOWS!!!
+*/
+
+/* .window:has(.thing1:target) {
+	transform: translate(100px, 50px);
+} */
+
+.window span {
+	border: 1px solid black;
+}
+
+.window {
+	--anim-speed-to: 0.5s;
+	--anim-speed-away: 3.0s;
+	--anim-max: 4000px;
+	--anim-min: 0.001px;
+}
+
+/* Q UP LEFT */
+.window:has(.mover:active .mover-hand-Q:hover) {
+	transition: left var(--anim-speed-to) linear, top var(--anim-speed-to) linear;
+	top: var(--anim-min);
+	left: var(--anim-min);
+}
+/* W UP */
+.window:has(.mover:active .mover-hand-W:hover) {
+	transition: top var(--anim-speed-to) linear, left 10s linear 2147483640s;
+	top: var(--anim-min);
+}
+/* E UP RIGHT */
+.window:has(.mover:active .mover-hand-E:hover) {
+	transition: left var(--anim-speed-away) linear, top var(--anim-speed-to) linear;
+	top: var(--anim-min);
+	left: var(--anim-max);
+}
+/* A LEFT */
+.window:has(.mover:active .mover-hand-A:hover) {
+	transition: left var(--anim-speed-to) linear, top 10s linear 2147483640s;
+	left: var(--anim-min);
+}
+/* D RIGHT */
+.window:has(.mover:active .mover-hand-D:hover) {
+	transition: left var(--anim-speed-away) linear, top 10s linear 2147483640s;
+	left: var(--anim-max);
+}
+/* Z DOWN LEFT */
+.window:has(.mover:active .mover-hand-Z:hover) {
+	transition: top var(--anim-speed-away) linear, left var(--anim-speed-to) linear;
+	top: var(--anim-max);
+	left: var(--anim-min);
+}
+/* X DOWN */
+.window:has(.mover:active .mover-hand-X:hover) {
+	transition: top var(--anim-speed-away) linear, left 10s linear 2147483640s;
+	top: var(--anim-max);
+}
+/* C DOWN RIGHT */
+.window:has(.mover:active .mover-hand-C:hover) {
+	transition: top var(--anim-speed-away) linear, left var(--anim-speed-away) linear;
+	top: var(--anim-max);
+	left: var(--anim-max);
+}
+
+.window {
+	transition: left 10s linear 2147483640s, top 10s linear 2147483640s;
+	/* transition-behavior: allow-discrete; */
+	display: flex;
+	flex-direction: column;
+	/* border: 5px ridge whitesmoke; */
+	width: 500px;
+	height: 400px;
+	position: absolute;
+	left: -2000px;
+	/* left: 0px; */
+	top: 0px;
+}
+
+.window-titlebar {
+	border-bottom: 1px solid gray;
+	background: linear-gradient(to right, rgb(126, 126, 126), rgb(187, 187, 187));
+	display: flex;
+	column-gap: 3px;
+	align-items: center;
+}
+
+.window-name {
+	display: flex;
+	align-items: center;
+	color: white;
+	/* font-family: 'Courier New', Courier, monospace; */
+	font-weight: 200;
+	font-size: 14.5px;
+	padding-bottom: 0px;
+}
+
+.window-exiter {
+	margin-left: auto;
+	margin-right: 3px;
+	width: 18px;
+	height: 15px;
+	border: 3px outset;
+	--border-c1: rgb(249, 249, 249);
+	--border-c2: rgb(170, 170, 170);
+	border-color: var(--border-c1) var(--border-c2) var(--border-c2) var(--border-c1);
+	font-stretch: ultra-expanded;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: rgb(47, 47, 47);
+}
+.window-exiter:active {
+	border-style: inset;
+	border-color: var(--border-c2) var(--border-c1) var(--border-c1) var(--border-c2);
+}
+.window:has(.window-exiter:active) {
+	top: 0.002px;
+	left: -2000.002px;
+	transition: top 0s linear 0s, left 0s linear 0s;
+	/* transform: rotateZ(90deg); */
+}
+/* .window-exiter > p {
+	text-align: center;
+} */
+
+.window-content {
+	/* background-color: #C0C0C0; */
+	width: 100%;
+	height: auto;
+	flex-grow: 1;
+}
+
+.content-inner {
+	padding: 3px;
+}
+
+.mover {
+	--width: 25px;
+	--width3: calc(var(--width) / 3);
+
+	width:  var(--width);
+	height: var(--width);
+	/* border: 1px solid blue; */
+	position: relative;
+	/* display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start; */
+	/* border-right: 1px solid black; */
+}
+
+.mover-hand {
+	margin: 0;
+	padding: 0;
+	position: absolute;
+	width: 1000px;
+	height: 1000px;
+	background: teal;
+	display: none;
+}
+
+.mover-hand-S {
+	z-index: -100;
+	background: red;
+}
+
+.mover-hand {
+	background: plum;
+	z-index: 9999;
+	opacity: 0;
+}
+
+.mover:active .mover-hand {
+	display: unset;
+}
+
+/* .mover-hand:not(.mover-hand-C) {
+	opacity: 0;
+} */
+
+/*FIXME: REMOVE!!!*/
+/* .window {
+	left: 200px !important;
+	top:  200px !important;
+} */
+
+/* Q UP LEFT */
+/* .mover-hand-Q, .mover-hand-E, .mover-hand-Z, .mover-hand-C {
+	width: 100px;
+	height: 100px;
+} */
+
+.mover-hand-W, .mover-hand-X {
+	width: var(--width3);
+}
+.mover-hand-A, .mover-hand-D {
+	height: var(--width3);
+}
+
+.mover-hand-Q, .mover-hand-W, .mover-hand-E {
+	bottom: 66%;
+}
+.mover-hand-A, .mover-hand-D {
+	bottom: 33%;
+}
+.mover-hand-Z, .mover-hand-X, .mover-hand-C {
+	top: 66%;
+}
+
+.mover-hand-Q, .mover-hand-A, .mover-hand-Z {
+	right: 66%;
+}
+.mover-hand-W, .mover-hand-X {
+	right: 33%;
+}
+.mover-hand-E, .mover-hand-D, .mover-hand-C {
+	left: 66%;
+}
+
+                            .desktop-item-18073141479183332128 .desktop-icon {
+                                        background: url("https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png");
+                                        background-size: cover;
+                                    }
+                                    .desktop-item-18073141479183332128 {
+                                        left: 54px;
+                                        top: 192px;
+                                    }
+                            
+                                    
+                                    .desktop:has(.desktop-item-18073141479183332128 + .desktop-item-animator .desktop-item-animator-helper:hover) ~ .window-18073141479183332128 {
+                                        top: 30px;
+                                        left: 30px;
+                                        transition: top 0s linear 0s, left 0s linear 0s;
+                                    }
+                                    
+                            .desktop-item-6824116271661900671 .desktop-icon {
+                                        background: url("https://win98icons.alexmeub.com/icons/png/msie1-2.png");
+                                        background-size: cover;
+                                    }
+                                    .desktop-item-6824116271661900671 {
+                                        left: 162px;
+                                        top: 192px;
+                                    }
+                            
+                                    
+                                    .desktop:has(.desktop-item-6824116271661900671 + .desktop-item-animator .desktop-item-animator-helper:hover) ~ .window-12658790935562795924 {
+                                        top: 30px;
+                                        left: 30px;
+                                        transition: top 0s linear 0s, left 0s linear 0s;
+                                    }
+                                    
+                            .desktop-item-3077155343494820994 .desktop-icon {
+                                        background: url("https://win98icons.alexmeub.com/icons/png/directory_closed-4.png");
+                                        background-size: cover;
+                                    }
+                                    .desktop-item-3077155343494820994 {
+                                        left: 0px;
+                                        top: 0px;
+                                    }
+                            
+                            .window-12658790935562795924 .mover {
+                                background: url("https://win98icons.alexmeub.com/icons/png/msie1-2.png");
+                                background-size: cover;
+                            }
+                            
+                            .window-18073141479183332128 .mover {
+                                background: url("https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png");
+                                background-size: cover;
+                            }
+
+
+
+
+.window {
+	--window-background: #C0C0C0;
+	padding: 2px;
+	background-color: 1px;
+	background-color: var(--window-background);
+	border: 2px;
+	--border-c1: rgb(251, 251, 251);
+	--border-c2: rgb(97, 97, 97);
+	border-color: var(--border-c1) var(--border-c2) var(--border-c2) var(--border-c1);
+	border-style: groove ridge ridge groove;
+}
+
+.window-content {
+	font-size: 12px;
+	display: flex;
+	/* flex-wrap: wrap; */
+	flex-direction: column;
+	background-color: var(--window-background);
+	font-weight: 100;
+}
+
+.border-style-light-1 {
+	border: 2px;
+	--border-c1: rgb(238, 238, 238);
+	--border-c2: rgb(170, 170, 170);
+	border-color: var(--border-c1) var(--border-c1) var(--border-c1) var(--border-c1);
+	border-style: groove groove groove groove;
+}
+
+.menubar {
+	padding: 2px;
+	padding-left: 10px;
+	display: flex;
+	column-gap: 10px;
+}
+
+.menubar-item {
+	
+}
+
+.menubar-item::first-letter {
+	text-decoration: underline;
+}
+
+.fe-address-bar {
+	padding: 0 2px;
+	display: flex;
+	column-gap: 2px;
+	align-items: center;
+	border-top: none;
+}
+
+.fe-address-bar p:nth-child(1) {}
+
+.fe-address-bar p:nth-child(2) {
+	background-color: white;
+	flex-grow: 1;
+}
+
+.border-style-dark-1 {
+	border: 2px;
+	--border-c1: rgb(97, 97, 97);
+	--border-c2: rgb(251, 251, 251);
+	border-color: var(--border-c1) var(--border-c2) var(--border-c2) var(--border-c1);
+	border-style: ridge groove groove ridge;
+}
+
+.window-main {
+	padding-top: 3px;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+}
+
+.fe-main {
+	display: flex;
+	flex-grow: 1;
+	column-gap: 2px;
+}
+
+.fe-view {
+	/* TODO: remove if favor of transforms? */
+	position: relative;
+	flex-grow: 1;
+	background-color: white;
+}
+
+.fe-view p {
+	color: black;
+}
+
+.fe-sideview {
+	width: 100px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	/* height: 100%; */
+}
+
+.fe-sideview-header {
+	border: 2px;
+	--border-c1: rgb(238, 238, 238);
+	--border-c2: rgb(170, 170, 170);
+	border-color: var(--border-c1) var(--border-c1) var(--border-c1) var(--border-c1);
+	border-style: none none groove none;
+	padding: 2px;
+	padding-left: 6px;
+	z-index: 1;
+	background-color: var(--window-background);
+}
+
+.fe-sideview-view {
+	background-color: white;
+	flex-grow: 1;
+	z-index: 0;
+	/* padding-left: 20px; */
+}
+.fe-svv-child {
+	/* border-left: 1px dotted black; */
+	padding-left: 0px;
+	position: relative;
+	left: 14px;
+	z-index: 0;
+}
+.fe-svv-child::before {
+	content: "";
+	position: absolute;
+	border-left: 1px dotted black;
+	height: 100%;
+	transform: translate(-1px, -3px);
+	z-index: -1;
+}
+.fe-svv-item {
+
+}
+.fe-svvi-icon {
+	background: url("https://win98icons.alexmeub.com/icons/png/directory_closed-4.png");
+	background-size: cover;
+	width: 14px;
+	height: 14px;
+	z-index: 1;
+}
+.fe-svvi-group {
+	display: flex;
+	align-items: center;
+}
+.fe-svvi-expander {
+	width: 8px;
+	height: 8px;
+	border: 0.5px solid black;
+	background-color: white;
+	position: absolute;
+	transform: translateX(-5px);
+	/* left: -5px; */
+}
+.fe-svvi-line {
+	width: 9px;
+	height: 0px;
+	border-bottom: 1px dotted black;
+	transform: translateX(-1px);
+	z-index: -1;
+	/* left: -5px; */
+}
+.fe-svvi-group p {
+	margin-left: 5px;
+}
+.fe-sideview-view {
+	overflow: scroll;
+}
+
+.fe-sideview-view::-webkit-scrollbar {
+	height: 10px;
+}
+.fe-sideview-view::-webkit-scrollbar:vertical {
+	width: 10px;
+}
+
+.fe-sideview-view::-webkit-scrollbar-track {
+	background: #C0C0C0;
+}
+
+/* Handle */
+.fe-sideview-view::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+/* Handle on hover */
+.fe-sideview-view::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+.fe-sideview::after {
+	content: "";
+	width: 10px;
+	height: 10px;
+	background-color: #C0C0C0;
+	display: block;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}

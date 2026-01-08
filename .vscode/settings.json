@@ -1,5 +1,8 @@
 {
 	"[ron]": {
 		"editor.insertSpaces": true
+	},
+	"[html]": {
+		"editor.insertSpaces": true
 	}
 }
