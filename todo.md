@@ -1,0 +1,2 @@
+- [ ] window close animation
+- [ ] window content proper

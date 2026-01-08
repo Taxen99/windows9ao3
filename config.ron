@@ -1,0 +1,45 @@
+Config (
+    // windows: [
+    //     Window (
+    //         name: "Internet Explorer",
+    //         icon: "https://win98icons.alexmeub.com/icons/png/msie1-2.png",
+    //         add_to_desktop: Some((0, 0)),
+    //         content: "Internet Exploruvu!!!",
+    //     ),
+    //     Window (
+    //         name: "My Computer",
+    //         icon: "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
+    //         add_to_desktop: Some((1, 3)),
+    //         content: "My <i>uwoepic</i> COMPUTER!!!",
+    //     ),
+    // ],
+    apps: [
+        App (
+            name: "Internet Explorer",
+            icon: "https://win98icons.alexmeub.com/icons/png/msie1-2.png",
+            // add_to_desktop: Some((0, 0)),
+            content: "Internet Exploruvu!!!",
+        ),
+        App (
+            name: "My Computer",
+            icon: "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
+            add_to_desktop: Some((1, 3)),
+            content: "My <i>uwoepic</i> COMPUTER!!!",
+        ),
+    ],
+    fs: (
+        root: (
+            content: {
+                "desktop": Folder ((
+                    content: {
+                        "Internet ExplorerÖ": File ((
+                            kind: App,
+                            link: "Internet Explorer",
+                            offset: Some((3, 3))
+                        )),
+                    },
+                )),
+            }
+        ),
+    ),
+)
