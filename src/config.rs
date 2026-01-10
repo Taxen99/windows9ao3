@@ -125,7 +125,7 @@ impl Config {
             emit_div(html, "desktop", |html| {
                 if let Some(desktop) = self.fs.root.as_folder().unwrap().children.get("desktop") {
                     let _ = desktop.as_folder().expect("desktop must be folder");
-                    self.emit_file_view_content(html, &mut css, Path::new("/desktop"));
+                    self.emit_file_view_content(html, &mut css, Path::new("/desktop"), false);
                 }
             });
             for w in &self.apps {
@@ -235,7 +235,7 @@ impl Config {
                                 fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
                                     let folder_hash = path.hashed();
                                     emit_div(html, &format!("fe-view border-style-dark-1 fe-view-{}", folder_hash), |html| {
-                                        config.emit_file_view_content(html, css, &path);
+                                        config.emit_file_view_content(html, css, &path, true);
                                     });
                                     for (name, entry) in &folder.children {
                                         if let FsEntry::Folder(sub_folder) = &entry {
@@ -310,6 +310,7 @@ impl Config {
         // id: u64,
         // folder: &Folder,
         path: &path::Path,
+        is_in_explorer: bool,
         // mut cb: impl FnMut(&mut String, &mut String),
     ) {
         // dbg!(path);
@@ -351,7 +352,7 @@ impl Config {
                 offset.0 * 54,
                 offset.1 * 64,
             ));
-            self.emit_fe_interaction(css, entry, &entry_path, unique_hash);
+            self.emit_fe_interaction(css, entry, &entry_path, unique_hash, is_in_explorer);
         }
     }
     fn emit_fe_interaction(
@@ -360,6 +361,7 @@ impl Config {
         entry: &FsEntry,
         entry_path: &Path,
         file_unique_hash: u64,
+        is_in_explorer: bool,
     ) {
         if let Some(file) = entry.as_file() {
             match file.kind {
@@ -380,30 +382,42 @@ impl Config {
                 FileKind::Shortcut => {
                     let new_path = Path::new(&file.link);
                     let new_entry = self.fs_entry(new_path).unwrap();
-                    self.emit_fe_interaction(css, new_entry, new_path, file_unique_hash);
+                    self.emit_fe_interaction(
+                        css,
+                        new_entry,
+                        new_path,
+                        file_unique_hash,
+                        is_in_explorer,
+                    );
                 }
             }
         }
         if let Some(_sub_folder) = entry.as_folder() {
-            css.push_str(&format!(
+            if !is_in_explorer {
+                css.push_str(&format!(
                     r##"
-                    
+
                     .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .window-{1} {{
                         top: 30px;
                         left: 30px;
                         transition: top 0s linear 0s, left 0s linear 0s;
-                    }}
-                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .fe-view-{2} {{
+                    }}"##,
+                    file_unique_hash,
+                    Self::FILE_EXPLORER_ID,
+                ));
+            }
+            css.push_str(&format!(
+                    r##"
+                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .fe-view-{1} {{
                         left: 0px;
                         transition: left 0s linear;
                     }}
-                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .fe-view:not(.fe-view-{2}) {{
+                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .fe-view:not(.fe-view-{1}) {{
                         left: -20000.001px;
                         transition: left 0s linear;
                     }}
                     "##,
                     file_unique_hash,
-                    Self::FILE_EXPLORER_ID,
                     entry_path.hashed(),
                 ));
         }
