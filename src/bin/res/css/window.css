@@ -250,8 +250,8 @@ WINDOWS!!!
 	transition: background 10s linear 2147483640s;
 	transition-behavior: allow-discrete;
 	border-bottom: 1px solid gray;
-	/* background: linear-gradient(to right, rgb(126, 126, 126), rgb(187, 187, 187)); */
-	background: linear-gradient(to right, #00007B, #3B79B9);
+	background: linear-gradient(to right, rgb(126, 126, 126), rgb(187, 187, 187));
+	/* background: linear-gradient(to right, #00007B, #3B79B9); */
 	display: flex;
 	column-gap: 3px;
 	align-items: center;
