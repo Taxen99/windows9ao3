@@ -1,0 +1,175 @@
+.fe-address-bar {
+	padding: 0 2px;
+	display: flex;
+	column-gap: 2px;
+	align-items: center;
+	border-top: none;
+}
+
+/* .fe-address-bar p:nth-child(1) {} */
+
+.fe-address-bar p:nth-child(2) {
+	background-color: white;
+	flex-grow: 1;
+	display: flex;
+	padding: 1px;
+}
+
+.fe-address-bar p:nth-child(2)::before {
+	content: "";
+	display: block;
+	width: 16px;
+	height: 16px;
+	background: url("https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png");
+	background-size: cover;
+	margin-right: 5px;
+}
+
+.fe-main {
+	display: flex;
+	flex-grow: 1;
+	column-gap: 2px;
+}
+
+.fe-view {
+	/* TODO: remove if favor of transforms? */
+	position: relative;
+	flex-grow: 1;
+	background-color: white;
+}
+
+.fe-view p {
+	color: black;
+}
+
+.fe-sideview {
+	width: 100px;
+	display: flex;
+	flex-direction: column;
+	position: relative;
+	/* height: 100%; */
+}
+
+.fe-sideview-header {
+	border: 2px;
+	--border-c1_d: rgb(238, 238, 238);
+	--border-c2_d: rgb(170, 170, 170);
+	border-color: var(--border-c1_d) var(--border-c1_d) var(--border-c1_d) var(--border-c1_d);
+	border-style: none none groove none;
+	padding: 2px;
+	padding-left: 6px;
+	z-index: 1;
+	background-color: var(--window-background);
+}
+
+.fe-sideview-view {
+	background-color: white;
+	flex-grow: 1;
+	z-index: 0;
+	/* padding-left: 20px; */
+}
+
+.fe-svv-child {
+	/* border-left: 1px dotted black; */
+	padding-left: 0px;
+	position: relative;
+	left: 16px;
+	z-index: 0;
+}
+
+.fe-svv-child::before {
+	content: "";
+	position: absolute;
+	border-left: 1px dotted black;
+	/* height: 100%; */
+	transform: translate(-1px, -3.5px);
+	z-index: -1;
+}
+
+/* .fe-svv-item {} */
+
+.fe-svvi-name {
+	display: flex;
+	margin-left: 9px;
+	white-space: nowrap;
+}
+
+.fe-svvi-name::before {
+	content: "";
+	background: url("https://win98icons.alexmeub.com/icons/png/directory_closed-4.png");
+	background-size: cover;
+	width: 14px;
+	height: 14px;
+	z-index: 1;
+	margin-right: 5px;
+	display: block;
+	/* opacity: 0.2; */
+}
+
+.fe-svvi-group {
+	display: flex;
+	align-items: center;
+	/* z-index: 0; */
+}
+
+.fe-svvi-group:has(+ .fe-svv-child > .fe-svv-item) .fe-svvi-expander::before {
+	content: "";
+	width: 9px;
+	height: 9px;
+	border: 0.5px solid black;
+	background-color: white;
+	/* background-color: white; */
+	position: absolute;
+	transform: translate(-4px, -4px);
+	/* z-index: 0; */
+	/* left: -5px; */
+}
+
+.fe-svvi-expander {
+	position: absolute;
+	display: block;
+	min-width: 9px;
+	height: 0px;
+	border-bottom: 1px dotted black;
+	transform: translateX(-1px);
+	/* transform: translate(-1px, -4px); */
+	/* z-index: -10000; */
+	/* left: -5px; */
+}
+
+.fe-sideview-view {
+	overflow: scroll;
+}
+
+.fe-sideview-view::-webkit-scrollbar {
+	height: 10px;
+}
+
+.fe-sideview-view::-webkit-scrollbar:vertical {
+	width: 10px;
+}
+
+.fe-sideview-view::-webkit-scrollbar-track {
+	background: #C0C0C0;
+}
+
+/* Handle */
+.fe-sideview-view::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+/* Handle on hover */
+.fe-sideview-view::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+.fe-sideview::after {
+	content: "";
+	width: 10px;
+	height: 10px;
+	background-color: #C0C0C0;
+	display: block;
+	position: absolute;
+	bottom: 0;
+	right: 0;
+}

@@ -23,38 +23,45 @@ WINDOWS!!!
 	top: var(--anim-min);
 	left: var(--anim-min);
 }
+
 /* W UP */
 .window:has(.mover:active .mover-hand-W:hover) {
 	transition: top var(--anim-speed-to) linear, left 10s linear 2147483640s;
 	top: var(--anim-min);
 }
+
 /* E UP RIGHT */
 .window:has(.mover:active .mover-hand-E:hover) {
 	transition: left var(--anim-speed-away) linear, top var(--anim-speed-to) linear;
 	top: var(--anim-min);
 	left: var(--anim-max);
 }
+
 /* A LEFT */
 .window:has(.mover:active .mover-hand-A:hover) {
 	transition: left var(--anim-speed-to) linear, top 10s linear 2147483640s;
 	left: var(--anim-min);
 }
+
 /* D RIGHT */
 .window:has(.mover:active .mover-hand-D:hover) {
 	transition: left var(--anim-speed-away) linear, top 10s linear 2147483640s;
 	left: var(--anim-max);
 }
+
 /* Z DOWN LEFT */
 .window:has(.mover:active .mover-hand-Z:hover) {
 	transition: top var(--anim-speed-away) linear, left var(--anim-speed-to) linear;
 	top: var(--anim-max);
 	left: var(--anim-min);
 }
+
 /* X DOWN */
 .window:has(.mover:active .mover-hand-X:hover) {
 	transition: top var(--anim-speed-away) linear, left 10s linear 2147483640s;
 	top: var(--anim-max);
 }
+
 /* C DOWN RIGHT */
 .window:has(.mover:active .mover-hand-C:hover) {
 	transition: top var(--anim-speed-away) linear, left var(--anim-speed-away) linear;
@@ -74,61 +81,33 @@ WINDOWS!!!
 	left: -2000px;
 	/* left: 0px; */
 	top: 0px;
-	border: 3px ridge;
-	--win-border-c1: rgb(249, 249, 249);
-	--win-border-c2: rgb(153, 153, 153);
-	border-color: var(--win-border-c1) var(--win-border-c2) var(--win-border-c2) var(--win-border-c1);
+	--window-background: #C0C0C0;
+	padding: 2px;
+	background-color: 1px;
+	background-color: var(--window-background);
+	border: 2px;
+	--border-c1_w: rgb(251, 251, 251);
+	--border-c2_w: rgb(97, 97, 97);
+	border-color: var(--border-c1_w) var(--border-c2_w) var(--border-c2_w) var(--border-c1_w);
+	border-style: groove ridge ridge groove;
+	/* overflow: hidden; */
+
 }
 
-.window-titlebar {
-	border-bottom: 1px solid gray;
-	background: linear-gradient(to right, rgb(126, 126, 126), rgb(187, 187, 187));
-	display: flex;
-	column-gap: 3px;
-	align-items: center;
-}
 
-.window-name {
-	display: flex;
-	align-items: center;
-	color: white;
-	/* font-family: 'Courier New', Courier, monospace; */
-	font-weight: 200;
-	font-size: 14.5px;
-	padding-bottom: 0px;
-}
-
-.window-exiter {
-	margin-left: auto;
-	margin-right: 3px;
-	width: 18px;
-	height: 15px;
-	border: 3px outset;
-	--border-c1: rgb(249, 249, 249);
-	--border-c2: rgb(170, 170, 170);
-	border-color: var(--border-c1) var(--border-c2) var(--border-c2) var(--border-c1);
-	font-stretch: ultra-expanded;
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	color: rgb(47, 47, 47);
-}
-.window-exiter:active {
-	border-style: inset;
-	border-color: var(--border-c2) var(--border-c1) var(--border-c1) var(--border-c2);
-}
 .window:has(.window-exiter:active) {
 	top: 0.002px;
 	left: -2000.002px;
 	transition: top 0s linear 0s, left 0s linear 0s;
 	/* transform: rotateZ(90deg); */
 }
+
 /* .window-exiter > p {
 	text-align: center;
 } */
 
 .window-content {
-	background-color: #c6c6c6;
+	/* background-color: #C0C0C0; */
 	width: 100%;
 	height: auto;
 	flex-grow: 1;
@@ -136,20 +115,6 @@ WINDOWS!!!
 
 .content-inner {
 	padding: 3px;
-}
-
-.mover {
-	--width: 25px;
-	--width3: calc(var(--width) / 3);
-
-	width:  var(--width);
-	height: var(--width);
-	/* border: 1px solid blue; */
-	position: relative;
-	/* display: flex;
-	flex-wrap: wrap;
-	align-content: flex-start; */
-	/* border-right: 1px solid black; */
 }
 
 .mover-hand {
@@ -193,29 +158,265 @@ WINDOWS!!!
 	height: 100px;
 } */
 
-.mover-hand-W, .mover-hand-X {
-	width: var(--width3);
-}
-.mover-hand-A, .mover-hand-D {
-	height: var(--width3);
+.mover-hand-W,
+.mover-hand-X {
+	width: var(--width);
 }
 
-.mover-hand-Q, .mover-hand-W, .mover-hand-E {
-	bottom: 66%;
-}
-.mover-hand-A, .mover-hand-D {
-	bottom: 33%;
-}
-.mover-hand-Z, .mover-hand-X, .mover-hand-C {
-	top: 66%;
+.mover-hand-A,
+.mover-hand-D {
+	height: var(--width);
 }
 
-.mover-hand-Q, .mover-hand-A, .mover-hand-Z {
-	right: 66%;
+.mover-hand-Q,
+.mover-hand-W,
+.mover-hand-E {
+	/* bottom: 66%; */
+	bottom: 100%;
 }
-.mover-hand-W, .mover-hand-X {
-	right: 33%;
+
+.mover-hand-A,
+.mover-hand-D {
+	/* bottom: 33%; */
+	top: 0;
 }
-.mover-hand-E, .mover-hand-D, .mover-hand-C {
-	left: 66%;
+
+.mover-hand-Z,
+.mover-hand-X,
+.mover-hand-C {
+	/* top: 66%; */
+	top: 100%;
+}
+
+.mover-hand-Q,
+.mover-hand-A,
+.mover-hand-Z {
+	/* right: 66%; */
+	right: 100%;
+}
+
+.mover-hand-W,
+.mover-hand-X {
+	/* right: 33%; */
+	left: 0;
+}
+
+.mover-hand-E,
+.mover-hand-D,
+.mover-hand-C {
+	/* left: 66%; */
+	left: 100%;
+}
+
+.mover {
+	--width: 16px;
+	/* --width3: calc(var(--width) / 3); */
+
+	width: var(--width);
+	height: var(--width);
+	/* border: 1px solid blue; */
+	position: relative;
+	margin: 1px;
+	/* display: flex;
+	flex-wrap: wrap;
+	align-content: flex-start; */
+	/* border-right: 1px solid black; */
+}
+
+.window-titlebar {
+	border-bottom: 1px solid gray;
+	/* background: linear-gradient(to right, rgb(126, 126, 126), rgb(187, 187, 187)); */
+	background: linear-gradient(to right, #00007B, #3B79B9);
+	display: flex;
+	column-gap: 3px;
+	align-items: center;
+	height: 18px;
+}
+
+.window-name {
+	display: flex;
+	align-items: center;
+	color: white;
+	/* font-family: 'Courier New', Courier, monospace; */
+	font-weight: 400;
+	font-size: 13px;
+	padding-bottom: 0px;
+}
+
+.window-exiter {
+	margin-left: auto;
+	margin-right: 3px;
+	width: 16px;
+	height: 14px;
+	/* border: 1px outset; */
+	border-width: 1px 2px 2px 1px;
+	--border-c1: rgb(249, 249, 249);
+	--border-c2: rgb(93, 93, 93);
+	border-color: var(--border-c1) var(--border-c2) var(--border-c2) var(--border-c1);
+	border-style: solid ridge ridge solid;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	color: rgb(47, 47, 47);
+	background-color: var(--window-background);
+	margin-top: 1px;
+}
+
+.window-exiter::after {
+	content: "";
+	width: 9px;
+	height: 9px;
+	display: block;
+	background-image: url("../res/exit-9.png");
+	background-size: cover;
+}
+
+.window-exiter p {
+	font-family: BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+	font-stretch: ultra-expanded;
+	font-size: 10px;
+}
+
+.window-exiter:active {
+	border-color: var(--border-c2) var(--border-c1) var(--border-c1) var(--border-c2);
+	border-style: inset solid solid inset;
+}
+
+.window-content {
+	font-size: 12px;
+	display: flex;
+	/* flex-wrap: wrap; */
+	flex-direction: column;
+	background-color: var(--window-background);
+	font-weight: 100;
+}
+
+.border-style-light-1 {
+	border: 2px;
+	--border-c1_b: rgb(238, 238, 238);
+	--border-c2_b: rgb(170, 170, 170);
+	border-color: var(--border-c1_b) var(--border-c1_b) var(--border-c1_b) var(--border-c1_b);
+	border-style: groove groove groove groove;
+}
+
+.menubar {
+	padding: 1px;
+	/* padding-left: 10px; */
+	display: flex;
+	/* column-gap: 10px; */
+	height: 24px;
+	align-items: center;
+	/* position: relative; */
+}
+
+.menubar-item {
+	padding: 1px 7px;
+}
+
+.menubar-item {
+	border: 1px inset transparent;
+	position: relative;
+	/* overflow: hidden; */
+}
+
+.menubar-item:hover {
+	border: 1px inset rgb(238, 238, 238);
+}
+
+.menubar-item-state:hover~.mb-submenu,
+.mb-submenu:hover {
+	display: block;
+}
+
+.mb-submenu:has(.mb-submenu-item:active) {
+	display: none;
+}
+
+.menubar-item-state {
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 110%;
+	/* background-color: #00007B; */
+	left: 0px;
+	/* top: 0px; */
+	top: -2000px;
+	transition: top 10s linear 2147483640s;
+	/* transition-behavior: allow-discrete; */
+}
+
+.menubar:has(.menubar-item:active) .menubar-item-state {
+	top: 0px;
+	transition: top 0s linear;
+}
+
+.menubar-item-state:hover {
+	background-color: green !important;
+}
+
+/* .menubar-item-state:hover {
+	background-color: green !important;
+} */
+
+/* i call this the bullshit selector. no i shall not explain it. my life is a mistake. */
+.window:is(:not(:has(.menubar-item-state:active, .menubar-item:active)), :has(.mb-submenu-item:active)):active .menubar-item-state {
+	/* .window *:not(.menubar-item):active { */
+	top: -2000.001px;
+	transition: top 0s linear;
+	/* background-color: red; */
+}
+
+.mb-submenu {
+	display: none;
+	position: absolute;
+	z-index: 3;
+	background-color: var(--window-background);
+	width: 120px;
+	transform: translate(-8px, 2px);
+	padding: 1px;
+}
+
+.mb-submenu-item {
+	padding: 2px 0;
+	padding-left: 5px;
+	display: flex;
+	align-items: center;
+}
+
+.mb-submenu-item:hover {
+	background-color: #0000A1;
+	color: white;
+}
+
+.mb-submenu-item:hover::before {
+	filter: invert();
+}
+
+.mb-submenu-item::before {
+	content: "";
+	width: 9px;
+	height: 9px;
+	display: block;
+	background-image: url("../res/check-9.png");
+	background-size: cover;
+	margin-right: 8px;
+}
+
+.menubar-item::first-letter {
+	text-decoration: underline;
+}
+
+.border-style-dark-1 {
+	border: 2px;
+	--border-c1_c: rgb(97, 97, 97);
+	--border-c2_c: rgb(251, 251, 251);
+	border-color: var(--border-c1_c) var(--border-c2_c) var(--border-c2_c) var(--border-c1_c);
+	border-style: ridge groove groove ridge;
+}
+
+.window-main {
+	padding-top: 3px;
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
 }

@@ -4,4 +4,6 @@ foo.*
 baz/windows98-icons
 *.zip
 testeeeee
+output*
 output
+*.png

@@ -1,3 +1,6 @@
-- [ ] window close animation
+- [ ] window close animation (maybe not?)
 - [ ] window content proper
-- [ ] blue title bar for focus
+- [ ] blue title bar for focus (ie gray for unfocused)
+- [ ] normalize styles on #workskin
+- [ ] fix borders
+- [x] border-box!!!

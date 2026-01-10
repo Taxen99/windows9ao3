@@ -3,7 +3,7 @@ use std::fs;
 use arcthing::config::Config;
 
 pub fn main() {
-    panic!();
+    // panic!();
     // let config: Config = toml::from_str(&fs::read_to_string("config.toml").unwrap()).unwrap();
     let config: Config = ron::from_str(&fs::read_to_string("config.ron").unwrap()).unwrap();
     let res = config.build();

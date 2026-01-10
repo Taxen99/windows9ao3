@@ -1,6 +1,7 @@
 use std::collections::HashMap;
-use std::fs;
 use std::hash::{DefaultHasher, Hash, Hasher};
+use std::path::{Path, PathBuf};
+use std::{fs, path};
 
 use enum_as_inner::EnumAsInner;
 use serde::{Deserialize, Serialize};
@@ -38,7 +39,7 @@ impl FsEntry {
 
 #[derive(Serialize, Deserialize)]
 pub struct Folder {
-    pub content: HashMap<String, FsEntry>,
+    pub children: HashMap<String, FsEntry>,
     pub offset: Option<(u8, u8)>,
 }
 #[derive(Serialize, Deserialize, PartialEq, Eq)]
@@ -58,11 +59,14 @@ pub struct Config {
     pub fs: FileSystem,
 }
 
-trait StrExt {
+trait HashedExt {
     fn hashed(self) -> u64;
 }
-impl StrExt for &str {
-    // TODO: quick and dirty solution!
+impl<T> HashedExt for &T
+where
+    T: Hash,
+{
+    // TODO: quick and dirty solution! this is really scuffed
     fn hashed(self) -> u64 {
         let mut s = DefaultHasher::new();
         self.hash(&mut s);
@@ -108,6 +112,7 @@ impl BuildResult {
 }
 
 impl Config {
+    const FILE_EXPLORER_ID: u64 = 1;
     pub fn build(mut self) -> BuildResult {
         self.app_apps_to_desktop();
 
@@ -116,9 +121,9 @@ impl Config {
         css.push_str(&load_css());
         emit_div(&mut html, "main", |html| {
             emit_div(html, "desktop", |html| {
-                if let Some(desktop) = self.fs.root.content.get("desktop") {
+                if let Some(desktop) = self.fs.root.children.get("desktop") {
                     let desktop = desktop.as_folder().expect("desktop must be folder");
-                    for (name, entry) in &desktop.content {
+                    for (name, entry) in &desktop.children {
                         let offset = entry.offset().unwrap_or_default();
                         html.push_str(&format!(
                             r##"
@@ -166,56 +171,184 @@ impl Config {
                                     file.link.hashed()
                                 ));
                         }
+                        if let Some(folder) = entry.as_folder() {
+                            css.push_str(&format!(
+                                    r##"
+                                    
+                                    .desktop:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) ~ .window-{1} {{
+                                        top: 30px;
+                                        left: 30px;
+                                        transition: top 0s linear 0s, left 0s linear 0s;
+                                    }}
+                                    "##,
+                                    name.hashed(),
+                                    Self::FILE_EXPLORER_ID,
+                                ));
+                        }
                     }
-                }
-                for w in self.apps.iter().filter(|x| x.add_to_desktop.is_some()) {
-                    let pos = w.add_to_desktop.unwrap();
                 }
             });
             for w in &self.apps {
-                html.push_str(&format!(
-                            r##"
-                            <div class="window window-{0}">
-                                <div class="window-titlebar">
-                                    <div class="mover">
-                                        <div class="mover-hand mover-hand-Q mover-hand-up mover-hand-left "></div>
-                                        <div class="mover-hand mover-hand-W mover-hand-up "></div>
-                                        <div class="mover-hand mover-hand-E mover-hand-up mover-hand-right "></div>
-                                        <div class="mover-hand mover-hand-A mover-hand-left "></div>
-                                        <div class="mover-hand mover-hand-D mover-hand-right "></div>
-                                        <div class="mover-hand mover-hand-Z mover-hand-down mover-hand-left "></div>
-                                        <div class="mover-hand mover-hand-X mover-hand-down  "></div>
-                                        <div class="mover-hand mover-hand-C mover-hand-down mover-hand-right "></div>
-                                    </div>
-                                    <div class="window-name">
-                                        <p>{1}</p>
-                                    </div>
-                                    <div class="window-exiter"><p>X</p></div>
-                                </div>
-                                <div class="window-content">
-                                    <div class="content-inner">
-                                        <p>{2}</p>
-                                    </div>
-                                </div>
-                            </div>
-                            "##,
-                            w.name.hashed(),
-                            w.name,
+                self.emit_window(
+                    html,
+                    &mut css,
+                    w.name.hashed(),
+                    &w.name,
+                    &w.icon,
+                    |html, css| {
+                        html.push_str(&format!(
+                            r##"<div class="content-inner">
+                                <p>{}</p>
+                            </div>"##,
                             w.content
                         ));
-                css.push_str(&format!(
-                    r##"
+                    },
+                );
+            }
+            self.emit_fe_window(html, &mut css);
+        });
+        BuildResult::from_html_css(html, css)
+    }
+    fn emit_fe_window(&self, html: &mut String, css: &mut String) {
+        self.emit_window(
+            html,
+            css,
+            Self::FILE_EXPLORER_ID,
+            "File Explorer",
+            "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
+            |html, css| {
+                html.push_str(&format!(r##"
+                <div class="window-header">
+                    <div class="topbar menubar border-style-light-1">
+                        <div class="menubar-item">
+                            <div class="menubar-item-state"></div>
+                            <p>File</p>
+                            <div class="mb-submenu border-style-light-1">
+                                <div class="mb-submenu-item">
+                                    <p>Open</p>
+                                </div>
+                                <div class="mb-submenu-item">
+                                    <p>Close</p>
+                                </div>
+                                <div class="mb-submenu-item">
+                                    <p>Redact</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Edit</p></div>
+                        <div class="menubar-item"><div class="menubar-item-state"></div><p>View</p></div>
+                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Go</p></div>
+                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Favorites</p></div>
+                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Help</p></div>
+                    </div>
+                    <div class="topbar fe-address-bar border-style-light-1">
+                        <p>Address</p>
+                        <p class="border-style-dark-1">My Computer</p>
+                    </div>
+                </div>
+                "##));
+                //
+                emit_div(html, "window-main", |html| {
+                    emit_div(html, "fe-main", |html| {
+                        emit_div(html, "fe-main", |html| {
+                            emit_div(html, "fe-sideview border-style-light-1", |html| {
+                                html.push_str(
+                                    r##"<div class="fe-sideview-header">
+                                                    <p>All Folders</p>
+                                                </div>"##,
+                                );
+                                emit_div(html, "fe-sideview-view", |html| {
+                                    fn emit_folder(html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                                        let folder_hash = path.hashed();
+                                        let mut sub_folder_count = 0;
+                                        emit_div(html, &format!("fe-svv-child fe-svv-child-{}", folder_hash), |html| {
+                                            for (name, entry) in &folder.children {
+                                                if let FsEntry::Folder(sub_folder) = &entry {
+                                                    sub_folder_count += 1;
+                                                    emit_div(html, "fe-svv-item", |html| {
+                                                        html.push_str(&format!(
+                                                            r##"
+                                                            <div class="fe-svvi-group">
+                                                                <div class="fe-svvi-expander"></div>
+                                                                <p class="fe-svvi-name">{}</p>
+                                                            </div>"##,
+                                                            name
+                                                        ));
+                                                        let mut sub_path = path.clone();
+                                                        sub_path.push(name);
+                                                        emit_folder(html, css, sub_folder, sub_path);
+                                                    });
+                                                }
+                                            }
+                                        });
+                                        css.push_str(&format!(r##"
+                                        .fe-svv-child-{}::before {{
+                                            height: {}px;
+                                        }}
+                                        "##, folder_hash, 14 * sub_folder_count - 3));
+                                        dbg!(folder.children.len(), path);
+                                    }
+                                    emit_folder(html, css, &self.fs.root, PathBuf::from("/"));
+                                });
+                            });
+                            emit_div(html, "fe-view border-style-dark-1", |html| {
+                                html.push_str("FOOBARBAZQUX");
+                            });
+                        });
+                    });
+                });
+            },
+        );
+    }
+    fn emit_window(
+        &self,
+        html: &mut String,
+        css: &mut String,
+        id: u64,
+        name: &str,
+        icon: &str,
+        mut cb: impl FnMut(&mut String, &mut String),
+    ) {
+        html.push_str(&format!(
+            r##"
+            <div class="window window-{0}">
+                <div class="window-titlebar">
+                    <div class="mover">
+                        <div class="mover-hand mover-hand-Q mover-hand-up mover-hand-left "></div>
+                        <div class="mover-hand mover-hand-W mover-hand-up "></div>
+                        <div class="mover-hand mover-hand-E mover-hand-up mover-hand-right "></div>
+                        <div class="mover-hand mover-hand-A mover-hand-left "></div>
+                        <div class="mover-hand mover-hand-D mover-hand-right "></div>
+                        <div class="mover-hand mover-hand-Z mover-hand-down mover-hand-left "></div>
+                        <div class="mover-hand mover-hand-X mover-hand-down  "></div>
+                        <div class="mover-hand mover-hand-C mover-hand-down mover-hand-right "></div>
+                    </div>
+                    <div class="window-name">
+                        <p>{1}</p>
+                    </div>
+                    <div class="window-exiter"></div>
+                </div>
+                <div class="window-content">
+            "##,
+            id,
+            name,
+        ));
+        cb(html, css);
+        html.push_str(
+            r##"
+                </div>
+            </div>
+        "##,
+        );
+        css.push_str(&format!(
+            r##"
                             .window-{0} .mover {{
                                 background: url("{1}");
                                 background-size: cover;
                             }}
                             "##,
-                    w.name.hashed(),
-                    w.icon,
-                ));
-            }
-        });
-        BuildResult::from_html_css(html, css)
+            id, icon,
+        ));
     }
     fn app_apps_to_desktop(&mut self) {
         let mut app_files = HashMap::new();
@@ -232,10 +365,10 @@ impl Config {
             }
         }
 
-        if let Some(desktop) = self.fs.root.content.get_mut("desktop") {
+        if let Some(desktop) = self.fs.root.children.get_mut("desktop") {
             let desktop = desktop.as_folder_mut().expect("desktop must be folder");
             for (k, v) in app_files.drain() {
-                if desktop.content.insert(k, FsEntry::File(v)).is_some() {
+                if desktop.children.insert(k, FsEntry::File(v)).is_some() {
                     panic!("publicate file name");
                 }
             }
@@ -266,11 +399,22 @@ fn emit_div(s: &mut String, class: &str, mut cb: impl FnMut(&mut String)) {
 }
 fn load_css() -> String {
     let mut res = String::new();
-    for e in fs::read_dir("src/bin/res/css").unwrap() {
-        let e = e.unwrap();
-        assert!(e.path().extension().unwrap() == "css");
-        res.push_str(std::fs::read_to_string(e.path()).unwrap().as_str());
+    visit_dir(path::Path::new("src/bin/res/css"), &mut |path| {
+        assert!(path.extension().unwrap() == "css");
+        res.push_str(std::fs::read_to_string(path).unwrap().as_str());
         res.push('\n');
-    }
+    });
     res
+}
+
+fn visit_dir(dir: &path::Path, cb: &mut dyn FnMut(&path::Path)) {
+    for e in fs::read_dir(dir).unwrap() {
+        let e = e.unwrap();
+        let path = e.path();
+        if path.is_dir() {
+            visit_dir(&path, cb);
+        } else {
+            cb(&path);
+        }
+    }
 }
