@@ -20,12 +20,12 @@ Config (
             // add_to_desktop: Some((0, 0)),
             content: "Internet Exploruvu!!!",
         ),
-        // App (
-        //     name: "My Computer",
-        //     icon: "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
-        //     add_to_desktop: Some((1, 3)),
-        //     content: "My <i>uwoepic</i> COMPUTER!!!",
-        // ),
+        App (
+            name: "Another Application",
+            icon: "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
+            add_to_desktop: Some((4, 2)),
+            content: "THIS <i>uwoepic</i> APP!!!",
+        ),
     ],
     fs: (
         root: Folder ((

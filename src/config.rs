@@ -128,24 +128,26 @@ impl Config {
                     self.emit_file_view_content(html, &mut css, Path::new("/desktop"), false);
                 }
             });
-            for w in &self.apps {
-                self.emit_window(
-                    html,
-                    &mut css,
-                    w.name.hashed(),
-                    &w.name,
-                    &w.icon,
-                    |html, css| {
-                        html.push_str(&format!(
-                            r##"<div class="content-inner">
-                                <p>{}</p>
-                            </div>"##,
-                            w.content
-                        ));
-                    },
-                );
-            }
-            self.emit_fe_window(html, &mut css);
+            emit_div(html, "windows-container", |html| {
+                for w in &self.apps {
+                    self.emit_window(
+                        html,
+                        &mut css,
+                        w.name.hashed(),
+                        &w.name,
+                        &w.icon,
+                        |html, css| {
+                            html.push_str(&format!(
+                                r##"<div class="content-inner">
+                                    <p>{}</p>
+                                </div>"##,
+                                w.content
+                            ));
+                        },
+                    );
+                }
+                self.emit_fe_window(html, &mut css);
+            });
         });
         BuildResult::from_html_css(html, css)
     }
