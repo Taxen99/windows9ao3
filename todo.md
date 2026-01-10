@@ -7,3 +7,4 @@
 - [ ] window resizing
 - [ ] fix the animators when parented by pos-relative shit
 - [ ] optimize selectors/css/html/shit
+- [ ] ALWAYS PREFER TRANSFORM OVER LEFT/UP FOR TRANSITIONS!!!!! see: https://www.joshwcomeau.com/animation/css-transitions/
