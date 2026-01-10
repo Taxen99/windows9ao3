@@ -44,6 +44,7 @@ version = "0.1.0"
 dependencies = [
  "enum-as-inner",
  "image",
+ "rand",
  "ron",
  "serde",
  "toml",

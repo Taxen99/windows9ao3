@@ -4,11 +4,12 @@ use std::path::{Path, PathBuf};
 use std::{fs, path};
 
 use enum_as_inner::EnumAsInner;
+use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 use crate::css_var_remove::css_var_remove;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct App {
     pub name: String,
     pub icon: String,
@@ -18,12 +19,12 @@ pub struct App {
 
 impl App {}
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct FileSystem {
-    pub root: Folder,
+    pub root: FsEntry,
 }
 
-#[derive(Serialize, Deserialize, EnumAsInner)]
+#[derive(Debug, Serialize, Deserialize, EnumAsInner)]
 pub enum FsEntry {
     File(File),
     Folder(Folder),
@@ -37,23 +38,24 @@ impl FsEntry {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Folder {
     pub children: HashMap<String, FsEntry>,
     pub offset: Option<(u8, u8)>,
 }
-#[derive(Serialize, Deserialize, PartialEq, Eq)]
+#[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub enum FileKind {
     App,
+    Shortcut,
 }
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct File {
     pub kind: FileKind,
     pub link: String,
     pub offset: Option<(u8, u8)>,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub apps: Vec<App>,
     pub fs: FileSystem,
@@ -121,71 +123,9 @@ impl Config {
         css.push_str(&load_css());
         emit_div(&mut html, "main", |html| {
             emit_div(html, "desktop", |html| {
-                if let Some(desktop) = self.fs.root.children.get("desktop") {
-                    let desktop = desktop.as_folder().expect("desktop must be folder");
-                    for (name, entry) in &desktop.children {
-                        let offset = entry.offset().unwrap_or_default();
-                        html.push_str(&format!(
-                            r##"
-                                <div class="desktop-item desktop-item-{}">
-                                    <div class="desktop-icon"></div>
-                                    <p class="desktop-icon-name">{}</p>
-                                    <div class="desktop-item-double-clicker"></div>
-                                </div>
-                                <div class="desktop-item-animator">
-                                    <div class="desktop-item-animator-helper"></div>
-                                </div>
-                                "##,
-                            name.hashed(),
-                            name
-                        ));
-                        css.push_str(&format!(
-                            r##"
-                            .desktop-item-{0} .desktop-icon {{
-                                        background: url("{1}");
-                                        background-size: cover;
-                                    }}
-                                    .desktop-item-{0} {{
-                                        left: {2}px;
-                                        top: {3}px;
-                                    }}
-                            "##,
-                            name.hashed(),
-                            self.icon_of(entry),
-                            offset.0 * 54,
-                            offset.1 * 64,
-                        ));
-                        if let Some(file) = entry.as_file()
-                            && file.kind == FileKind::App
-                        {
-                            css.push_str(&format!(
-                                    r##"
-                                    
-                                    .desktop:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) ~ .window-{1} {{
-                                        top: 30px;
-                                        left: 30px;
-                                        transition: top 0s linear 0s, left 0s linear 0s;
-                                    }}
-                                    "##,
-                                    name.hashed(),
-                                    file.link.hashed()
-                                ));
-                        }
-                        if let Some(folder) = entry.as_folder() {
-                            css.push_str(&format!(
-                                    r##"
-                                    
-                                    .desktop:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) ~ .window-{1} {{
-                                        top: 30px;
-                                        left: 30px;
-                                        transition: top 0s linear 0s, left 0s linear 0s;
-                                    }}
-                                    "##,
-                                    name.hashed(),
-                                    Self::FILE_EXPLORER_ID,
-                                ));
-                        }
-                    }
+                if let Some(desktop) = self.fs.root.as_folder().unwrap().children.get("desktop") {
+                    let _ = desktop.as_folder().expect("desktop must be folder");
+                    self.emit_file_view_content(html, &mut css, Path::new("/desktop"));
                 }
             });
             for w in &self.apps {
@@ -288,11 +228,24 @@ impl Config {
                                         "##, folder_hash, 14 * sub_folder_count - 3));
                                         dbg!(folder.children.len(), path);
                                     }
-                                    emit_folder(html, css, &self.fs.root, PathBuf::from("/"));
+                                    emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
                                 });
                             });
-                            emit_div(html, "fe-view border-style-dark-1", |html| {
-                                html.push_str("FOOBARBAZQUX");
+                            emit_div(html, "fe-view-anchor", |html| {
+                                fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                                    let folder_hash = path.hashed();
+                                    emit_div(html, &format!("fe-view border-style-dark-1 fe-view-{}", folder_hash), |html| {
+                                        config.emit_file_view_content(html, css, &path);
+                                    });
+                                    for (name, entry) in &folder.children {
+                                        if let FsEntry::Folder(sub_folder) = &entry {
+                                            let mut sub_path = path.clone();
+                                            sub_path.push(name);
+                                            emit_folder(config, html, css, sub_folder, sub_path);
+                                        }
+                                    }
+                                }
+                                emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
                             });
                         });
                     });
@@ -350,6 +303,111 @@ impl Config {
             id, icon,
         ));
     }
+    fn emit_file_view_content(
+        &self,
+        html: &mut String,
+        css: &mut String,
+        // id: u64,
+        // folder: &Folder,
+        path: &path::Path,
+        // mut cb: impl FnMut(&mut String, &mut String),
+    ) {
+        // dbg!(path);
+        let folder = self.fs_entry(path).unwrap().as_folder().unwrap();
+        for (name, entry) in &folder.children {
+            // dbg!(name);
+            let mut entry_path = path.to_owned();
+            entry_path.push(name);
+            let unique_hash: u64 = rand::rng().random();
+            // let unique_hash =
+            //     format!("{}___{}", entry_path.to_str().unwrap(), some_random_numer).hashed();
+            let offset = entry.offset().unwrap_or_default();
+            html.push_str(&format!(
+                r##"
+                <div class="desktop-item desktop-item-{}">
+                    <div class="desktop-icon"></div>
+                    <p class="desktop-icon-name">{}</p>
+                    <div class="desktop-item-double-clicker"></div>
+                </div>
+                <div class="desktop-item-animator">
+                    <div class="desktop-item-animator-helper"></div>
+                </div>
+                "##,
+                unique_hash, name
+            ));
+            css.push_str(&format!(
+                r##"
+                .desktop-item-{0} .desktop-icon {{
+                            background: url("{1}");
+                            background-size: cover;
+                        }}
+                        .desktop-item-{0} {{
+                            left: {2}px;
+                            top: {3}px;
+                        }}
+                "##,
+                unique_hash,
+                self.icon_of(entry),
+                offset.0 * 54,
+                offset.1 * 64,
+            ));
+            self.emit_fe_interaction(css, entry, &entry_path, unique_hash);
+        }
+    }
+    fn emit_fe_interaction(
+        &self,
+        css: &mut String,
+        entry: &FsEntry,
+        entry_path: &Path,
+        file_unique_hash: u64,
+    ) {
+        if let Some(file) = entry.as_file() {
+            match file.kind {
+                FileKind::App => {
+                    css.push_str(&format!(
+                            r##"
+                            
+                            .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .window-{1} {{
+                                top: 30px;
+                                left: 30px;
+                                transition: top 0s linear 0s, left 0s linear 0s;
+                            }}
+                            "##,
+                            file_unique_hash,
+                            file.link.hashed()
+                        ));
+                }
+                FileKind::Shortcut => {
+                    let new_path = Path::new(&file.link);
+                    let new_entry = self.fs_entry(new_path).unwrap();
+                    self.emit_fe_interaction(css, new_entry, new_path, file_unique_hash);
+                }
+            }
+        }
+        if let Some(_sub_folder) = entry.as_folder() {
+            css.push_str(&format!(
+                    r##"
+                    
+                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .window-{1} {{
+                        top: 30px;
+                        left: 30px;
+                        transition: top 0s linear 0s, left 0s linear 0s;
+                    }}
+                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .fe-view-{2} {{
+                        left: 0px;
+                        transition: left 0s linear;
+                    }}
+                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .fe-view:not(.fe-view-{2}) {{
+                        left: -20000.001px;
+                        transition: left 0s linear;
+                    }}
+                    "##,
+                    file_unique_hash,
+                    Self::FILE_EXPLORER_ID,
+                    entry_path.hashed(),
+                ));
+        }
+    }
     fn app_apps_to_desktop(&mut self) {
         let mut app_files = HashMap::new();
         for app in &self.apps {
@@ -365,7 +423,14 @@ impl Config {
             }
         }
 
-        if let Some(desktop) = self.fs.root.children.get_mut("desktop") {
+        if let Some(desktop) = self
+            .fs
+            .root
+            .as_folder_mut()
+            .unwrap()
+            .children
+            .get_mut("desktop")
+        {
             let desktop = desktop.as_folder_mut().expect("desktop must be folder");
             for (k, v) in app_files.drain() {
                 if desktop.children.insert(k, FsEntry::File(v)).is_some() {
@@ -373,6 +438,17 @@ impl Config {
                 }
             }
         }
+    }
+    fn fs_entry(&self, path: &path::Path) -> Option<&FsEntry> {
+        if path == "/" {
+            return Some(&self.fs.root);
+        }
+        let parts: Vec<_> = path.to_str().unwrap().split("/").skip(1).collect();
+        let mut entry: &FsEntry = &self.fs.root;
+        for part in parts {
+            entry = &entry.as_folder()?.children[part];
+        }
+        Some(entry)
     }
     fn app(&self, name: &str) -> &App {
         self.apps
@@ -384,6 +460,7 @@ impl Config {
         match entry {
             FsEntry::File(file) => match file.kind {
                 FileKind::App => self.app(&file.link).icon.clone(),
+                FileKind::Shortcut => self.icon_of(self.fs_entry(Path::new(&file.link)).unwrap()),
             },
             FsEntry::Folder(_folder) => {
                 // TODO: what if this resource disappears?

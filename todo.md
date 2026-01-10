@@ -4,3 +4,6 @@
 - [ ] normalize styles on #workskin
 - [ ] fix borders
 - [x] border-box!!!
+- [ ] window resizing
+- [ ] fix the animators when parented by pos-relative shit
+- [ ] optimize selectors/css/html/shit

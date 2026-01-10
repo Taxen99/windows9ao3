@@ -28,21 +28,27 @@ Config (
         // ),
     ],
     fs: (
-        root: (
+        root: Folder ((
             children: {
                 "desktop": Folder ((
                     children: {
                         "Internet ExplorerÖ": File ((
                             kind: App,
                             link: "Internet Explorer",
-                            offset: Some((3, 3))
+                            offset: Some((3, 3)),
                         )),
                         "My Pictures": Folder ((
-                            children: {}
-                        ))
+                            children: {},
+                            offset: Some((0, 1)),
+                        )),
+                        "My Computer": File ((
+                            kind: Shortcut,
+                            link: "/",
+                            offset: Some((0, 0)),
+                        )),
                     },
                 )),
-            }
-        ),
+            },
+        )),
     ),
 )
