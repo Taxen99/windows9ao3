@@ -11,10 +11,10 @@ WINDOWS!!!
 }
 
 .window {
-	--anim-speed-to: 0.5s;
+	--anim-speed-to: 3.0s;
 	--anim-speed-away: 3.0s;
 	--anim-max: 4000px;
-	--anim-min: 0.001px;
+	--anim-min: -4000px;
 }
 
 /* Q UP LEFT */
