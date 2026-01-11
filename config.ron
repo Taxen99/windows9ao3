@@ -46,6 +46,11 @@ Config (
                             link: "/",
                             offset: Some((0, 0)),
                         )),
+                        "Sussy document": File ((
+                            kind: Text,
+                            link: "",
+                            offset: Some((2, 2)),
+                        )),
                     },
                 )),
             },

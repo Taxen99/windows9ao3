@@ -334,6 +334,10 @@ WINDOWS!!!
 	/* position: relative; */
 }
 
+.menubar.menubar-short {
+	height: 20px;
+}
+
 .menubar-item {
 	padding: 1px 7px;
 }
@@ -384,7 +388,7 @@ WINDOWS!!!
 } */
 
 /* i call this the bullshit selector. no i shall not explain it. my life is a mistake. */
-.window:is(:not(:has(.menubar-item-state:active, .menubar-item:active)), :has(.mb-submenu-item:active)):active .menubar-item-state {
+.main:is(:not(:has(.menubar-item-state:active, .menubar-item:active)), :has(.mb-submenu-item:active)):active .menubar-item-state {
 	/* .window *:not(.menubar-item):active { */
 	top: -2000.001px;
 	transition: top 0s linear;
@@ -444,4 +448,8 @@ WINDOWS!!!
 	flex-grow: 1;
 	display: flex;
 	flex-direction: column;
+}
+
+.window-main.window-main-nopadtop {
+	padding-top: 0px;
 }

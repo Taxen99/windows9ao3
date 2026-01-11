@@ -9,3 +9,5 @@
 - [ ] optimize selectors/css/html/shit
 - [ ] ALWAYS (though messure difference!!! might not be worth it) PREFER TRANSFORM OVER LEFT/UP FOR TRANSITIONS!!!!! see: https://www.joshwcomeau.com/animation/css-transitions/
 - [ ] focus window when opened
+- [ ] dynamic window titles (and icons?)
+- [ ] fix inline TODO:s

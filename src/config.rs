@@ -47,6 +47,7 @@ pub struct Folder {
 pub enum FileKind {
     App,
     Shortcut,
+    Text,
 }
 #[derive(Debug, Serialize, Deserialize)]
 pub struct File {
@@ -115,6 +116,7 @@ impl BuildResult {
 
 impl Config {
     const FILE_EXPLORER_ID: u64 = 1;
+    const NOTEPAD_ID: u64 = 2;
     pub fn build(mut self) -> BuildResult {
         self.app_apps_to_desktop();
 
@@ -147,6 +149,7 @@ impl Config {
                     );
                 }
                 self.emit_fe_window(html, &mut css);
+                self.emit_np_window(html, &mut css);
             });
         });
         BuildResult::from_html_css(html, css)
@@ -161,7 +164,7 @@ impl Config {
             |html, css| {
                 html.push_str(&format!(r##"
                 <div class="window-header">
-                    <div class="topbar menubar border-style-light-1">
+                    <div class="menubar border-style-light-1">
                         <div class="menubar-item">
                             <div class="menubar-item-state"></div>
                             <p>File</p>
@@ -183,7 +186,7 @@ impl Config {
                         <div class="menubar-item"><div class="menubar-item-state"></div><p>Favorites</p></div>
                         <div class="menubar-item"><div class="menubar-item-state"></div><p>Help</p></div>
                     </div>
-                    <div class="topbar fe-address-bar border-style-light-1">
+                    <div class="fe-address-bar border-style-light-1">
                         <p>Address</p>
                         <p class="border-style-dark-1">My Computer</p>
                     </div>
@@ -191,6 +194,7 @@ impl Config {
                 "##));
                 //
                 emit_div(html, "window-main", |html| {
+                    // FIXME: this looks sussy, why two fe-mains?
                     emit_div(html, "fe-main", |html| {
                         emit_div(html, "fe-main", |html| {
                             emit_div(html, "fe-sideview border-style-light-1", |html| {
@@ -251,6 +255,57 @@ impl Config {
                             });
                         });
                     });
+                });
+            },
+        );
+    }
+    fn emit_np_window(&self, html: &mut String, css: &mut String) {
+        self.emit_window(
+            html,
+            css,
+            Self::NOTEPAD_ID,
+            "Notepad",
+            "https://win98icons.alexmeub.com/icons/png/notepad-5.png",
+            |html, css| {
+                html.push_str(&format!(r##"
+                <div class="window-header">
+                    <div class="menubar menubar-short">
+                        <div class="menubar-item">
+                            <div class="menubar-item-state"></div>
+                            <p>File</p>
+                        </div>
+                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Edit</p></div>
+                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Search</p></div>
+                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Help</p></div>
+                    </div>
+                </div>
+                "##));
+                //
+                emit_div(html, "window-main window-main-nopadtop", |html| {
+                    emit_div(html, "np-main", |html| {
+                            // emit_div(html, "fe-view-anchor", |html| {
+                            //     fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                            //         let folder_hash = path.hashed();
+                                    emit_div(html, &format!("np-view border-style-dark-1"), |html| {
+                                        const THINGY: &str = r###"<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<meta charset="utf-8" />\n\t<meta http-equiv="x-ua-compatible" content="ie=edge" />\n\t<meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />\n\t<meta name="language" content="en-US" />\n\t<meta name="subject" content="fandom" />\n\t<meta name="description" content="An Archive of Our Own, a project of the Organization for Transformative Works" />\n\t<meta name="distribution" content="GLOBAL" />\n\t<meta name="classification" content="transformative works" />\n\t<meta name="author" content="Organization for Transformative Works" />\n\t<meta name="robots" content="noindex" />\n\t<meta name="googlebot" content="noindex" />\n\t<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n\t<meta name="chrome" content="nointentdetection" />\n\t<meta name="format-detection" content="telephone=no" />\n\t<title>test testson - Kurt Kurtson (taxen99) - Original Work [Archive of Our Own]</title>\n\n\t<link rel="stylesheet" type="text/css" media="screen" href="https://archiveofourown.org//stylesheets/skins/skin_1_default/1_site_screen_.css" />\n\t<link rel="stylesheet" type="text/css" media="only screen and (max-width: 62em), handheld"\n\t\thref="https://archiveofourown.org/stylesheets/skins/skin_1_default/4_site_midsize.handheld_.css" />\n\t<link rel="stylesheet" type="text/css" media="only screen and (max-width: 42em), handheld"\n\t\thref="https://archiveofourown.org/stylesheets/skins/skin_1_default/5_site_narrow.handheld_.css" />\n\t<link rel="stylesheet" type="text/css" media="speech" href="https://archiveofourown.org/stylesheets/skins/skin_1_default/6_site_speech_.css" />\n\t<link rel="stylesheet" type="text/css" media="print" href="https://archiveofourown.org/stylesheets/skins/skin_1_default/7_site_print_.css" />\n\t\x3C!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/8_site_screen_IE8_or_lower.css" /><![endif]-->\n\t\x3C!--[if IE 5]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/9_site_screen_IE5.css" /><![endif]-->\n\t\x3C!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/10_site_screen_IE6.css" /><![endif]-->\n\t\x3C!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/11_site_screen_IE7.css" /><![endif]-->\n\n\n\t\x3C!--sandbox for developers\t-->\n\t<link rel="stylesheet" href="https://archiveofourown.org/stylesheets/sandbox.css" />\n\n\n\n\t\x3Cscript src="https://archiveofourown.org/javascripts/livevalidation_standalone.js">\x3C/script>\n\n\t<meta name="csrf-param" content="authenticity_token" />\n\t<meta name="csrf-token"\n\t\tcontent="-PDRY6n50tSUYv72wKd9N3fkT2IjDC3nj9Ooa884vN7P8A4TFMGqiHM5A5-rO5_dYbV2RKZ23YekbcHtNQpucw" />\n\n\n</head>\n\n<body class="logged-in">\n\t<div id="outer" class="wrapper">\n\t\t<ul id="skiplinks">\n\t\t\t<li><a href="#main">Main Content</a></li>\n\t\t</ul>\n\t\t<noscript>\n\t\t\t<p id="javascript-warning">While we&#39;ve done our best to make the core functionality of this site\n\t\t\t\taccessible without JavaScript, it will work better with it enabled. Please consider turning it on!</p>\n\t\t</noscript>"###;
+                                        
+                                        html.push_str(&format!(r##"
+                                            <p>{}</p>
+                                        "##, &THINGY.to_owned().replace("\\n", "\n").replace("\\t", "\t").replace("<", "&lt;").replace(">", "&gt;")));
+                                        // config.emit_file_view_content(html, css, &path, true);
+                                    });
+                                    // for (name, entry) in &folder.children {
+                                    //     if let FsEntry::Folder(sub_folder) = &entry {
+                                    //         let mut sub_path = path.clone();
+                                    //         sub_path.push(name);
+                                    //         emit_folder(config, html, css, sub_folder, sub_path);
+                                    //     }
+                                    // }
+                        //         }
+                        //         emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
+                        //     });
+                        // });
+                    })
                 });
             },
         );
@@ -392,6 +447,19 @@ impl Config {
                         is_in_explorer,
                     );
                 }
+                FileKind::Text => {
+                    css.push_str(&format!(
+                        r##"
+
+                        .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .window-{1} {{
+                            top: 30px;
+                            left: 30px;
+                            transition: top 0s linear 0s, left 0s linear 0s;
+                        }}"##,
+                        file_unique_hash,
+                        Self::NOTEPAD_ID,
+                    ));
+                }
             }
         }
         if let Some(_sub_folder) = entry.as_folder() {
@@ -477,6 +545,9 @@ impl Config {
             FsEntry::File(file) => match file.kind {
                 FileKind::App => self.app(&file.link).icon.clone(),
                 FileKind::Shortcut => self.icon_of(self.fs_entry(Path::new(&file.link)).unwrap()),
+                FileKind::Text => {
+                    "https://win98icons.alexmeub.com/icons/png/notepad_file-2.png".to_owned()
+                }
             },
             FsEntry::Folder(_folder) => {
                 // TODO: what if this resource disappears?
