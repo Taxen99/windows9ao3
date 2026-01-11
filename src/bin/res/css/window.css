@@ -357,7 +357,7 @@ WINDOWS!!!
 	display: block;
 }
 
-.mb-submenu:has(.mb-submenu-item:active) {
+.mb-submenu:has(.mb-submenu-item:not(.mb-disabled, details):active) {
 	display: none;
 }
 
@@ -388,7 +388,7 @@ WINDOWS!!!
 } */
 
 /* i call this the bullshit selector. no i shall not explain it. my life is a mistake. */
-.main:is(:not(:has(.menubar-item-state:active, .menubar-item:active)), :has(.mb-submenu-item:active)):active .menubar-item-state {
+.main:is(:not(:has(.menubar-item-state:active, .menubar-item:active)), :has(.mb-submenu-item:not(.mb-disabled, details):active)):active .menubar-item-state {
 	/* .window *:not(.menubar-item):active { */
 	top: -2000.001px;
 	transition: top 0s linear;
@@ -406,10 +406,18 @@ WINDOWS!!!
 }
 
 .mb-submenu-item {
+
+	/* display: flex;
+	align-items: center; */
+}
+.mb-submenu-item p {
+	margin-left: 16px;
 	padding: 2px 0;
 	padding-left: 5px;
-	display: flex;
-	align-items: center;
+}
+
+.mb-disabled {
+	color: #87888E;
 }
 
 .mb-submenu-separator {
@@ -433,18 +441,19 @@ WINDOWS!!!
 	color: white;
 }
 
-.mb-submenu-item:hover::before {
-	filter: invert();
-}
-
-.mb-submenu-item::before {
+.mb-submenu-item[open] summary::before {
 	content: "";
 	width: 9px;
 	height: 9px;
 	display: block;
 	background-image: url("../res/check-9.png");
 	background-size: cover;
-	margin-right: 8px;
+	/* margin-right: 8px; */
+	position: absolute;
+	transform: translate(5px, 3px);
+}
+.mb-submenu-item[open]:hover summary::before {
+	filter: invert();
 }
 
 .menubar-item::first-letter {

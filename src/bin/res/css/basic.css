@@ -19,3 +19,13 @@
 	/* font-family: Arial, Helvetica, sans-serif; */
 	/* filter: url("filter.svg#vignette"); */
 }
+
+details summary::-webkit-details-marker,
+details summary::marker {
+	display: none
+}
+
+details summary::-webkit-details-marker,
+details summary::marker {
+	content: ""
+}

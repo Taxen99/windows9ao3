@@ -51,12 +51,32 @@ impl MenubarBuilder {
                     emit_div(html, "mb-submenu border-style-light-1", |html| {
                         for (i, group) in item.sub_item_groups.iter().enumerate() {
                             for sub_item in &group.sub_items {
-                                html.push_str(&format!(
-                                    r##"<div class="mb-submenu-item">
-                                        <p>{}</p>
-                                    </div>"##,
-                                    sub_item.name
-                                ));
+                                let mut classlist = String::from("mb-submenu-item");
+                                if sub_item.disabled {
+                                    classlist.push_str(" mb-disabled");
+                                }
+                                if let Some(id) = sub_item.id {
+                                    classlist.push_str(&format!(" mb-submenu-item-{}", id));
+                                }
+                                match sub_item.kind {
+                                    SubItemKind::Dummy | SubItemKind::Action => {
+                                        html.push_str(&format!(
+                                            r##"<div class="{1}">
+                                                <p>{0}</p>
+                                            </div>"##,
+                                            sub_item.name, classlist
+                                        ));
+                                    }
+                                    SubItemKind::Toggle => {
+                                        html.push_str(&format!(
+                                            r##"<details class="{1}">
+                                                <summary><p>{0}</p></summary>
+                                            </details>"##,
+                                            sub_item.name, classlist
+                                        ));
+                                    }
+                                    SubItemKind::Action => todo!(),
+                                }
                             }
                             // not last!
                             if i != item.sub_item_groups.len() - 1 {
@@ -99,16 +119,53 @@ impl SubItemGroup {
             sub_items: Vec::new(),
         }
     }
-    pub fn item(&mut self, name: &str, action: ()) -> &mut Self {
-        self.sub_items.push(SubItem {
-            name: name.to_owned(),
-            action,
-        });
+    pub fn sub(&mut self, name: &str, func: impl Fn(&mut SubItem) -> &mut SubItem) -> &mut Self {
+        self.sub_items.push(SubItem::new(name, false));
+        func(self.sub_items.last_mut().unwrap());
+        self
+    }
+    pub fn sub_disabled(&mut self, name: &str) -> &mut Self {
+        self.sub_items.push(SubItem::new(name, true));
         self
     }
 }
 
 pub struct SubItem {
     name: String,
-    action: (),
+    kind: SubItemKind,
+    id: Option<u64>,
+    disabled: bool,
+}
+
+impl SubItem {
+    fn new(name: &str, disabled: bool) -> Self {
+        Self {
+            name: name.to_owned(),
+            kind: SubItemKind::Dummy,
+            id: None,
+            disabled,
+        }
+    }
+    pub fn dummy(&mut self) -> &mut Self {
+        self.kind = SubItemKind::Dummy;
+        self
+    }
+    pub fn html_toggle(&mut self) -> &mut Self {
+        self.kind = SubItemKind::Toggle;
+        self
+    }
+    pub fn action(&mut self) -> &mut Self {
+        self.kind = SubItemKind::Action;
+        self
+    }
+    pub fn id(&mut self, id: u64) -> &mut Self {
+        self.id = Some(id);
+        self
+    }
+}
+
+pub enum SubItemKind {
+    Dummy,
+    Toggle,
+    Action,
 }

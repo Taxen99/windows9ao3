@@ -271,54 +271,61 @@ impl Config {
             "https://win98icons.alexmeub.com/icons/png/notepad-5.png",
             |html, css| {
                 emit_div(html, "window-header", |html| {
+                    let word_wrap_toggle_id = 8336941761795208;
+                    css.push_str(&format!(r##"
+                        .window-{}:has(.mb-submenu-item-{}[open]) .np-view {{
+	                        white-space: pre-wrap;
+                            word-break: break-all;
+                        }}
+                    "##, Self::NOTEPAD_ID, word_wrap_toggle_id));
                     MenubarBuilder::new()
                         .short(true)
                         .item("File", |item| item
                             .group(|group| group
-                                .item("New", ())
-                                .item("Open...", ())
-                                .item("Save", ())
-                                .item("Save As...", ())
+                                .sub_disabled("New")
+                                .sub_disabled("Open...")
+                                .sub_disabled("Save")
+                                .sub_disabled("Save As...")
                             )
                             .group(|group| group
-                                .item("Page Setup...", ())
-                                .item("Print", ())
+                                .sub_disabled("Page Setup...")
+                                .sub_disabled("Print")
                             )
                             .group(|group| group
-                                .item("Exit", ())
+                                .sub("Exit", |i| i.action())
                             )
                         )
                         .item("Edit", |item| item
                             .group(|group| group
-                                .item("Undo", ())
+                                .sub_disabled("Undo")
                             )
                             .group(|group| group
-                                .item("Cut", ())
-                                .item("Copy", ())
-                                .item("Paste", ())
-                                .item("Delete", ())
+                                .sub_disabled("Cut")
+                                .sub_disabled("Copy")
+                                .sub_disabled("Paste")
+                                .sub_disabled("Delete")
                             )
                             .group(|group| group
-                                .item("Select All", ())
-                                .item("Time/Date", ())
+                                .sub_disabled("Select All")
+                                .sub_disabled("Time/Date")
                             )
                             .group(|group| group
-                                .item("Word Wrap", ())
-                                .item("Set Font", ())
+                                .sub("Word Wrap", |i| i.html_toggle().id(word_wrap_toggle_id))
+                                .sub("Set Font", |i| i.action())
                             )
                         )
                         .item("Search", |item| item
                             .group(|group| group
-                                .item("Find...", ())
-                                .item("Find Next", ())
+                                .sub_disabled("Find...")
+                                .sub_disabled("Find Next")
                             )
                         )
                         .item("Help", |item| item
                             .group(|group| group
-                                .item("Help Topics", ())
+                                .sub_disabled("Help Topics")
                             )
                             .group(|group| group
-                                .item("About Notepad", ())
+                                .sub("About Notepad", |i| i.action())
                             )
                         )
                         .build(html, css);

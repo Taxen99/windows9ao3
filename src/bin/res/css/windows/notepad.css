@@ -21,6 +21,8 @@
 	user-select: text;
 }
 
+/* .window:has() */
+
 .np-view::-webkit-scrollbar {
 	height: 10px;
 }
