@@ -412,6 +412,22 @@ WINDOWS!!!
 	align-items: center;
 }
 
+.mb-submenu-separator {
+	width: 100%;
+	margin: 3px 0;
+	padding: 0 1px;
+}
+
+.mb-submenu-separator::before {
+	content: "";
+	display: block;
+	width: 100%;
+	border-bottom: 2px;
+	--border-c1_sep: rgb(238, 238, 238);
+	border-bottom-color: var(--border-c1_sep);
+	border-bottom-style: groove;
+}
+
 .mb-submenu-item:hover {
 	background-color: #0000A1;
 	color: white;
@@ -440,6 +456,14 @@ WINDOWS!!!
 	--border-c1_c: rgb(97, 97, 97);
 	--border-c2_c: rgb(251, 251, 251);
 	border-color: var(--border-c1_c) var(--border-c2_c) var(--border-c2_c) var(--border-c1_c);
+	border-style: ridge groove groove ridge;
+}
+.border-style-dark-2 {
+	border: 2px;
+	--border-c1_bb: rgb(238, 238, 238);
+	/* --border-c2_bb: rgb(170, 170, 170); */
+	--border-c2_bb: rgb(97, 97, 97);
+	border-color: var(--border-c1_bb) var(--border-c2_bb) var(--border-c2_bb) var(--border-c1_bb);
 	border-style: ridge groove groove ridge;
 }
 

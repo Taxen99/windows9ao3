@@ -7,7 +7,10 @@ use enum_as_inner::EnumAsInner;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
+use crate::config::menubar_builder::MenubarBuilder;
 use crate::css_var_remove::css_var_remove;
+
+mod menubar_builder;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct App {
@@ -168,7 +171,7 @@ impl Config {
                         <div class="menubar-item">
                             <div class="menubar-item-state"></div>
                             <p>File</p>
-                            <div class="mb-submenu border-style-light-1">
+                            <div class="mb-submenu border-style-dark-2">
                                 <div class="mb-submenu-item">
                                     <p>Open</p>
                                 </div>
@@ -267,19 +270,59 @@ impl Config {
             "Notepad",
             "https://win98icons.alexmeub.com/icons/png/notepad-5.png",
             |html, css| {
-                html.push_str(&format!(r##"
-                <div class="window-header">
-                    <div class="menubar menubar-short">
-                        <div class="menubar-item">
-                            <div class="menubar-item-state"></div>
-                            <p>File</p>
-                        </div>
-                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Edit</p></div>
-                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Search</p></div>
-                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Help</p></div>
-                    </div>
-                </div>
-                "##));
+                emit_div(html, "window-header", |html| {
+                    MenubarBuilder::new()
+                        .short(true)
+                        .item("File", |item| item
+                            .group(|group| group
+                                .item("New", ())
+                                .item("Open...", ())
+                                .item("Save", ())
+                                .item("Save As...", ())
+                            )
+                            .group(|group| group
+                                .item("Page Setup...", ())
+                                .item("Print", ())
+                            )
+                            .group(|group| group
+                                .item("Exit", ())
+                            )
+                        )
+                        .item("Edit", |item| item
+                            .group(|group| group
+                                .item("Undo", ())
+                            )
+                            .group(|group| group
+                                .item("Cut", ())
+                                .item("Copy", ())
+                                .item("Paste", ())
+                                .item("Delete", ())
+                            )
+                            .group(|group| group
+                                .item("Select All", ())
+                                .item("Time/Date", ())
+                            )
+                            .group(|group| group
+                                .item("Word Wrap", ())
+                                .item("Set Font", ())
+                            )
+                        )
+                        .item("Search", |item| item
+                            .group(|group| group
+                                .item("Find...", ())
+                                .item("Find Next", ())
+                            )
+                        )
+                        .item("Help", |item| item
+                            .group(|group| group
+                                .item("Help Topics", ())
+                            )
+                            .group(|group| group
+                                .item("About Notepad", ())
+                            )
+                        )
+                        .build(html, css);
+                });
                 //
                 emit_div(html, "window-main window-main-nopadtop", |html| {
                     emit_div(html, "np-main", |html| {
