@@ -11,6 +11,7 @@ use crate::config::menubar_builder::MenubarBuilder;
 use crate::css_var_remove::css_var_remove;
 
 mod menubar_builder;
+mod vertical_select;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct App {
@@ -374,8 +375,78 @@ impl Config {
             "Font",
             "https://win98icons.alexmeub.com/icons/png/font_tt-0.png",
             |html, css| {
-                emit_div(html, "window-main window-main-nopadtop", |html| {
-                    html.push_str("foobar?");
+                emit_div(html, "window-main", |html| {
+                    emit_div(html, "npf-main", |html| {
+                        emit_div(html, "npf-upper", |html| {
+                            emit_div(html, "npf-font npf-upper-sub", |html| {
+                                emit_p(html, "", "Font:");
+                                emit_p(
+                                    html,
+                                    "vertical-select-header border-style-dark-1",
+                                    "Times New Roman",
+                                );
+                                emit_div(
+                                    html,
+                                    "npf-select border-style-dark-1 vertical-select-group",
+                                    |html| {
+                                        emit_p(html, "vertical-select-item", "Times New Roman");
+                                        emit_p(html, "vertical-select-item", "Times Roman");
+                                        emit_p(html, "vertical-select-item", "Times Old R");
+                                        emit_p(html, "vertical-select-item", "Courier New");
+                                        emit_p(html, "vertical-select-item", "Old Courier");
+                                    },
+                                )
+                            });
+                            emit_div(html, "npf-style npf-upper-sub", |html| {
+                                emit_p(html, "", "Font style:");
+                                emit_div(html, "footest", |html| {
+                                    emit_p(
+                                        html,
+                                        "vertical-select-header border-style-dark-1",
+                                        "Bold Italic",
+                                    );
+                                    emit_div(
+                                        html,
+                                        "npf-select border-style-dark-1 vertical-select-group",
+                                        |html| {
+                                            emit_p(html, "vertical-select-item", "Regular");
+                                            emit_p(html, "vertical-select-item", "Italic");
+                                            emit_p(html, "vertical-select-item", "Bold");
+                                            emit_p(html, "vertical-select-item", "Bold Italic");
+                                        },
+                                    )
+                                });
+                            });
+                            emit_div(html, "npf-size npf-upper-sub", |html| {
+                                emit_p(html, "", "Size:");
+                                emit_p(html, "vertical-select-header border-style-dark-1", "18");
+                                emit_div(
+                                    html,
+                                    "npf-select border-style-dark-1 vertical-select-group",
+                                    |html| {
+                                        let values = [
+                                            8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36,
+                                            72,
+                                        ];
+                                        for v in values {
+                                            emit_p(html, "vertical-select-item", &format!("{}", v));
+                                        }
+                                    },
+                                )
+                            });
+                            emit_div(html, "npf-confirm", |html| {
+                                emit_p(html, "npf-pad-p", "-");
+                                emit_p(html, "npf-ok npf-button", "OK");
+                                emit_p(html, "npf-cancel npf-button", "Cancel");
+                            });
+                        });
+                        emit_div(html, "npf-lower", |html| {
+                            emit_div(html, "npf-sample border-style-light-1", |html| {
+                                emit_p(html, "border-style-dark-1", "AaBbYyZz");
+                            });
+                            // emit_div(html, "npf-script", |html| {});
+                        });
+                    });
                 });
             },
         );
@@ -641,6 +712,9 @@ fn emit_div(s: &mut String, class: &str, mut cb: impl FnMut(&mut String)) {
     s.push_str(&format!(r##"<div class="{class}">"##));
     cb(s);
     s.push_str(&format!(r##"</div>"##));
+}
+fn emit_p(s: &mut String, class: &str, content: &str) {
+    s.push_str(&format!(r##"<p class="{class}">{content}</p>"##));
 }
 fn load_css() -> String {
     let mut res = String::new();

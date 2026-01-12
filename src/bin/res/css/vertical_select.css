@@ -1,0 +1,17 @@
+.vertical-select-item {
+	transition: background 10s linear 2147483640s, color 10s linear 2147483640s;
+	background: #00000000;
+	color: #000001;
+}
+
+.vertical-select-item:active {
+	transition: background 0s linear, color 0s linear;
+	background: #0000A1;
+	color: white;
+}
+
+.vertical-select-group:has(.vertical-select-item:active) .vertical-select-item:not(:active) {
+	transition: background 0s linear, color 0s linear;
+	background: #00000001;
+	color: black;
+}

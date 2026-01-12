@@ -3,7 +3,7 @@
 	display: flex;
 	column-gap: 2px;
 	align-items: center;
-	border-top: none;
+	border-top: none !important;
 }
 
 /* .fe-address-bar p:nth-child(1) {} */
