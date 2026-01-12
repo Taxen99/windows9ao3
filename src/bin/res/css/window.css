@@ -220,7 +220,7 @@ WINDOWS!!!
 	transition: background 0s linear;
 }
 .main:has(.window:active) .window:not(:active) .window-titlebar {
-	background: linear-gradient(to right, rgb(126, 126, 126), rgb(187, 187, 187));
+	background: linear-gradient(to right, rgb(126, 126, 125), rgb(187, 187, 187));
 	transition: background 0s linear;
 }
 

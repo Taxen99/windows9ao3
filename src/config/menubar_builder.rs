@@ -1,4 +1,6 @@
-use crate::config::emit_div;
+use rand::Rng;
+
+use crate::config::{Action, Config, emit_div};
 
 pub struct MenubarBuilder {
     items: Vec<MenubarItem>,
@@ -26,7 +28,7 @@ impl MenubarBuilder {
         self
     }
 
-    pub fn build(&self, html: &mut String, css: &mut String) {
+    pub fn build(&self, html: &mut String, css: &mut String, config: &Config) {
         /*
         <div class="menubar menubar-short">
                         <div class="menubar-item">
@@ -55,11 +57,14 @@ impl MenubarBuilder {
                                 if sub_item.disabled {
                                     classlist.push_str(" mb-disabled");
                                 }
-                                if let Some(id) = sub_item.id {
-                                    classlist.push_str(&format!(" mb-submenu-item-{}", id));
-                                }
-                                match sub_item.kind {
-                                    SubItemKind::Dummy | SubItemKind::Action => {
+                                // if let Some(id) = sub_item.id {
+                                //     classlist.push_str(&format!(" mb-submenu-item-{}", id));
+                                // }
+                                let id = sub_item.id.unwrap_or_else(|| rand::rng().random());
+                                let id_class = format!("mb-submenu-item-{}", id);
+                                classlist.push_str(&format!(" {id_class}"));
+                                match &sub_item.kind {
+                                    SubItemKind::Dummy => {
                                         html.push_str(&format!(
                                             r##"<div class="{1}">
                                                 <p>{0}</p>
@@ -75,7 +80,19 @@ impl MenubarBuilder {
                                             sub_item.name, classlist
                                         ));
                                     }
-                                    SubItemKind::Action => todo!(),
+                                    SubItemKind::Action(action) => {
+                                        html.push_str(&format!(
+                                            r##"<div class="{1}">
+                                                <p>{0}</p>
+                                            </div>"##,
+                                            sub_item.name, classlist
+                                        ));
+                                        config.emit_action(
+                                            css,
+                                            action,
+                                            &format!(".{}:active", id_class),
+                                        );
+                                    }
                                 }
                             }
                             // not last!
@@ -154,8 +171,8 @@ impl SubItem {
         self.kind = SubItemKind::Toggle;
         self
     }
-    pub fn action(&mut self) -> &mut Self {
-        self.kind = SubItemKind::Action;
+    pub fn action(&mut self, action: Action) -> &mut Self {
+        self.kind = SubItemKind::Action(action);
         self
     }
     pub fn id(&mut self, id: u64) -> &mut Self {
@@ -167,5 +184,5 @@ impl SubItem {
 pub enum SubItemKind {
     Dummy,
     Toggle,
-    Action,
+    Action(Action),
 }

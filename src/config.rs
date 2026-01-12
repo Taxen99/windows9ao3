@@ -65,6 +65,13 @@ pub struct Config {
     pub fs: FileSystem,
 }
 
+pub enum Action {
+    Close(u64),
+    Open(u64),
+    OpenFileExplorer(u64),
+    OpenNotepad(u64),
+}
+
 trait HashedExt {
     fn hashed(self) -> u64;
 }
@@ -120,6 +127,7 @@ impl BuildResult {
 impl Config {
     const FILE_EXPLORER_ID: u64 = 1;
     const NOTEPAD_ID: u64 = 2;
+    const NOTEPAD_FONT_ID: u64 = 3;
     pub fn build(mut self) -> BuildResult {
         self.app_apps_to_desktop();
 
@@ -292,7 +300,7 @@ impl Config {
                                 .sub_disabled("Print")
                             )
                             .group(|group| group
-                                .sub("Exit", |i| i.action())
+                                .sub("Exit", |i| i.action(Action::Close(Self::NOTEPAD_ID)))
                             )
                         )
                         .item("Edit", |item| item
@@ -311,7 +319,7 @@ impl Config {
                             )
                             .group(|group| group
                                 .sub("Word Wrap", |i| i.html_toggle().id(word_wrap_toggle_id))
-                                .sub("Set Font", |i| i.action())
+                                .sub("Set Font", |i| i.action(Action::Open(Self::NOTEPAD_FONT_ID)))
                             )
                         )
                         .item("Search", |item| item
@@ -325,10 +333,10 @@ impl Config {
                                 .sub_disabled("Help Topics")
                             )
                             .group(|group| group
-                                .sub("About Notepad", |i| i.action())
+                                .sub("About Notepad", |i| i.dummy())
                             )
                         )
-                        .build(html, css);
+                        .build(html, css, self);
                 });
                 //
                 emit_div(html, "window-main window-main-nopadtop", |html| {
@@ -338,7 +346,7 @@ impl Config {
                             //         let folder_hash = path.hashed();
                                     emit_div(html, &format!("np-view border-style-dark-1"), |html| {
                                         const THINGY: &str = r###"<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<meta charset="utf-8" />\n\t<meta http-equiv="x-ua-compatible" content="ie=edge" />\n\t<meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />\n\t<meta name="language" content="en-US" />\n\t<meta name="subject" content="fandom" />\n\t<meta name="description" content="An Archive of Our Own, a project of the Organization for Transformative Works" />\n\t<meta name="distribution" content="GLOBAL" />\n\t<meta name="classification" content="transformative works" />\n\t<meta name="author" content="Organization for Transformative Works" />\n\t<meta name="robots" content="noindex" />\n\t<meta name="googlebot" content="noindex" />\n\t<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n\t<meta name="chrome" content="nointentdetection" />\n\t<meta name="format-detection" content="telephone=no" />\n\t<title>test testson - Kurt Kurtson (taxen99) - Original Work [Archive of Our Own]</title>\n\n\t<link rel="stylesheet" type="text/css" media="screen" href="https://archiveofourown.org//stylesheets/skins/skin_1_default/1_site_screen_.css" />\n\t<link rel="stylesheet" type="text/css" media="only screen and (max-width: 62em), handheld"\n\t\thref="https://archiveofourown.org/stylesheets/skins/skin_1_default/4_site_midsize.handheld_.css" />\n\t<link rel="stylesheet" type="text/css" media="only screen and (max-width: 42em), handheld"\n\t\thref="https://archiveofourown.org/stylesheets/skins/skin_1_default/5_site_narrow.handheld_.css" />\n\t<link rel="stylesheet" type="text/css" media="speech" href="https://archiveofourown.org/stylesheets/skins/skin_1_default/6_site_speech_.css" />\n\t<link rel="stylesheet" type="text/css" media="print" href="https://archiveofourown.org/stylesheets/skins/skin_1_default/7_site_print_.css" />\n\t\x3C!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/8_site_screen_IE8_or_lower.css" /><![endif]-->\n\t\x3C!--[if IE 5]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/9_site_screen_IE5.css" /><![endif]-->\n\t\x3C!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/10_site_screen_IE6.css" /><![endif]-->\n\t\x3C!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/11_site_screen_IE7.css" /><![endif]-->\n\n\n\t\x3C!--sandbox for developers\t-->\n\t<link rel="stylesheet" href="https://archiveofourown.org/stylesheets/sandbox.css" />\n\n\n\n\t\x3Cscript src="https://archiveofourown.org/javascripts/livevalidation_standalone.js">\x3C/script>\n\n\t<meta name="csrf-param" content="authenticity_token" />\n\t<meta name="csrf-token"\n\t\tcontent="-PDRY6n50tSUYv72wKd9N3fkT2IjDC3nj9Ooa884vN7P8A4TFMGqiHM5A5-rO5_dYbV2RKZ23YekbcHtNQpucw" />\n\n\n</head>\n\n<body class="logged-in">\n\t<div id="outer" class="wrapper">\n\t\t<ul id="skiplinks">\n\t\t\t<li><a href="#main">Main Content</a></li>\n\t\t</ul>\n\t\t<noscript>\n\t\t\t<p id="javascript-warning">While we&#39;ve done our best to make the core functionality of this site\n\t\t\t\taccessible without JavaScript, it will work better with it enabled. Please consider turning it on!</p>\n\t\t</noscript>"###;
-                                        
+
                                         html.push_str(&format!(r##"
                                             <p>{}</p>
                                         "##, &THINGY.to_owned().replace("\\n", "\n").replace("\\t", "\t").replace("<", "&lt;").replace(">", "&gt;")));
@@ -356,6 +364,18 @@ impl Config {
                         //     });
                         // });
                     })
+                });
+            },
+        );
+        self.emit_window(
+            html,
+            css,
+            Self::NOTEPAD_FONT_ID,
+            "Font",
+            "https://win98icons.alexmeub.com/icons/png/font_tt-0.png",
+            |html, css| {
+                emit_div(html, "window-main window-main-nopadtop", |html| {
+                    html.push_str("foobar?");
                 });
             },
         );
@@ -470,21 +490,14 @@ impl Config {
         file_unique_hash: u64,
         is_in_explorer: bool,
     ) {
+        let condition = format!(
+            ".desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover",
+            file_unique_hash
+        );
         if let Some(file) = entry.as_file() {
             match file.kind {
                 FileKind::App => {
-                    css.push_str(&format!(
-                            r##"
-                            
-                            .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .window-{1} {{
-                                top: 30px;
-                                left: 30px;
-                                transition: top 0s linear 0s, left 0s linear 0s;
-                            }}
-                            "##,
-                            file_unique_hash,
-                            file.link.hashed()
-                        ));
+                    self.emit_action(css, &Action::Open(file.link.hashed()), &condition);
                 }
                 FileKind::Shortcut => {
                     let new_path = Path::new(&file.link);
@@ -498,48 +511,66 @@ impl Config {
                     );
                 }
                 FileKind::Text => {
-                    css.push_str(&format!(
-                        r##"
-
-                        .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .window-{1} {{
-                            top: 30px;
-                            left: 30px;
-                            transition: top 0s linear 0s, left 0s linear 0s;
-                        }}"##,
-                        file_unique_hash,
-                        Self::NOTEPAD_ID,
-                    ));
+                    self.emit_action(css, &Action::Open(Self::NOTEPAD_ID), &condition);
                 }
             }
         }
         if let Some(_sub_folder) = entry.as_folder() {
             if !is_in_explorer {
+                self.emit_action(css, &Action::Open(Self::FILE_EXPLORER_ID), &condition);
+            }
+            self.emit_action(
+                css,
+                &Action::OpenFileExplorer(entry_path.hashed()),
+                &condition,
+            );
+        }
+    }
+    fn emit_action(&self, css: &mut String, action: &Action, condition: &str) {
+        match action {
+            Action::Close(id) => {
                 css.push_str(&format!(
                     r##"
-
-                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .window-{1} {{
-                        top: 30px;
-                        left: 30px;
-                        transition: top 0s linear 0s, left 0s linear 0s;
+                    .main:has({0}) .window-{1} {{
+                        top: 0.002px;
+                        left: -2000.002px;
+                        transition: top 0s linear 0s, left 0s linear 0s !important;
                     }}"##,
-                    file_unique_hash,
-                    Self::FILE_EXPLORER_ID,
+                    condition, id,
                 ));
             }
-            css.push_str(&format!(
+            Action::Open(id) => {
+                css.push_str(&format!(
                     r##"
-                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .fe-view-{1} {{
+                    .main:has({0}) .window-{1} {{
+                        top: 30px;
+                        left: 30px;
+                        transition: top 0s linear 0s, left 0s linear 0s !important;
+                    }}"##,
+                    condition, id,
+                ));
+            }
+            Action::OpenFileExplorer(id) => {
+                // TODO: for now we don't do this, as to not preemtively complicate design.
+                // self.emit_action(css, Action::Open(Self::FILE_EXPLORER_ID), condition);
+                css.push_str(&format!(
+                    r##"
+                    .main:has({0}) .fe-view-{1} {{
                         left: 0px;
-                        transition: left 0s linear;
+                        transition: left 0s linear !important;
                     }}
-                    .main:has(.desktop-item-{0} + .desktop-item-animator .desktop-item-animator-helper:hover) .fe-view:not(.fe-view-{1}) {{
+                    .main:has({0}) .fe-view:not(.fe-view-{1}) {{
                         left: -20000.001px;
-                        transition: left 0s linear;
+                        transition: left 0s linear !important;
                     }}
                     "##,
-                    file_unique_hash,
-                    entry_path.hashed(),
+                    condition, id
                 ));
+            }
+            Action::OpenNotepad(id) => {
+                // self.emit_action(css, Action::Open(Self::NOTEPAD_ID), condition);
+                todo!();
+            }
         }
     }
     fn app_apps_to_desktop(&mut self) {
