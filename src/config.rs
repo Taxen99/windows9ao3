@@ -722,6 +722,8 @@ impl Config {
                 ));
             }
             Action::Open(id) => {
+                // TODO: this is Really shitty (tm). Also why the FUCK does this work (especially with touchpad taps????). Investigate!!!!
+                // NOTE: we have extra ".window"s because css selector specificity...
                 css.push_str(&format!(
                     r##"
                     .main:has({0}) .window-{1}.window.window {{
