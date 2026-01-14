@@ -724,11 +724,26 @@ impl Config {
             Action::Open(id) => {
                 css.push_str(&format!(
                     r##"
-                    .main:has({0}) .window-{1} {{
+                    .main:has({0}) .window-{1}.window.window {{
                         top: 30px;
                         left: 30px;
-                        transition: top 0s linear 0s, left 0s linear 0s !important;
-                    }}"##,
+                        transition: top 0s linear 0s, left 0s linear 0s, z-index 0s linear;
+                        z-index: 2147483640;
+                    }}
+
+.main:has({0}) .window:not(.window-{1}).window.window {{
+    z-index: 1;
+    transition: left 10s linear 2147483640s, top 10s linear 2147483640s, z-index 214748s linear;
+}}
+.main:has({0}) .window-{1}.window.window .window-titlebar {{
+    background: linear-gradient(to right, #00007B, #3B79B8);
+    transition: background 0s linear;
+}}
+.main:has({0}) .window:not(.window-{1}).window.window .window-titlebar {{
+    background: linear-gradient(to right, rgb(126, 126, 125), rgb(187, 187, 187));
+    transition: background 0s linear;
+}}
+                    "##,
                     condition, id,
                 ));
             }
