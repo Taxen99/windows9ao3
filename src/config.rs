@@ -473,7 +473,12 @@ impl Config {
                             emit_div(html, "npf-confirm", |html| {
                                 emit_p(html, "npf-pad-p", "-");
                                 emit_p(html, "npf-ok npf-button", "OK");
-                                emit_p(html, "npf-cancel npf-button", "Cancel");
+                                self.emit_action(
+                                    css,
+                                    &Action::Close(Self::NOTEPAD_FONT_ID),
+                                    ".npf-button:active",
+                                );
+                                // emit_p(html, "npf-cancel npf-button", "Cancel");
                             });
                         });
                         emit_div(html, "npf-lower", |html| {

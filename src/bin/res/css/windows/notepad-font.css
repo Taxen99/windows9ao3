@@ -9,6 +9,10 @@
 	flex-direction: column;
 }
 
+.window:has(.npf-main) .window-exiter {
+	display: none;
+}
+
 .npf-upper {
 	width: 100%;
 	display: flex;
