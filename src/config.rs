@@ -8,6 +8,7 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 use crate::config::menubar_builder::MenubarBuilder;
+use crate::config::vertical_select::emit_vertical_select;
 use crate::css_var_remove::css_var_remove;
 
 mod menubar_builder;
@@ -136,6 +137,7 @@ impl Config {
         let mut html = String::new();
         css.push_str(&load_css());
         emit_div(&mut html, "main", |html| {
+            emit_div(html, "onload", |_| ());
             emit_div(html, "desktop", |html| {
                 if let Some(desktop) = self.fs.root.as_folder().unwrap().children.get("desktop") {
                     let _ = desktop.as_folder().expect("desktop must be folder");
@@ -368,6 +370,76 @@ impl Config {
                 });
             },
         );
+        let fonts = [
+            // NOTE: sans-serif twice because css transitions...
+            ("Sans Serif", "sans-serif, sans-serif"),
+            ("Courier New", "'Courier New', Courier, monospace"),
+            (
+                "Franklin Gothic Medium",
+                "'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif",
+            ),
+            (
+                "Lucida Sans",
+                "'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif",
+            ),
+            ("Times New Roman", "'Times New Roman', Times, serif"),
+            (
+                "Trebuchet MS",
+                "'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif",
+            ),
+            ("Arial", "Arial, Helvetica, sans-serif"),
+            (
+                "Impact",
+                "Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif",
+            ),
+            ("Verdana", "Verdana, Geneva, Tahoma, sans-serif"),
+            ("Cursive", "cursive"),
+            ("Fantasy", "fantasy"),
+            (
+                "Segoe UI",
+                "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+            ),
+        ];
+        let default_font = "Sans Serif";
+        let sizes = [
+            "8", "9", "10", "11", "12", "14", "16", "18", "20", "22", "24", "26", "28", "36", "72",
+        ];
+        let default_size = "12";
+        let styles = ["Regular", "Italic", "Bold", "Bold Italic"];
+        let default_style = "Regular";
+        for (i, &size) in sizes.iter().enumerate() {
+            css.push_str(&format!(r##"
+                .npf-main:has(.npf-size .vertical-select-item:nth-of-type({}):active) .npf-sample p {{
+                    transition: font-family 10s linear 2147483640s, font-weight 10s linear 2147483640s, font-style 10s linear 2147483640s, font-size 0s linear;
+                    font-size: {}px;
+                }}
+            "##, i + 1, size));
+        }
+        for (i, (_, css_font)) in fonts.iter().enumerate() {
+            css.push_str(&format!(r##"
+                .npf-main:has(.npf-font .vertical-select-item:nth-of-type({}):active) .npf-sample p {{
+                    transition: font-family 0s linear, font-weight 10s linear 2147483640s, font-style 10s linear 2147483640s, font-size 10s linear 2147483640s;
+                    font-family: {};
+                }}
+            "##, i + 1, css_font));
+        }
+        {
+            css.push_str(&format!(
+                r##"
+                .main:has(.onload:hover) .npf-sample p {{
+                    transition: all 0s linear;
+                    font-weight: 100;
+                    font-style: normal;
+                    font-family: {};
+                    font-size: {}px;
+                }}
+            "##,
+                // TODO: this is so cursed
+                HashMap::from(fonts)[default_font],
+                default_size
+            ));
+        }
+
         self.emit_window(
             html,
             css,
@@ -380,59 +452,23 @@ impl Config {
                         emit_div(html, "npf-upper", |html| {
                             emit_div(html, "npf-font npf-upper-sub", |html| {
                                 emit_p(html, "", "Font:");
-                                emit_p(
+                                emit_vertical_select(
+                                    self,
                                     html,
-                                    "vertical-select-header border-style-dark-1",
-                                    "Times New Roman",
+                                    css,
+                                    &fonts.iter().map(|x| x.0).collect::<Vec<_>>(),
+                                    default_font,
                                 );
-                                emit_div(
-                                    html,
-                                    "npf-select border-style-dark-1 vertical-select-group",
-                                    |html| {
-                                        emit_p(html, "vertical-select-item", "Times New Roman");
-                                        emit_p(html, "vertical-select-item", "Times Roman");
-                                        emit_p(html, "vertical-select-item", "Times Old R");
-                                        emit_p(html, "vertical-select-item", "Courier New");
-                                        emit_p(html, "vertical-select-item", "Old Courier");
-                                    },
-                                )
                             });
                             emit_div(html, "npf-style npf-upper-sub", |html| {
                                 emit_p(html, "", "Font style:");
-                                emit_div(html, "footest", |html| {
-                                    emit_p(
-                                        html,
-                                        "vertical-select-header border-style-dark-1",
-                                        "Bold Italic",
-                                    );
-                                    emit_div(
-                                        html,
-                                        "npf-select border-style-dark-1 vertical-select-group",
-                                        |html| {
-                                            emit_p(html, "vertical-select-item", "Regular");
-                                            emit_p(html, "vertical-select-item", "Italic");
-                                            emit_p(html, "vertical-select-item", "Bold");
-                                            emit_p(html, "vertical-select-item", "Bold Italic");
-                                        },
-                                    )
-                                });
+                                // NOTE: must change in notepad-font.css as well
+                                emit_vertical_select(self, html, css, &styles, default_style);
                             });
                             emit_div(html, "npf-size npf-upper-sub", |html| {
                                 emit_p(html, "", "Size:");
-                                emit_p(html, "vertical-select-header border-style-dark-1", "18");
-                                emit_div(
-                                    html,
-                                    "npf-select border-style-dark-1 vertical-select-group",
-                                    |html| {
-                                        let values = [
-                                            8, 9, 10, 11, 12, 14, 16, 18, 20, 22, 24, 26, 28, 36,
-                                            72,
-                                        ];
-                                        for v in values {
-                                            emit_p(html, "vertical-select-item", &format!("{}", v));
-                                        }
-                                    },
-                                )
+                                // NOTE: must change in notepad-font.css as well
+                                emit_vertical_select(self, html, css, &sizes, default_size);
                             });
                             emit_div(html, "npf-confirm", |html| {
                                 emit_p(html, "npf-pad-p", "-");
@@ -442,7 +478,9 @@ impl Config {
                         });
                         emit_div(html, "npf-lower", |html| {
                             emit_div(html, "npf-sample border-style-light-1", |html| {
-                                emit_p(html, "border-style-dark-1", "AaBbYyZz");
+                                emit_div(html, "npf-sample-inner border-style-dark-1", |html| {
+                                    emit_p(html, "", "AaBbYyZz");
+                                });
                             });
                             // emit_div(html, "npf-script", |html| {});
                         });

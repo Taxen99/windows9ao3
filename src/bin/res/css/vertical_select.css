@@ -1,10 +1,19 @@
+.vertical-select {
+	position: relative;
+}
+
 .vertical-select-item {
 	transition: background 10s linear 2147483640s, color 10s linear 2147483640s;
 	background: #00000000;
 	color: #000001;
 }
 
-.vertical-select-item:active {
+.vertical-select-item.vertical-select-item-default {
+	background: #0000A2;
+	color: #fffffe;
+}
+
+.vertical-select-item:active:not(#foobarforspecificity) {
 	transition: background 0s linear, color 0s linear;
 	background: #0000A1;
 	color: white;
@@ -14,4 +23,46 @@
 	transition: background 0s linear, color 0s linear;
 	background: #00000001;
 	color: black;
+}
+
+.vertical-select-header {
+	transition: z-index 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+	z-index: -2;
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+}
+.vertical-select-header.vertical-select-header-fake {
+	opacity: 0.0;
+	position: relative;
+}
+.vertical-select-header.vertical-select-header-default {
+	z-index: 2;
+}
+.vertical-select-item:active + .vertical-select-header {
+	transition: z-index 0s linear;
+	z-index: 1;
+}
+
+.vertical-select-group:has(.vertical-select-item:active) .vertical-select-item:not(:active) +.vertical-select-header {
+	transition: z-index 0s linear;
+	z-index: -1;
+}
+
+.vertical-select-group::-webkit-scrollbar {
+	width: 10px;
+}
+
+.vertical-select-group::-webkit-scrollbar-track {
+	background: #C0C0C0;
+}
+
+.vertical-select-group::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+.vertical-select-group::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }

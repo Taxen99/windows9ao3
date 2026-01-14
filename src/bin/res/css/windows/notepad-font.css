@@ -23,8 +23,7 @@
 	background-color: white;
 	padding: 1px;
 }
-
-.npf-select {
+.npf-upper-sub .vertical-select-group {
 	height: 104px;
 	word-break: break-word;
 	overflow-y: scroll;
@@ -32,31 +31,20 @@
 	padding: 1px;
 }
 
-.npf-font .npf-select p {
-	padding-left: 20px;
+.npf-font .vertical-select-item {
+	padding-left: 2px;
+	display: flex;
 }
-.npf-font .npf-select p::before {
+.npf-font .vertical-select-item::before {
+	margin-right: 6px;
 	content: "";
 	display: block;
 	background: url("../res/tt-9.png");
 	background-size: cover;
 	width: 12px;
 	height: 12px;
-	position: absolute;
-	transform: translate(-16px, 0px);
-}
-
-.npf-select::-webkit-scrollbar {
-	width: 10px;
-}
-.npf-select::-webkit-scrollbar-track {
-	background: #C0C0C0;
-}
-.npf-select::-webkit-scrollbar-thumb {
-	background: #888;
-}
-.npf-select::-webkit-scrollbar-thumb:hover {
-	background: #555;
+	/* position: absolute; */
+	/* transform: translate(-16px, 0px); */
 }
 
 .npf-font {
@@ -108,10 +96,45 @@
 	top: -10px;
 }
 
-.npf-sample p {
+.npf-sample-inner {
 	width: 116px;
 	height: 37px;
 	display: flex;
 	align-items: center;
 	justify-content: center;
+	overflow: hidden;
 }
+
+.npf-sample-inner p {
+	transition: font-family 10s linear 2147483640s, font-weight 10s linear 2147483640s, font-style 10s linear 2147483640s, font-size 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+	/* work-around because transitions are weird and fucked up. this needs to be unique! */
+	font-style: oblique 1deg;
+	font-weight: 101;
+	font-size: 12.01px;
+}
+
+.npf-main:has(.npf-style .vertical-select-item:nth-of-type(1):active) .npf-sample p {
+	transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
+	font-weight: 100;
+	font-style: normal;
+}
+.npf-main:has(.npf-style .vertical-select-item:nth-of-type(2):active) .npf-sample p {
+	transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
+	font-weight: 100;
+	font-style: italic;
+}
+.npf-main:has(.npf-style .vertical-select-item:nth-of-type(3):active) .npf-sample p {
+	transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
+	font-weight: bold;
+	font-style: normal;
+}
+.npf-main:has(.npf-style .vertical-select-item:nth-of-type(4):active) .npf-sample p {
+	transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
+	font-weight: bold;
+	font-style: italic;
+}
+
+/* .asdjsaoa {
+	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+} */

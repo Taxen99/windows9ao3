@@ -29,3 +29,17 @@ details summary::-webkit-details-marker,
 details summary::marker {
 	content: ""
 }
+
+.onload {
+	position: absolute;
+	inset: 0;
+	z-index: 2147483647;
+	transition: z-index 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+	background-color: #ac2b2b22;
+}
+
+.onload:hover {
+	transition: z-index 0s linear;
+	z-index: -1000000;
+}
