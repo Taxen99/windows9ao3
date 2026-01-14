@@ -48,8 +48,18 @@ Config (
                         )),
                         "Sussy document": File ((
                             kind: Text,
-                            link: "",
+                            link: "Foobaz",
                             offset: Some((2, 2)),
+                        )),
+                        "Sussy document": File ((
+                            kind: Text,
+                            link: "text/sussy.txt",
+                            offset: Some((2, 2)),
+                        )),
+                        "Ao3": File ((
+                            kind: Text,
+                            link: "text/ao3.html",
+                            offset: Some((3, 2)),
                         )),
                     },
                 )),

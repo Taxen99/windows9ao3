@@ -29,6 +29,24 @@ pub struct FileSystem {
     pub root: FsEntry,
 }
 
+impl FileSystem {
+    pub fn visit_all_files(&self, mut func: impl FnMut(&File, &Path)) {
+        fn visit(f: &FsEntry, p: &Path, mut cb: &mut dyn FnMut(&File, &Path)) {
+            match f {
+                FsEntry::File(file) => cb(file, p),
+                FsEntry::Folder(folder) => {
+                    for (child_name, child_entry) in &folder.children {
+                        let mut child_path = p.to_owned();
+                        child_path.push(child_name);
+                        visit(&child_entry, &child_path, cb);
+                    }
+                }
+            };
+        };
+        visit(&self.root, Path::new("/"), &mut func);
+    }
+}
+
 #[derive(Debug, Serialize, Deserialize, EnumAsInner)]
 pub enum FsEntry {
     File(File),
@@ -128,8 +146,8 @@ impl BuildResult {
 
 impl Config {
     const FILE_EXPLORER_ID: u64 = 1;
-    const NOTEPAD_ID: u64 = 2;
-    const NOTEPAD_FONT_ID: u64 = 3;
+    // const NOTEPAD_ID: u64 = 2;
+    // const NOTEPAD_FONT_ID: u64 = 3;
     pub fn build(mut self) -> BuildResult {
         self.app_apps_to_desktop();
 
@@ -152,6 +170,7 @@ impl Config {
                         w.name.hashed(),
                         &w.name,
                         &w.icon,
+                        None,
                         |html, css| {
                             html.push_str(&format!(
                                 r##"<div class="content-inner">
@@ -175,6 +194,7 @@ impl Config {
             Self::FILE_EXPLORER_ID,
             "File Explorer",
             "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
+            None,
             |html, css| {
                 html.push_str(&format!(r##"
                 <div class="window-header">
@@ -274,102 +294,6 @@ impl Config {
         );
     }
     fn emit_np_window(&self, html: &mut String, css: &mut String) {
-        self.emit_window(
-            html,
-            css,
-            Self::NOTEPAD_ID,
-            "Notepad",
-            "https://win98icons.alexmeub.com/icons/png/notepad-5.png",
-            |html, css| {
-                emit_div(html, "window-header", |html| {
-                    let word_wrap_toggle_id = 8336941761795208;
-                    css.push_str(&format!(r##"
-                        .window-{}:has(.mb-submenu-item-{}[open]) .np-view {{
-	                        white-space: pre-wrap;
-                            word-break: break-all;
-                        }}
-                    "##, Self::NOTEPAD_ID, word_wrap_toggle_id));
-                    MenubarBuilder::new()
-                        .short(true)
-                        .item("File", |item| item
-                            .group(|group| group
-                                .sub_disabled("New")
-                                .sub_disabled("Open...")
-                                .sub_disabled("Save")
-                                .sub_disabled("Save As...")
-                            )
-                            .group(|group| group
-                                .sub_disabled("Page Setup...")
-                                .sub_disabled("Print")
-                            )
-                            .group(|group| group
-                                .sub("Exit", |i| i.action(Action::Close(Self::NOTEPAD_ID)))
-                            )
-                        )
-                        .item("Edit", |item| item
-                            .group(|group| group
-                                .sub_disabled("Undo")
-                            )
-                            .group(|group| group
-                                .sub_disabled("Cut")
-                                .sub_disabled("Copy")
-                                .sub_disabled("Paste")
-                                .sub_disabled("Delete")
-                            )
-                            .group(|group| group
-                                .sub_disabled("Select All")
-                                .sub_disabled("Time/Date")
-                            )
-                            .group(|group| group
-                                .sub("Word Wrap", |i| i.html_toggle().id(word_wrap_toggle_id))
-                                .sub("Set Font", |i| i.action(Action::Open(Self::NOTEPAD_FONT_ID)))
-                            )
-                        )
-                        .item("Search", |item| item
-                            .group(|group| group
-                                .sub_disabled("Find...")
-                                .sub_disabled("Find Next")
-                            )
-                        )
-                        .item("Help", |item| item
-                            .group(|group| group
-                                .sub_disabled("Help Topics")
-                            )
-                            .group(|group| group
-                                .sub("About Notepad", |i| i.dummy())
-                            )
-                        )
-                        .build(html, css, self);
-                });
-                //
-                emit_div(html, "window-main window-main-nopadtop", |html| {
-                    emit_div(html, "np-main", |html| {
-                            // emit_div(html, "fe-view-anchor", |html| {
-                            //     fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
-                            //         let folder_hash = path.hashed();
-                                    emit_div(html, &format!("np-view border-style-dark-1"), |html| {
-                                        const THINGY: &str = r###"<!DOCTYPE html>\n<html lang="en">\n\n<head>\n\t<meta charset="utf-8" />\n\t<meta http-equiv="x-ua-compatible" content="ie=edge" />\n\t<meta name="keywords" content="fanfiction, transformative works, otw, fair use, archive" />\n\t<meta name="language" content="en-US" />\n\t<meta name="subject" content="fandom" />\n\t<meta name="description" content="An Archive of Our Own, a project of the Organization for Transformative Works" />\n\t<meta name="distribution" content="GLOBAL" />\n\t<meta name="classification" content="transformative works" />\n\t<meta name="author" content="Organization for Transformative Works" />\n\t<meta name="robots" content="noindex" />\n\t<meta name="googlebot" content="noindex" />\n\t<meta name="viewport" content="width=device-width, initial-scale=1.0" />\n\t<meta name="chrome" content="nointentdetection" />\n\t<meta name="format-detection" content="telephone=no" />\n\t<title>test testson - Kurt Kurtson (taxen99) - Original Work [Archive of Our Own]</title>\n\n\t<link rel="stylesheet" type="text/css" media="screen" href="https://archiveofourown.org//stylesheets/skins/skin_1_default/1_site_screen_.css" />\n\t<link rel="stylesheet" type="text/css" media="only screen and (max-width: 62em), handheld"\n\t\thref="https://archiveofourown.org/stylesheets/skins/skin_1_default/4_site_midsize.handheld_.css" />\n\t<link rel="stylesheet" type="text/css" media="only screen and (max-width: 42em), handheld"\n\t\thref="https://archiveofourown.org/stylesheets/skins/skin_1_default/5_site_narrow.handheld_.css" />\n\t<link rel="stylesheet" type="text/css" media="speech" href="https://archiveofourown.org/stylesheets/skins/skin_1_default/6_site_speech_.css" />\n\t<link rel="stylesheet" type="text/css" media="print" href="https://archiveofourown.org/stylesheets/skins/skin_1_default/7_site_print_.css" />\n\t\x3C!--[if IE 8]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/8_site_screen_IE8_or_lower.css" /><![endif]-->\n\t\x3C!--[if IE 5]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/9_site_screen_IE5.css" /><![endif]-->\n\t\x3C!--[if IE 6]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/10_site_screen_IE6.css" /><![endif]-->\n\t\x3C!--[if IE 7]><link rel="stylesheet" type="text/css" media="screen" href="/stylesheets/skins/skin_1_default/11_site_screen_IE7.css" /><![endif]-->\n\n\n\t\x3C!--sandbox for developers\t-->\n\t<link rel="stylesheet" href="https://archiveofourown.org/stylesheets/sandbox.css" />\n\n\n\n\t\x3Cscript src="https://archiveofourown.org/javascripts/livevalidation_standalone.js">\x3C/script>\n\n\t<meta name="csrf-param" content="authenticity_token" />\n\t<meta name="csrf-token"\n\t\tcontent="-PDRY6n50tSUYv72wKd9N3fkT2IjDC3nj9Ooa884vN7P8A4TFMGqiHM5A5-rO5_dYbV2RKZ23YekbcHtNQpucw" />\n\n\n</head>\n\n<body class="logged-in">\n\t<div id="outer" class="wrapper">\n\t\t<ul id="skiplinks">\n\t\t\t<li><a href="#main">Main Content</a></li>\n\t\t</ul>\n\t\t<noscript>\n\t\t\t<p id="javascript-warning">While we&#39;ve done our best to make the core functionality of this site\n\t\t\t\taccessible without JavaScript, it will work better with it enabled. Please consider turning it on!</p>\n\t\t</noscript>"###;
-
-                                        html.push_str(&format!(r##"
-                                            <p>{}</p>
-                                        "##, &THINGY.to_owned().replace("\\n", "\n").replace("\\t", "\t").replace("<", "&lt;").replace(">", "&gt;")));
-                                        // config.emit_file_view_content(html, css, &path, true);
-                                    });
-                                    // for (name, entry) in &folder.children {
-                                    //     if let FsEntry::Folder(sub_folder) = &entry {
-                                    //         let mut sub_path = path.clone();
-                                    //         sub_path.push(name);
-                                    //         emit_folder(config, html, css, sub_folder, sub_path);
-                                    //     }
-                                    // }
-                        //         }
-                        //         emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
-                        //     });
-                        // });
-                    })
-                });
-            },
-        );
         let fonts = [
             // NOTE: sans-serif twice because css transitions...
             ("Sans Serif", "sans-serif, sans-serif"),
@@ -409,50 +333,50 @@ impl Config {
         let styles = ["Regular", "Italic", "Bold", "Bold Italic"];
         let default_style = "Regular";
         {
-            css.push_str(&format!(r##"
+            css.push_str(r##"
 .npf-main:has(.npf-style .vertical-select-item:nth-of-type(1):active) .npf-sample p,
-.window-{0}:has(+ .window .npf-style .vertical-select-item:nth-of-type(1):active) .np-view {{
+.window-kind-notepad:has(+ .window .npf-style .vertical-select-item:nth-of-type(1):active) .np-view {
     transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
     font-weight: 100;
     font-style: normal;
-}}
+}
 .npf-main:has(.npf-style .vertical-select-item:nth-of-type(2):active) .npf-sample p,
-.window-{0}:has(+ .window .npf-style .vertical-select-item:nth-of-type(2):active) .np-view {{
+.window-kind-notepad:has(+ .window .npf-style .vertical-select-item:nth-of-type(2):active) .np-view {
     transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
     font-weight: 100;
     font-style: italic;
-}}
+}
 .npf-main:has(.npf-style .vertical-select-item:nth-of-type(3):active) .npf-sample p,
-.window-{0}:has(+ .window .npf-style .vertical-select-item:nth-of-type(3):active) .np-view {{
+.window-kind-notepad:has(+ .window .npf-style .vertical-select-item:nth-of-type(3):active) .np-view {
     transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
     font-weight: bold;
     font-style: normal;
-}}
+}
 .npf-main:has(.npf-style .vertical-select-item:nth-of-type(4):active) .npf-sample p,
-.window-{0}:has(+ .window .npf-style .vertical-select-item:nth-of-type(4):active) .np-view {{
+.window-kind-notepad:has(+ .window .npf-style .vertical-select-item:nth-of-type(4):active) .np-view {
     transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
     font-weight: bold;
     font-style: italic;
-}}
-            "##, Self::NOTEPAD_ID));
+}
+            "##);
         }
         for (i, &size) in sizes.iter().enumerate() {
             css.push_str(&format!(r##"
                 .npf-main:has(.npf-size .vertical-select-item:nth-of-type({0}):active) .npf-sample p,
-                .window-{2}:has(+ .window .npf-size .vertical-select-item:nth-of-type({0}):active) .np-view {{
+                .window-kind-notepad:has(+ .window .npf-size .vertical-select-item:nth-of-type({0}):active) .np-view {{
                     transition: font-family 10s linear 2147483640s, font-weight 10s linear 2147483640s, font-style 10s linear 2147483640s, font-size 0s linear;
                     font-size: {1}px;
                 }}
-            "##, i + 1, size, Self::NOTEPAD_ID));
+            "##, i + 1, size));
         }
         for (i, (_, css_font)) in fonts.iter().enumerate() {
             css.push_str(&format!(r##"
                 .npf-main:has(.npf-font .vertical-select-item:nth-of-type({0}):active) .npf-sample p,
-                .window-{2}:has(+ .window .npf-font .vertical-select-item:nth-of-type({0}):active) .np-view {{
+                .window-kind-notepad:has(+ .window .npf-font .vertical-select-item:nth-of-type({0}):active) .np-view {{
                     transition: font-family 0s linear, font-weight 10s linear 2147483640s, font-style 10s linear 2147483640s, font-size 10s linear 2147483640s;
                     font-family: {1};
                 }}
-            "##, i + 1, css_font, Self::NOTEPAD_ID));
+            "##, i + 1, css_font));
         }
         {
             css.push_str(&format!(
@@ -472,59 +396,169 @@ impl Config {
             ));
         }
 
-        self.emit_window(
-            html,
-            css,
-            Self::NOTEPAD_FONT_ID,
-            "Font",
-            "https://win98icons.alexmeub.com/icons/png/font_tt-0.png",
-            |html, css| {
-                emit_div(html, "window-main", |html| {
-                    emit_div(html, "npf-main", |html| {
-                        emit_div(html, "npf-upper", |html| {
-                            emit_div(html, "npf-font npf-upper-sub", |html| {
-                                emit_p(html, "", "Font:");
-                                emit_vertical_select(
-                                    self,
-                                    html,
-                                    css,
-                                    &fonts.iter().map(|x| x.0).collect::<Vec<_>>(),
-                                    default_font,
-                                );
+        self.fs.visit_all_files(|file, path| {
+            if file.kind != FileKind::Text {
+                return;
+            }
+            let id = path.hashed();
+            let font_id = id + 1;
+            self.emit_window(
+                html,
+                css,
+                id,
+                "Notepad",
+                "https://win98icons.alexmeub.com/icons/png/notepad-5.png",
+                Some("window-kind-notepad"),
+                |html, css| {
+                    emit_div(html, "window-header", |html| {
+                        let word_wrap_toggle_id = 8336941761795208;
+                        css.push_str(&format!(
+                            r##"
+                            .window-{}:has(.mb-submenu-item-{}[open]) .np-view {{
+                                white-space: pre-wrap;
+                                word-break: break-all;
+                            }}
+                        "##,
+                            id, word_wrap_toggle_id
+                        ));
+                        MenubarBuilder::new()
+                            .short(true)
+                            .item("File", |item| {
+                                item.group(|group| {
+                                    group
+                                        .sub_disabled("New")
+                                        .sub_disabled("Open...")
+                                        .sub_disabled("Save")
+                                        .sub_disabled("Save As...")
+                                })
+                                .group(|group| {
+                                    group.sub_disabled("Page Setup...").sub_disabled("Print")
+                                })
+                                .group(|group| group.sub("Exit", |i| i.action(Action::Close(id))))
+                            })
+                            .item("Edit", |item| {
+                                item.group(|group| group.sub_disabled("Undo"))
+                                    .group(|group| {
+                                        group
+                                            .sub_disabled("Cut")
+                                            .sub_disabled("Copy")
+                                            .sub_disabled("Paste")
+                                            .sub_disabled("Delete")
+                                    })
+                                    .group(|group| {
+                                        group.sub_disabled("Select All").sub_disabled("Time/Date")
+                                    })
+                                    .group(|group| {
+                                        group
+                                            .sub("Word Wrap", |i| {
+                                                i.html_toggle().id(word_wrap_toggle_id)
+                                            })
+                                            .sub("Set Font", |i| i.action(Action::Open(font_id)))
+                                    })
+                            })
+                            .item("Search", |item| {
+                                item.group(|group| {
+                                    group.sub_disabled("Find...").sub_disabled("Find Next")
+                                })
+                            })
+                            .item("Help", |item| {
+                                item.group(|group| group.sub_disabled("Help Topics"))
+                                    .group(|group| group.sub("About Notepad", |i| i.dummy()))
+                            })
+                            .build(html, css, self);
+                    });
+                    //
+                    emit_div(html, "window-main window-main-nopadtop", |html| {
+                        emit_div(html, "np-main", |html| {
+                            // emit_div(html, "fe-view-anchor", |html| {
+                            //     fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                            //         let folder_hash = path.hashed();
+                            emit_div(html, &format!("np-view border-style-dark-1"), |html| {
+                                let content =
+                                    fs::read_to_string(Path::new("./res").join(&file.link))
+                                        .expect(&format!("resource {} does not exist", &file.link));
+                                html.push_str(&format!(
+                                    r##"
+                                        <p>{}</p>
+                                    "##,
+                                    content.replace("<", "&lt;").replace(">", "&gt;")
+                                ));
+                                // config.emit_file_view_content(html, css, &path, true);
                             });
-                            emit_div(html, "npf-style npf-upper-sub", |html| {
-                                emit_p(html, "", "Font style:");
-                                // NOTE: must change in notepad-font.css as well
-                                emit_vertical_select(self, html, css, &styles, default_style);
-                            });
-                            emit_div(html, "npf-size npf-upper-sub", |html| {
-                                emit_p(html, "", "Size:");
-                                // NOTE: must change in notepad-font.css as well
-                                emit_vertical_select(self, html, css, &sizes, default_size);
-                            });
-                            emit_div(html, "npf-confirm", |html| {
-                                emit_p(html, "npf-pad-p", "-");
-                                emit_p(html, "npf-ok npf-button", "OK");
-                                self.emit_action(
-                                    css,
-                                    &Action::Close(Self::NOTEPAD_FONT_ID),
-                                    ".npf-button:active",
-                                );
-                                // emit_p(html, "npf-cancel npf-button", "Cancel");
-                            });
-                        });
-                        emit_div(html, "npf-lower", |html| {
-                            emit_div(html, "npf-sample border-style-light-1", |html| {
-                                emit_div(html, "npf-sample-inner border-style-dark-1", |html| {
-                                    emit_p(html, "", "AaBbYyZz");
+                            // for (name, entry) in &folder.children {
+                            //     if let FsEntry::Folder(sub_folder) = &entry {
+                            //         let mut sub_path = path.clone();
+                            //         sub_path.push(name);
+                            //         emit_folder(config, html, css, sub_folder, sub_path);
+                            //     }
+                            // }
+                            //         }
+                            //         emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
+                            //     });
+                            // });
+                        })
+                    });
+                },
+            );
+            self.emit_window(
+                html,
+                css,
+                font_id,
+                "Font",
+                "https://win98icons.alexmeub.com/icons/png/font_tt-0.png",
+                None,
+                |html, css| {
+                    emit_div(html, "window-main", |html| {
+                        emit_div(html, "npf-main", |html| {
+                            emit_div(html, "npf-upper", |html| {
+                                emit_div(html, "npf-font npf-upper-sub", |html| {
+                                    emit_p(html, "", "Font:");
+                                    emit_vertical_select(
+                                        self,
+                                        html,
+                                        css,
+                                        &fonts.iter().map(|x| x.0).collect::<Vec<_>>(),
+                                        default_font,
+                                    );
+                                });
+                                emit_div(html, "npf-style npf-upper-sub", |html| {
+                                    emit_p(html, "", "Font style:");
+                                    // NOTE: must change in notepad-font.css as well
+                                    emit_vertical_select(self, html, css, &styles, default_style);
+                                });
+                                emit_div(html, "npf-size npf-upper-sub", |html| {
+                                    emit_p(html, "", "Size:");
+                                    // NOTE: must change in notepad-font.css as well
+                                    emit_vertical_select(self, html, css, &sizes, default_size);
+                                });
+                                emit_div(html, "npf-confirm", |html| {
+                                    emit_p(html, "npf-pad-p", "-");
+                                    emit_p(html, "npf-ok npf-button", "OK");
+                                    self.emit_action(
+                                        css,
+                                        &Action::Close(font_id),
+                                        ".npf-button:active",
+                                    );
+                                    // emit_p(html, "npf-cancel npf-button", "Cancel");
                                 });
                             });
-                            // emit_div(html, "npf-script", |html| {});
+                            emit_div(html, "npf-lower", |html| {
+                                emit_div(html, "npf-sample border-style-light-1", |html| {
+                                    emit_div(
+                                        html,
+                                        "npf-sample-inner border-style-dark-1",
+                                        |html| {
+                                            emit_p(html, "", "AaBbYyZz");
+                                        },
+                                    );
+                                });
+                                // emit_div(html, "npf-script", |html| {});
+                            });
                         });
                     });
-                });
-            },
-        );
+                },
+            );
+        });
     }
     fn emit_window(
         &self,
@@ -533,11 +567,12 @@ impl Config {
         id: u64,
         name: &str,
         icon: &str,
+        extra_classes: Option<&str>,
         mut cb: impl FnMut(&mut String, &mut String),
     ) {
         html.push_str(&format!(
             r##"
-            <div class="window window-{0}">
+            <div class="window window-{0} {2}">
                 <div class="window-titlebar">
                     <div class="mover">
                         <div class="mover-hand mover-hand-Q mover-hand-up mover-hand-left "></div>
@@ -558,6 +593,7 @@ impl Config {
             "##,
             id,
             name,
+            extra_classes.unwrap_or("")
         ));
         cb(html, css);
         html.push_str(
@@ -657,7 +693,7 @@ impl Config {
                     );
                 }
                 FileKind::Text => {
-                    self.emit_action(css, &Action::Open(Self::NOTEPAD_ID), &condition);
+                    self.emit_action(css, &Action::Open(entry_path.hashed()), &condition);
                 }
             }
         }
