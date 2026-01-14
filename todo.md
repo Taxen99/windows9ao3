@@ -13,3 +13,4 @@
 - [ ] fix inline TODO:s
 - [ ] fix the border color situation (unify into one set of global vars like a reasonable person)
 - [ ] fix window resizer (it should not be the icon (also what about iconless windows?))
+- [ ] upload all icon (local and web) to central location where they stay

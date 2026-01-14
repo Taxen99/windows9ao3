@@ -61,6 +61,11 @@ Config (
                             link: "text/ao3.html",
                             offset: Some((3, 2)),
                         )),
+                        "Gaffic.bmp": File ((
+                            kind: Image,
+                            link: "img/gaffic.png",
+                            offset: Some((5, 2)),
+                        )),
                     },
                 )),
             },

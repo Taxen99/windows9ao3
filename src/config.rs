@@ -18,7 +18,7 @@ mod vertical_select;
 pub struct App {
     pub name: String,
     pub icon: String,
-    pub add_to_desktop: Option<(u8, u8)>,
+    pub add_to_desktop: Option<(u32, u32)>,
     pub content: String,
 }
 
@@ -53,7 +53,7 @@ pub enum FsEntry {
     Folder(Folder),
 }
 impl FsEntry {
-    pub fn offset(&self) -> Option<(u8, u8)> {
+    pub fn offset(&self) -> Option<(u32, u32)> {
         match self {
             FsEntry::File(file) => file.offset,
             FsEntry::Folder(folder) => folder.offset,
@@ -64,19 +64,20 @@ impl FsEntry {
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Folder {
     pub children: HashMap<String, FsEntry>,
-    pub offset: Option<(u8, u8)>,
+    pub offset: Option<(u32, u32)>,
 }
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub enum FileKind {
     App,
     Shortcut,
     Text,
+    Image,
 }
 #[derive(Debug, Serialize, Deserialize)]
 pub struct File {
     pub kind: FileKind,
     pub link: String,
-    pub offset: Option<(u8, u8)>,
+    pub offset: Option<(u32, u32)>,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -183,6 +184,7 @@ impl Config {
                 }
                 self.emit_fe_window(html, &mut css);
                 self.emit_np_window(html, &mut css);
+                self.emit_qv_window(html, &mut css);
             });
         });
         BuildResult::from_html_css(html, css)
@@ -474,9 +476,12 @@ impl Config {
                             //     fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
                             //         let folder_hash = path.hashed();
                             emit_div(html, &format!("np-view border-style-dark-1"), |html| {
-                                let content =
-                                    fs::read_to_string(Path::new("./res").join(&file.link))
-                                        .expect(&format!("resource {} does not exist", &file.link));
+                                let path = Path::new("./res").join(&file.link);
+                                let content = fs::read_to_string(&path).expect(&format!(
+                                    "resource {} does not exist at {}",
+                                    &file.link,
+                                    path.to_str().unwrap()
+                                ));
                                 html.push_str(&format!(
                                     r##"
                                         <p>{}</p>
@@ -555,6 +560,88 @@ impl Config {
                                 // emit_div(html, "npf-script", |html| {});
                             });
                         });
+                    });
+                },
+            );
+        });
+    }
+    fn emit_qv_window(&self, html: &mut String, css: &mut String) {
+        self.fs.visit_all_files(|file, path| {
+            if file.kind != FileKind::Image {
+                return;
+            }
+            let id = path.hashed();
+            self.emit_window(
+                html,
+                css,
+                id,
+                "Quick View",
+                "https://win98icons.alexmeub.com/icons/png/magnifying_glass-0.png",
+                None,
+                |html, css| {
+                    emit_div(html, "window-header", |html| {
+                        // let word_wrap_toggle_id = 8336941761795208;
+                        // css.push_str(&format!(
+                        //     r##"
+                        //     .window-{}:has(.mb-submenu-item-{}[open]) .np-view {{
+                        //         white-space: pre-wrap;
+                        //         word-break: break-all;
+                        //     }}
+                        // "##,
+                        //     id, word_wrap_toggle_id
+                        // ));
+                        MenubarBuilder::new()
+                            .short(true)
+                            .item("File", |item| {
+                                item.group(|group| group.sub_disabled("Open File for Editing"))
+                                    .group(|group| {
+                                        group.sub("Exit", |i| i.action(Action::Close(id)))
+                                    })
+                            })
+                            .item("View", |item| {
+                                item.group(|group| {
+                                    group
+                                        .sub_disabled("Toolbar")
+                                        .sub_disabled("Status Bar")
+                                        .sub_disabled("Page View")
+                                        .sub_disabled("Replace Window")
+                                })
+                                .group(|group| {
+                                    group.sub_disabled("Landscape").sub_disabled("Rotate")
+                                })
+                                .group(|group| group.sub_disabled("Font..."))
+                            })
+                            .item("Search", |item| {
+                                item.group(|group| {
+                                    group.sub_disabled("Find...").sub_disabled("Find Next")
+                                })
+                            })
+                            .item("Help", |item| {
+                                item.group(|group| group.sub_disabled("Help Topics"))
+                                    .group(|group| group.sub("About", |i| i.dummy()))
+                            })
+                            .build(html, css, self);
+                    });
+                    //
+                    emit_div(html, "window-main window-main-nopadtop", |html| {
+                        emit_div(html, "qv-main", |html| {
+                            // emit_div(html, "fe-view-anchor", |html| {
+                            //     fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                            //         let folder_hash = path.hashed();
+                            emit_div(html, &format!("qv-view border-style-dark-1"), |html| {
+                                let path = Path::new("./res").join(&file.link);
+                                let _ = path
+                                    .metadata()
+                                    .expect(&format!("resource {} does not exist", &file.link));
+                                html.push_str(&format!(
+                                    r##"
+                                        <img src="{}" />
+                                    "##,
+                                    // TODO: fix!
+                                    &format!("../{}", path.to_str().unwrap()),
+                                ));
+                            });
+                        })
                     });
                 },
             );
@@ -692,7 +779,7 @@ impl Config {
                         is_in_explorer,
                     );
                 }
-                FileKind::Text => {
+                FileKind::Text | FileKind::Image => {
                     self.emit_action(css, &Action::Open(entry_path.hashed()), &condition);
                 }
             }
@@ -827,6 +914,9 @@ impl Config {
                 FileKind::Shortcut => self.icon_of(self.fs_entry(Path::new(&file.link)).unwrap()),
                 FileKind::Text => {
                     "https://win98icons.alexmeub.com/icons/png/notepad_file-2.png".to_owned()
+                }
+                FileKind::Image => {
+                    "https://win98icons.alexmeub.com/icons/png/paint_file-5.png".to_owned()
                 }
             },
             FsEntry::Folder(_folder) => {
