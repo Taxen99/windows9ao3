@@ -118,27 +118,6 @@
 	font-size: 12.01px;
 }
 
-.npf-main:has(.npf-style .vertical-select-item:nth-of-type(1):active) .npf-sample p {
-	transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
-	font-weight: 100;
-	font-style: normal;
-}
-.npf-main:has(.npf-style .vertical-select-item:nth-of-type(2):active) .npf-sample p {
-	transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
-	font-weight: 100;
-	font-style: italic;
-}
-.npf-main:has(.npf-style .vertical-select-item:nth-of-type(3):active) .npf-sample p {
-	transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
-	font-weight: bold;
-	font-style: normal;
-}
-.npf-main:has(.npf-style .vertical-select-item:nth-of-type(4):active) .npf-sample p {
-	transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
-	font-weight: bold;
-	font-style: italic;
-}
-
 /* .asdjsaoa {
 	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 } */

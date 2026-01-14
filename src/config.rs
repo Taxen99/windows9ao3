@@ -399,6 +399,7 @@ impl Config {
                 "Segoe UI",
                 "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
             ),
+            ("Wingdings", "wingdings"),
         ];
         let default_font = "Sans Serif";
         let sizes = [
@@ -407,26 +408,57 @@ impl Config {
         let default_size = "12";
         let styles = ["Regular", "Italic", "Bold", "Bold Italic"];
         let default_style = "Regular";
+        {
+            css.push_str(&format!(r##"
+.npf-main:has(.npf-style .vertical-select-item:nth-of-type(1):active) .npf-sample p,
+.window-{0}:has(+ .window .npf-style .vertical-select-item:nth-of-type(1):active) .np-view {{
+    transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
+    font-weight: 100;
+    font-style: normal;
+}}
+.npf-main:has(.npf-style .vertical-select-item:nth-of-type(2):active) .npf-sample p,
+.window-{0}:has(+ .window .npf-style .vertical-select-item:nth-of-type(2):active) .np-view {{
+    transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
+    font-weight: 100;
+    font-style: italic;
+}}
+.npf-main:has(.npf-style .vertical-select-item:nth-of-type(3):active) .npf-sample p,
+.window-{0}:has(+ .window .npf-style .vertical-select-item:nth-of-type(3):active) .np-view {{
+    transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
+    font-weight: bold;
+    font-style: normal;
+}}
+.npf-main:has(.npf-style .vertical-select-item:nth-of-type(4):active) .npf-sample p,
+.window-{0}:has(+ .window .npf-style .vertical-select-item:nth-of-type(4):active) .np-view {{
+    transition: font-family 10s linear 2147483640s, font-weight 0s linear, font-style 0s linear, font-size 10s linear 2147483640s;
+    font-weight: bold;
+    font-style: italic;
+}}
+            "##, Self::NOTEPAD_ID));
+        }
         for (i, &size) in sizes.iter().enumerate() {
             css.push_str(&format!(r##"
-                .npf-main:has(.npf-size .vertical-select-item:nth-of-type({}):active) .npf-sample p {{
+                .npf-main:has(.npf-size .vertical-select-item:nth-of-type({0}):active) .npf-sample p,
+                .window-{2}:has(+ .window .npf-size .vertical-select-item:nth-of-type({0}):active) .np-view {{
                     transition: font-family 10s linear 2147483640s, font-weight 10s linear 2147483640s, font-style 10s linear 2147483640s, font-size 0s linear;
-                    font-size: {}px;
+                    font-size: {1}px;
                 }}
-            "##, i + 1, size));
+            "##, i + 1, size, Self::NOTEPAD_ID));
         }
         for (i, (_, css_font)) in fonts.iter().enumerate() {
             css.push_str(&format!(r##"
-                .npf-main:has(.npf-font .vertical-select-item:nth-of-type({}):active) .npf-sample p {{
+                .npf-main:has(.npf-font .vertical-select-item:nth-of-type({0}):active) .npf-sample p,
+                .window-{2}:has(+ .window .npf-font .vertical-select-item:nth-of-type({0}):active) .np-view {{
                     transition: font-family 0s linear, font-weight 10s linear 2147483640s, font-style 10s linear 2147483640s, font-size 10s linear 2147483640s;
-                    font-family: {};
+                    font-family: {1};
                 }}
-            "##, i + 1, css_font));
+            "##, i + 1, css_font, Self::NOTEPAD_ID));
         }
         {
             css.push_str(&format!(
                 r##"
-                .main:has(.onload:hover) .npf-sample p {{
+                .main:has(.onload:hover) .npf-sample p,
+                .main:has(.onload:hover) .np-view {{
                     transition: all 0s linear;
                     font-weight: 100;
                     font-style: normal;

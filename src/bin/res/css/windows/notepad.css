@@ -19,6 +19,13 @@
 	white-space: pre;
 	overflow: scroll;
 	user-select: text;
+
+	transition: font-family 10s linear 2147483640s, font-weight 10s linear 2147483640s, font-style 10s linear 2147483640s, font-size 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+	/* work-around because transitions are weird and fucked up. this needs to be unique! */
+	font-style: oblique 1deg;
+	font-weight: 101;
+	font-size: 12.01px;
 }
 
 /* .window:has() */
