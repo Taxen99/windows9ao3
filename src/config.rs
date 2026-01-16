@@ -8,10 +8,12 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 use crate::config::menubar_builder::MenubarBuilder;
+use crate::config::toolbar_builder::ToolbarBuilder;
 use crate::config::vertical_select::emit_vertical_select;
 use crate::css_var_remove::css_var_remove;
 
 mod menubar_builder;
+mod toolbar_builder;
 mod vertical_select;
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -69,6 +71,7 @@ pub struct Folder {
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
 pub enum FileKind {
     App,
+    NativeApp,
     Shortcut,
     Text,
     Image,
@@ -147,6 +150,7 @@ impl BuildResult {
 
 impl Config {
     const FILE_EXPLORER_ID: u64 = 1;
+    const INTERNET_EXPLORER_ID: u64 = 69;
     // const NOTEPAD_ID: u64 = 2;
     // const NOTEPAD_FONT_ID: u64 = 3;
     pub fn build(mut self) -> BuildResult {
@@ -185,6 +189,7 @@ impl Config {
                 self.emit_fe_window(html, &mut css);
                 self.emit_np_window(html, &mut css);
                 self.emit_qv_window(html, &mut css);
+                self.emit_ie_window(html, &mut css);
             });
         });
         BuildResult::from_html_css(html, css)
@@ -611,11 +616,6 @@ impl Config {
                                 })
                                 .group(|group| group.sub_disabled("Font..."))
                             })
-                            .item("Search", |item| {
-                                item.group(|group| {
-                                    group.sub_disabled("Find...").sub_disabled("Find Next")
-                                })
-                            })
                             .item("Help", |item| {
                                 item.group(|group| group.sub_disabled("Help Topics"))
                                     .group(|group| group.sub("About", |i| i.dummy()))
@@ -646,6 +646,147 @@ impl Config {
                 },
             );
         });
+    }
+    fn emit_ie_window(&self, html: &mut String, css: &mut String) {
+        self.emit_window(
+            html,
+            css,
+            Self::INTERNET_EXPLORER_ID,
+            "Internet Explorer",
+            "https://win98icons.alexmeub.com/icons/png/html-5.png",
+            None,
+            |html, css| {
+                // TODO: window resizing and shit
+                css.push_str(&format!(
+                    r##".window.window-{} {{
+                        width: 600px;
+                        height: 600px;
+                    }}"##,
+                    Self::INTERNET_EXPLORER_ID
+                ));
+                emit_div(html, "window-header", |html| {
+                    MenubarBuilder::new()
+                        .item("File", |item| {
+                            item.group(|group| {
+                                group.sub("Exit", |i| {
+                                    i.action(Action::Close(Self::INTERNET_EXPLORER_ID))
+                                })
+                            })
+                        })
+                        // .item("View", |item| {
+                        //     item.group(|group| {
+                        //         group
+                        //             .sub_disabled("Toolbar")
+                        //             .sub_disabled("Status Bar")
+                        //             .sub_disabled("Page View")
+                        //             .sub_disabled("Replace Window")
+                        //     })
+                        //     .group(|group| {
+                        //         group.sub_disabled("Landscape").sub_disabled("Rotate")
+                        //     })
+                        //     .group(|group| group.sub_disabled("Font..."))
+                        // })
+                        .item("Help", |item| {
+                            item.group(|group| group.sub_disabled("Help Topics"))
+                                .group(|group| group.sub("About", |i| i.dummy()))
+                        })
+                        .build(html, css, self);
+                    ToolbarBuilder::new()
+                        .group(|group| {
+                            group
+                                .item("Back", "../res/icons/back-9.png")
+                                .item("Forward", "../res/icons/forward-9.png")
+                                .item("Stop", "../res/icons/stop-9.png")
+                                .item("Refresh", "../res/icons/refresh-9.png")
+                                .item("Home", "../res/icons/home-9.png")
+                        })
+                        .group(|group| {
+                            group
+                                .item("Search", "../res/icons/search-9.png")
+                                .item("Favorites", "../res/icons/favorites-9.png")
+                                .item("History", "../res/icons/history-9.png")
+                        })
+                        .group(|group| {
+                            group
+                                .item("Mail", "../res/icons/mail-9.png")
+                                .item("Print", "../res/icons/print-9.png")
+                        })
+                        .build(html, css, self);
+                    // emit_div(html, "ie-toolbar", |html| {
+                    //     let items =
+                    // });
+                    emit_div(html, "ie-address-bar border-style-light-1", |html| {
+                        html.push_str(&format!(
+                            r##"
+                            <p>Address</p>
+                            <p class="border-style-dark-1">My Computer</p>
+                        "##
+                        ));
+                    });
+                });
+                //
+                emit_div(html, "window-main", |html| {
+                    // emit_div(html, "ie-main", |html| {
+                    //     emit_div(html, "ie-sideview border-style-light-1", |html| {
+                    //         html.push_str(
+                    //             r##"<div class="ie-sideview-header">
+                    //                             <p>All Folders</p>
+                    //                         </div>"##,
+                    //         );
+                    //         emit_div(html, "ie-sideview-view", |html| {
+                    //             fn emit_folder(html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                    //                 let folder_hash = path.hashed();
+                    //                 let mut sub_folder_count = 0;
+                    //                 emit_div(html, &format!("ie-svv-child ie-svv-child-{}", folder_hash), |html| {
+                    //                     for (name, entry) in &folder.children {
+                    //                         if let FsEntry::Folder(sub_folder) = &entry {
+                    //                             sub_folder_count += 1;
+                    //                             emit_div(html, "ie-svv-item", |html| {
+                    //                                 html.push_str(&format!(
+                    //                                     r##"
+                    //                                     <div class="ie-svvi-group">
+                    //                                         <div class="ie-svvi-expander"></div>
+                    //                                         <p class="ie-svvi-name">{}</p>
+                    //                                     </div>"##,
+                    //                                     name
+                    //                                 ));
+                    //                                 let mut sub_path = path.clone();
+                    //                                 sub_path.push(name);
+                    //                                 emit_folder(html, css, sub_folder, sub_path);
+                    //                             });
+                    //                         }
+                    //                     }
+                    //                 });
+                    //                 css.push_str(&format!(r##"
+                    //                 .ie-svv-child-{}::before {{
+                    //                     height: {}px;
+                    //                 }}
+                    //                 "##, folder_hash, 14 * sub_folder_count - 3));
+                    //                 dbg!(folder.children.len(), path);
+                    //             }
+                    //             emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
+                    //         });
+                    //     });
+                    //     emit_div(html, "ie-view-anchor", |html| {
+                    //         fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                    //             let folder_hash = path.hashed();
+                    //             emit_div(html, &format!("ie-view border-style-dark-1 ie-view-{}", folder_hash), |html| {
+                    //                 config.emit_file_view_content(html, css, &path, true);
+                    //             });
+                    //             for (name, entry) in &folder.children {
+                    //                 if let FsEntry::Folder(sub_folder) = &entry {
+                    //                     let mut sub_path = path.clone();
+                    //                     sub_path.push(name);
+                    //                     emit_folder(config, html, css, sub_folder, sub_path);
+                    //                 }
+                    //             }
+                    //         }
+                    //         emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
+                    //     });
+                    // });
+                });
+            },
+        );
     }
     fn emit_window(
         &self,
@@ -782,6 +923,9 @@ impl Config {
                 FileKind::Text | FileKind::Image => {
                     self.emit_action(css, &Action::Open(entry_path.hashed()), &condition);
                 }
+                FileKind::NativeApp => {
+                    self.emit_action(css, &Action::Open(file.link.parse().unwrap()), &condition);
+                }
             }
         }
         if let Some(_sub_folder) = entry.as_folder() {
@@ -917,6 +1061,14 @@ impl Config {
                 }
                 FileKind::Image => {
                     "https://win98icons.alexmeub.com/icons/png/paint_file-5.png".to_owned()
+                }
+                FileKind::NativeApp => {
+                    match file.link.parse::<u64>().expect("native app id must be u64") {
+                        Self::INTERNET_EXPLORER_ID => {
+                            "https://win98icons.alexmeub.com/icons/png/msie1-2.png".to_owned()
+                        }
+                        _ => panic!("invalid native app id"),
+                    }
                 }
             },
             FsEntry::Folder(_folder) => {

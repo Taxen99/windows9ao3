@@ -14,12 +14,12 @@ Config (
     //     ),
     // ],
     apps: [
-        App (
-            name: "Internet Explorer",
-            icon: "https://win98icons.alexmeub.com/icons/png/msie1-2.png",
-            // add_to_desktop: Some((0, 0)),
-            content: "Internet Exploruvu!!!",
-        ),
+        // App (
+        //     name: "Internet Explorer",
+        //     icon: "https://win98icons.alexmeub.com/icons/png/msie1-2.png",
+        //     // add_to_desktop: Some((0, 0)),
+        //     content: "Internet Exploruvu!!!",
+        // ),
         App (
             name: "Another Application",
             icon: "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
@@ -33,8 +33,8 @@ Config (
                 "desktop": Folder ((
                     children: {
                         "Internet ExplorerÖ": File ((
-                            kind: App,
-                            link: "Internet Explorer",
+                            kind: NativeApp,
+                            link: "69",
                             offset: Some((3, 3)),
                         )),
                         "My Pictures": Folder ((

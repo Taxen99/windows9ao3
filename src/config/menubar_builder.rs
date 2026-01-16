@@ -43,7 +43,7 @@ impl MenubarBuilder {
         let classlist = if self.is_short {
             "menubar menubar-short"
         } else {
-            "menubar"
+            "menubar border-style-light-1"
         };
         emit_div(html, classlist, |html| {
             for item in &self.items {

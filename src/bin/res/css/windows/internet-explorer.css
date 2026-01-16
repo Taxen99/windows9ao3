@@ -1,0 +1,26 @@
+.ie-address-bar {
+	padding: 0 2px;
+	display: flex;
+	column-gap: 2px;
+	align-items: center;
+	border-top: none !important;
+}
+
+/* .ie-address-bar p:nth-child(1) {} */
+
+.ie-address-bar p:nth-child(2) {
+	background-color: white;
+	flex-grow: 1;
+	display: flex;
+	padding: 1px;
+}
+
+.ie-address-bar p:nth-child(2)::before {
+	content: "";
+	display: block;
+	width: 16px;
+	height: 16px;
+	background: url("https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png");
+	background-size: cover;
+	margin-right: 5px;
+}

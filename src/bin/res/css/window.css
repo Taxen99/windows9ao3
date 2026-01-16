@@ -292,7 +292,7 @@ WINDOWS!!!
 	width: 9px;
 	height: 9px;
 	display: block;
-	background-image: url("../res/exit-9.png");
+	background-image: url("../res/icons/exit-9.png");
 	background-size: cover;
 }
 
@@ -322,6 +322,13 @@ WINDOWS!!!
 	--border-c2_b: rgb(170, 170, 170);
 	border-color: var(--border-c1_b) var(--border-c1_b) var(--border-c1_b) var(--border-c1_b);
 	border-style: groove groove groove groove;
+}
+.border-style-light-2 {
+	border: 1px;
+	--border-c1_bsl2: rgb(238, 238, 238);
+	--border-c2_bsl2: rgb(170, 170, 170);
+	border-color: var(--border-c1_bsl2) var(--border-c1_bsl2) var(--border-c1_bsl2) var(--border-c1_bsl2);
+	border-style: outset;
 }
 
 .menubar {
@@ -448,7 +455,7 @@ WINDOWS!!!
 	width: 9px;
 	height: 9px;
 	display: block;
-	background-image: url("../res/check-9.png");
+	background-image: url("../res/icons/check-9.png");
 	background-size: cover;
 	/* margin-right: 8px; */
 	position: absolute;
