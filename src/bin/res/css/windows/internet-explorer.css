@@ -24,3 +24,13 @@
 	background-size: cover;
 	margin-right: 5px;
 }
+
+.ie-main {
+	display: flex;
+	flex-grow: 1;
+}
+
+.ie-view {
+	display: flex;
+	flex-grow: 1;
+}

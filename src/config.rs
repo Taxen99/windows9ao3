@@ -7,11 +7,13 @@ use enum_as_inner::EnumAsInner;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
+use crate::config::internet_explorer::PageParser;
 use crate::config::menubar_builder::MenubarBuilder;
 use crate::config::toolbar_builder::ToolbarBuilder;
 use crate::config::vertical_select::emit_vertical_select;
 use crate::css_var_remove::css_var_remove;
 
+mod internet_explorer;
 mod menubar_builder;
 mod toolbar_builder;
 mod vertical_select;
@@ -726,64 +728,73 @@ impl Config {
                 });
                 //
                 emit_div(html, "window-main", |html| {
-                    // emit_div(html, "ie-main", |html| {
-                    //     emit_div(html, "ie-sideview border-style-light-1", |html| {
-                    //         html.push_str(
-                    //             r##"<div class="ie-sideview-header">
-                    //                             <p>All Folders</p>
-                    //                         </div>"##,
-                    //         );
-                    //         emit_div(html, "ie-sideview-view", |html| {
-                    //             fn emit_folder(html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
-                    //                 let folder_hash = path.hashed();
-                    //                 let mut sub_folder_count = 0;
-                    //                 emit_div(html, &format!("ie-svv-child ie-svv-child-{}", folder_hash), |html| {
-                    //                     for (name, entry) in &folder.children {
-                    //                         if let FsEntry::Folder(sub_folder) = &entry {
-                    //                             sub_folder_count += 1;
-                    //                             emit_div(html, "ie-svv-item", |html| {
-                    //                                 html.push_str(&format!(
-                    //                                     r##"
-                    //                                     <div class="ie-svvi-group">
-                    //                                         <div class="ie-svvi-expander"></div>
-                    //                                         <p class="ie-svvi-name">{}</p>
-                    //                                     </div>"##,
-                    //                                     name
-                    //                                 ));
-                    //                                 let mut sub_path = path.clone();
-                    //                                 sub_path.push(name);
-                    //                                 emit_folder(html, css, sub_folder, sub_path);
-                    //                             });
-                    //                         }
-                    //                     }
-                    //                 });
-                    //                 css.push_str(&format!(r##"
-                    //                 .ie-svv-child-{}::before {{
-                    //                     height: {}px;
-                    //                 }}
-                    //                 "##, folder_hash, 14 * sub_folder_count - 3));
-                    //                 dbg!(folder.children.len(), path);
-                    //             }
-                    //             emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
-                    //         });
-                    //     });
-                    //     emit_div(html, "ie-view-anchor", |html| {
-                    //         fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
-                    //             let folder_hash = path.hashed();
-                    //             emit_div(html, &format!("ie-view border-style-dark-1 ie-view-{}", folder_hash), |html| {
-                    //                 config.emit_file_view_content(html, css, &path, true);
-                    //             });
-                    //             for (name, entry) in &folder.children {
-                    //                 if let FsEntry::Folder(sub_folder) = &entry {
-                    //                     let mut sub_path = path.clone();
-                    //                     sub_path.push(name);
-                    //                     emit_folder(config, html, css, sub_folder, sub_path);
-                    //                 }
-                    //             }
-                    //         }
-                    //         emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
-                    //     });
-                    // });
+                    emit_div(html, "ie-main", |html| {
+                        //     emit_div(html, "ie-sideview border-style-light-1", |html| {
+                        //         html.push_str(
+                        //             r##"<div class="ie-sideview-header">
+                        //                             <p>All Folders</p>
+                        //                         </div>"##,
+                        //         );
+                        //         emit_div(html, "ie-sideview-view", |html| {
+                        //             fn emit_folder(html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                        //                 let folder_hash = path.hashed();
+                        //                 let mut sub_folder_count = 0;
+                        //                 emit_div(html, &format!("ie-svv-child ie-svv-child-{}", folder_hash), |html| {
+                        //                     for (name, entry) in &folder.children {
+                        //                         if let FsEntry::Folder(sub_folder) = &entry {
+                        //                             sub_folder_count += 1;
+                        //                             emit_div(html, "ie-svv-item", |html| {
+                        //                                 html.push_str(&format!(
+                        //                                     r##"
+                        //                                     <div class="ie-svvi-group">
+                        //                                         <div class="ie-svvi-expander"></div>
+                        //                                         <p class="ie-svvi-name">{}</p>
+                        //                                     </div>"##,
+                        //                                     name
+                        //                                 ));
+                        //                                 let mut sub_path = path.clone();
+                        //                                 sub_path.push(name);
+                        //                                 emit_folder(html, css, sub_folder, sub_path);
+                        //                             });
+                        //                         }
+                        //                     }
+                        //                 });
+                        //                 css.push_str(&format!(r##"
+                        //                 .ie-svv-child-{}::before {{
+                        //                     height: {}px;
+                        //                 }}
+                        //                 "##, folder_hash, 14 * sub_folder_count - 3));
+                        //                 dbg!(folder.children.len(), path);
+                        //             }
+                        //             emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
+                        //         });
+                        //     });
+                        // emit_div(html, "ie-view-anchor", |html| {
+                        //     fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                        //         let folder_hash = path.hashed();
+                        //         emit_div(html, &format!("ie-view border-style-dark-1 ie-view-{}", folder_hash), |html| {
+                        //             config.emit_file_view_content(html, css, &path, true);
+                        //         });
+                        //         for (name, entry) in &folder.children {
+                        //             if let FsEntry::Folder(sub_folder) = &entry {
+                        //                 let mut sub_path = path.clone();
+                        //                 sub_path.push(name);
+                        //                 emit_folder(config, html, css, sub_folder, sub_path);
+                        //             }
+                        //         }
+                        //     }
+                        //     emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
+                        // });
+                        emit_div(html, "ie-view border-style-dark-1", |html| {
+                            let path = Path::new("pages/test.html");
+                            let real_path = Path::new("res").join(path);
+                            let page =
+                                PageParser::new(&fs::read_to_string(real_path).unwrap()).parse();
+                            html.push_str(&page.html);
+                            // html.push_str(string);
+                            // let page = ;
+                        });
+                    });
                 });
             },
         );
