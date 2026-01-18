@@ -10,8 +10,8 @@ impl History {
     }
     pub fn emit_stack(&self, html: &mut String, css: &mut String, config: &Config) {
         emit_div(html, "history", |html| {
-            emit_div(html, "history-l-shifter", |_| ());
-            emit_div(html, "history-r-shifter", |_| ());
+            // emit_div(html, "history-l-shifter", |_| ());
+            // emit_div(html, "history-r-shifter", |_| ());
             html.push_str(&format!(
                 r##"
                 <button class="history-back">&lt;-</button>
@@ -21,7 +21,7 @@ impl History {
             for (i, item) in self.items.iter().enumerate() {
                 html.push_str(&format!(
                     r##"
-                    <button class="history-trigger-{1}">{0}:{1}</button>
+                    <button class="history-trigger-{1} history-trigger">{0}:{1}</button>
                 "##,
                     i, item.id
                 ));
@@ -32,23 +32,50 @@ impl History {
                     }}
                     .history:has(.history-trigger-{0}:hover:active) .history-item-{0} {{
                         transition: 0s;
-                        left: 100vw;
-                    }}
-                    .history:has(.history-trigger-{0}:hover:active) .history-l-shifter {{
-                        transition: 0s;
-                        left: 0;
+                        left: 0.01px;
+                        top: 0.01px;
+                        z-index: 2147483641;
                     }}
                     "##,
                     item.id
                 ));
+                // .history:has(.history-trigger-{0}:hover:active) .history-l-shifter {{
+                //     transition: 0s;
+                //     left: 0;
+                // }}
             }
-            for item in &self.items {
-                emit_div(
-                    html,
-                    &format!("history-item history-item-{}", item.id),
-                    |_| (),
-                );
-            }
+            emit_div(html, "cur-display", |html| {
+                for (_, item) in self.items.iter().enumerate() {
+                    emit_div(html, &format!("cur-{} cur", item.id), |html| {
+                        html.push_str(&format!("Current: {}", item.id));
+                    });
+                }
+            });
+            emit_div(html, "history-items", |html| {
+                for item in &self.items {
+                    emit_div(
+                        html,
+                        &format!("history-item history-item-{}", item.id),
+                        |html| {
+                            emit_div(html, "history-item-reg", |_| ());
+                            emit_div(html, "history-item-move", |_| ());
+                        },
+                    );
+                    css.push_str(&format!(
+                        r##"
+                        .history:has(.history-item-{0} .history-item-reg:hover) .cur-{0} {{
+                            transition: 0s;
+                            left: 0px;
+                        }}
+                        .history:has(.history-item-{0} .history-item-reg:hover) .cur:not(.cur-{0}) {{
+                            transition: 0s;
+                            left: -100000.01px;
+                        }}
+                    "##,
+                        item.id
+                    ));
+                }
+            });
         });
     }
 }
