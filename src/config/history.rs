@@ -52,6 +52,8 @@ impl History {
                 }
             });
             emit_div(html, "history-items", |html| {
+                emit_div(html, "history-none-back", |_| ());
+                emit_div(html, "history-none-forward", |_| ());
                 for item in &self.items {
                     emit_div(
                         html,
@@ -59,6 +61,8 @@ impl History {
                         |html| {
                             emit_div(html, "history-item-reg", |_| ());
                             emit_div(html, "history-item-move", |_| ());
+                            // emit_div(html, "history-item-check-back", |_| ());
+                            emit_div(html, "history-item-check-forward", |_| ());
                         },
                     );
                     css.push_str(&format!(
