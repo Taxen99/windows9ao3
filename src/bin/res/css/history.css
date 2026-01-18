@@ -48,6 +48,8 @@
 	width: 100vw;
 	height: 100vh;
 	z-index: 10;
+	transition: z-index 214748s linear;
+	transition-behavior: allow-discrete;
 }
 
 .history-item-reg {
@@ -94,6 +96,10 @@
 	top: 100vh;
 }
 
+.history:has(.history-trigger:hover:active) .history-none-forward {
+	transition: 0s;
+	z-index: 2147483642;
+}
 .history:has(.history-trigger:hover:active, .history-back:hover:active) .history-items {
 	transition: 0s;
 	top: 0px;
