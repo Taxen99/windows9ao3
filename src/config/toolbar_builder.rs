@@ -47,15 +47,22 @@ impl ToolbarBuilder {
                         // let id = sub_item.id.unwrap_or_else(|| rand::rng().random());
                         // let id_class = format!("mb-submenu-item-{}", id);
                         // classlist.push_str(&format!(" {id_class}"));
-                        emit_div(html, "toolbar-item", |html| {
-                            html.push_str(&format!(
-                                r##"
-                                <img src="{}" />
-                                <p>{}</p>
-                            "##,
-                                item.icon, item.name
-                            ));
-                        });
+                        match item {
+                            ToolbarItem::Normal(item) => {
+                                emit_div(html, "toolbar-item", |html| {
+                                    html.push_str(&format!(
+                                        r##"
+                                            <img src="{}" />
+                                            <p>{}</p>
+                                        "##,
+                                        item.icon, item.name
+                                    ));
+                                });
+                            }
+                            ToolbarItem::Html(item) => {
+                                html.push_str(&item.html);
+                            }
+                        }
                     }
                 });
             }
@@ -75,18 +82,35 @@ impl ToolbarGroup {
         self.items.push(ToolbarItem::new(name, icon));
         self
     }
+    pub fn item_html(&mut self, mut func: impl FnMut(&mut String)) -> &mut Self {
+        let mut html = String::new();
+        func(&mut html);
+        self.items.push(ToolbarItem::new_html(html));
+        self
+    }
 }
 
-pub struct ToolbarItem {
+pub enum ToolbarItem {
+    Normal(ToolbarItemNormal),
+    Html(ToolbarItemHtml),
+}
+
+pub struct ToolbarItemNormal {
     name: String,
     icon: String,
+}
+pub struct ToolbarItemHtml {
+    html: String,
 }
 
 impl ToolbarItem {
     fn new(name: &str, icon: &str) -> Self {
-        Self {
+        Self::Normal(ToolbarItemNormal {
             name: name.into(),
             icon: icon.into(),
-        }
+        })
+    }
+    fn new_html(html: String) -> Self {
+        Self::Html(ToolbarItemHtml { html: html })
     }
 }

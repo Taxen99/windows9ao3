@@ -654,20 +654,20 @@ impl Config {
     fn emit_ie_window(&self, html: &mut String, css: &mut String) {
         let sites = read_sites();
         let mut history_items = Vec::new();
-        // for (_, site) in &sites {
-        //     for (path, page) in &site.pages {
-        //         history_items.push(HistoryItem {
-        //             id: format!("{}—{}", site.domain, path).hashed(),
-        //             rule: format!(""),
-        //         });
-        //     }
-        // }
-        for i in 0..25 {
-            history_items.push(HistoryItem {
-                id: i + 1,
-                rule: format!(""),
-            });
+        for (_, site) in &sites {
+            for (path, page) in &site.pages {
+                history_items.push(HistoryItem {
+                    id: format!("{}—{}", site.domain, path).hashed(),
+                    rule: format!(""),
+                });
+            }
         }
+        // for i in 0..25 {
+        //     history_items.push(HistoryItem {
+        //         id: i + 1,
+        //         rule: format!(""),
+        //     });
+        // }
         let history = History::new(history_items);
         history.emit_stack(html, css, self);
         self.emit_window(
@@ -716,8 +716,52 @@ impl Config {
                     ToolbarBuilder::new()
                         .group(|group| {
                             group
-                                .item("Back", "../res/icons/back-9.png")
-                                .item("Forward", "../res/icons/forward-9.png")
+                                // .item("Back", "../res/icons/back-9.png")
+                                // .item("Forward", "../res/icons/forward-9.png")
+                                .item_html(|html| {
+                                    emit_div(html, "history-toolbar-container", |html| {
+                                        emit_div(html, "toolbar-item history-back", |html| {
+                                            html.push_str(&format!(
+                                                r##"
+                                                <img src="{}" />
+                                                <p>{}</p>
+                                            "##,
+                                                "../res/icons/back-9.png", "Back"
+                                            ));
+                                        });
+                                        emit_div(html, "toolbar-item toolbar-disabled", |html| {
+                                            html.push_str(&format!(
+                                                r##"
+                                                <img src="{}" />
+                                                <p>{}</p>
+                                            "##,
+                                                "../res/icons/back-no-9.png", "Back"
+                                            ));
+                                        });
+                                    });
+                                })
+                                .item_html(|html| {
+                                    emit_div(html, "history-toolbar-container", |html| {
+                                        emit_div(html, "toolbar-item history-forward", |html| {
+                                            html.push_str(&format!(
+                                                r##"
+                                            <img src="{}" />
+                                            <p>{}</p>
+                                        "##,
+                                                "../res/icons/forward-9.png", "Forward"
+                                            ));
+                                        });
+                                        emit_div(html, "toolbar-item toolbar-disabled", |html| {
+                                            html.push_str(&format!(
+                                                r##"
+                                            <img src="{}" />
+                                            <p>{}</p>
+                                        "##,
+                                                "../res/icons/forward-no-9.png", "Forward"
+                                            ));
+                                        });
+                                    });
+                                })
                                 .item("Stop", "../res/icons/stop-9.png")
                                 .item("Refresh", "../res/icons/refresh-9.png")
                                 .item("Home", "../res/icons/home-9.png")

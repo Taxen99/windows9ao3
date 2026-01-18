@@ -28,10 +28,10 @@
 	justify-content: center;
 	font-size: 11px;
 }
-.toolbar-item:not(:hover) {
+.toolbar-item:not(:hover), .toolbar-disabled {
 	filter: grayscale(100%);
 }
-.toolbar-item:hover {
+.toolbar-item:hover:not(.toolbar-disabled) {
 	border: 1px outset rgb(238, 238, 238);
 }
 
