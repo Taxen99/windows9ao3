@@ -38,7 +38,7 @@
 	top: 0;
 	left: 0;
 	width: 100vw;
-	height: 100vh;
+	height: 200vh;
 	z-index: 10;
 }
 .history-none-forward {
@@ -101,14 +101,14 @@
 
 .history:has(.history-item-reg:hover, .history-none-back:hover) .history-items {
 	transition: 0s;
-	top: -200vh;
+	top: -100vh;
 	left: 0.01px;
 }
-/* .history:has(.history-item-check-back:hover, .history-none-back:hover) .history-items {
+.history:has(.history-item-check-back:hover, .history-none-back:hover) .history-items {
 	transition: 0s;
 	top: -200vh;
 	left: 0.01px;
-} */
+}
 .history:has(.history-item-check-forward:hover, .history-none-forward:hover) .history-items {
 	transition: 0s;
 	top: 200000.1px;
@@ -144,7 +144,7 @@
 	background-color: #f46367;
 }
 
-.history:has(.history-item:hover) .history-back {
+.history:has(.history-item-check-back:hover) .history-back {
 	transition: 0s;
 	background-color: #c1e1ed;
 }
@@ -193,4 +193,17 @@
 	transition: 10s linear 2147483640s;
 	left: -100000px;
 	position: absolute;
+}
+.cur.cur-default {
+	transition: 10s linear 2147483640s;
+	left: 0.01px;
+	position: absolute;
+}
+.history:has(.history-none-back:hover) .cur-default {
+	transition: 0s;
+	left: 0px;
+}
+.history:has(.history-none-back:hover) .cur:not(.cur-default) {
+	transition: 0s;
+	left: -100000.01px;
 }

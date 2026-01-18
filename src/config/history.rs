@@ -50,6 +50,9 @@ impl History {
                         html.push_str(&format!("Current: {}", item.id));
                     });
                 }
+                emit_div(html, "cur-default cur", |html| {
+                    html.push_str("Current: default");
+                });
             });
             emit_div(html, "history-items", |html| {
                 emit_div(html, "history-none-back", |_| ());
@@ -61,7 +64,7 @@ impl History {
                         |html| {
                             emit_div(html, "history-item-reg", |_| ());
                             emit_div(html, "history-item-move", |_| ());
-                            // emit_div(html, "history-item-check-back", |_| ());
+                            emit_div(html, "history-item-check-back", |_| ());
                             emit_div(html, "history-item-check-forward", |_| ());
                         },
                     );
