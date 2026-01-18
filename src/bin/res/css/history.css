@@ -1,0 +1,67 @@
+.history {
+	counter-reset: foo;
+	position: absolute;
+	/* top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%; */
+	z-index: 2147483645;
+	/* --max-items: 1000; */
+}
+
+.history-item {
+	position: absolute;
+	top: 0;
+	left: -10000vw;
+	width: 100vw;
+	height: 100vh;
+	background-color: #ff000066;
+	counter-increment: foo;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: left 10s linear 2147483640s;
+	pointer-events: none;
+}
+
+.history-item::after {
+	content: counter(foo);
+	font-size: 60px;
+}
+
+/* .history-back:active {
+
+} */
+
+.history-l-shifter, .history-r-shifter {
+	position: absolute;
+	transition: left 10s linear 2147483640s;
+	top: 0;
+	left: -10000vw;
+	width: 100vw;
+	height: 100vh;
+	background-color: #00ff0066;
+	z-index: 100;
+}
+
+.history-l-shifter:hover, .history-r-shifter:hover {
+	transition: left 0s linear 0.1s;
+	left: -10000.001vw;
+}
+.history:has(.history-l-shifter:hover) .history-item {
+	transition: left 1000s linear;
+	left: -1000000.001vw;
+}
+.history:has(.history-r-shifter:hover) .history-item {
+	transition: left 1000s linear;
+	left: 1000000.001vw;
+}
+
+.history:has(.history-back:hover:active) .history-l-shifter {
+	transition: 0s;
+	left: 0;
+}
+.history:has(.history-forward:hover:active) .history-r-shifter {
+	transition: 0s;
+	left: 0;
+}

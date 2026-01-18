@@ -20,7 +20,7 @@
 	display: block;
 	width: 16px;
 	height: 16px;
-	background: url("https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png");
+	background: url("https: //win98icons.alexmeub.com/icons/png/html-5.png");
 	background-size: cover;
 	margin-right: 5px;
 }
@@ -33,4 +33,5 @@
 .ie-view {
 	display: flex;
 	flex-grow: 1;
+	background-color: white;
 }
