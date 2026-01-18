@@ -662,7 +662,7 @@ impl Config {
         //         });
         //     }
         // }
-        for i in 0..10 {
+        for i in 0..25 {
             history_items.push(HistoryItem {
                 id: i + 1,
                 rule: format!(""),
