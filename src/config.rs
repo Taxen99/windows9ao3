@@ -652,13 +652,31 @@ impl Config {
         });
     }
     fn emit_ie_window(&self, html: &mut String, css: &mut String) {
+        let home_domain = "foo.bar";
         let sites = read_sites();
+        // let home_page = &sites[home_domain].pages[""];
         let mut history_items = Vec::new();
         for (_, site) in &sites {
-            for (path, page) in &site.pages {
+            for (path, _page) in &site.pages {
+                dbg!(format!("{}-{}", site.domain, path),);
                 history_items.push(HistoryItem {
-                    id: format!("{}—{}", site.domain, path).hashed(),
-                    rule: format!(""),
+                    id: dbg!(format!("{}-{}", site.domain, path).hashed()),
+                    rules: vec![
+                        format!(
+                            r##".ie-site-{} {{
+                                transition: 0s;
+                                z-index: 2147483640;
+                            }}"##,
+                            site.domain.hashed()
+                        ),
+                        format!(
+                            r##".ie-page-{} {{
+                                transition: 0s;
+                                z-index: 2147483640;
+                            }}"##,
+                            path.hashed()
+                        ),
+                    ],
                 });
             }
         }
@@ -668,7 +686,7 @@ impl Config {
         //         rule: format!(""),
         //     });
         // }
-        let history = History::new(history_items);
+        let history = History::new(history_items, format!("{}-{}", home_domain, "").hashed());
         history.emit_stack(html, css, self);
         self.emit_window(
             html,
@@ -729,6 +747,7 @@ impl Config {
                                                 "../res/icons/back-9.png", "Back"
                                             ));
                                         });
+                                        emit_div(html, "toolbar-item toolbar-single-click", |_| ());
                                         emit_div(html, "toolbar-item toolbar-disabled", |html| {
                                             html.push_str(&format!(
                                                 r##"
@@ -751,6 +770,7 @@ impl Config {
                                                 "../res/icons/forward-9.png", "Forward"
                                             ));
                                         });
+                                        emit_div(html, "toolbar-item toolbar-single-click", |_| ());
                                         emit_div(html, "toolbar-item toolbar-disabled", |html| {
                                             html.push_str(&format!(
                                                 r##"
@@ -796,13 +816,22 @@ impl Config {
                         emit_div(html, "ie-view border-style-dark-1", |html| {
                             for (domain, site) in &sites {
                                 css.push_str(&site.global_css);
-                                emit_div(html, &format!("ie-site-{}", domain), |html| {
-                                    for (page_path, page) in &site.pages {
-                                        emit_div(html, &format!("ie-page-{}", page_path), |html| {
-                                            html.push_str(&page.html);
-                                        });
-                                    }
-                                });
+                                emit_div(
+                                    html,
+                                    &format!("ie-site ie-site-{}", domain.hashed()),
+                                    |html| {
+                                        for (page_path, page) in &site.pages {
+                                            emit_div(
+                                                html,
+                                                &format!("ie-page ie-page-{}", page_path.hashed()),
+                                                |html| {
+                                                    html.push_str(&page.html);
+                                                },
+                                            );
+                                        }
+                                        // emit_div(html, "ie-page-cover", |_| ());
+                                    },
+                                );
                             }
                         });
                     });

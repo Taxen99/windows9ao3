@@ -1,3 +1,4 @@
+use crate::config::HashedExt;
 use std::{collections::HashMap, fs, path::Path};
 
 pub struct Page {
@@ -39,10 +40,7 @@ fn read_site(path: &Path) -> Site {
                 page_path = "";
             }
             let html = fs::read_to_string(entry.path()).unwrap();
-            let page = Page {
-                html,
-                title: "Example Title".into(),
-            };
+            let page = read_page(&domain, html);
             pages.insert(page_path.to_owned(), page);
         }
     }
@@ -50,6 +48,38 @@ fn read_site(path: &Path) -> Site {
         domain,
         pages,
         global_css,
+    }
+}
+
+fn read_page(domain: &str, html: String) -> Page {
+    // a simple html parser...
+    let doc = nipper::Document::from(&html);
+    for mut anchor in doc.select("a").iter() {
+        let href = anchor.attr("href").expect("a without href!");
+        let loc = if href.starts_with("/") {
+            (domain, href.strip_prefix("/").unwrap())
+        } else {
+            href.split_once("/").unwrap()
+        };
+        anchor.remove_attr("href");
+        dbg!(
+            format!("{}-{}", loc.0, loc.1),
+            format!("{}-{}", loc.0, loc.1).hashed()
+        );
+        let id = dbg!(format!("{}-{}", loc.0, loc.1).hashed());
+        anchor.add_class(&format!("history-trigger-{} history-trigger", id));
+        // anchor.a
+        // let new_node = NodeRef::new_element(QualName { prefix: None, ns: ns!(html), local: local_name!("div") }, attributes)
+    }
+    Page {
+        // TODO: shit!
+        html: (Into::<String>::into(doc.select("body").html())
+            .strip_prefix("<body>")
+            .unwrap()
+            .strip_suffix("</body>")
+            .unwrap()
+            .into()),
+        title: "Test Title".into(),
     }
 }
 

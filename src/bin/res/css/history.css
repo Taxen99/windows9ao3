@@ -1,5 +1,6 @@
 .history {
 	counter-reset: foo;
+	/* TODO: remove this! */
 	position: absolute;
 	/* top: 0;
 	left: 0;
@@ -91,16 +92,16 @@
 	background-color: blue;
 }
 
-.history:has(.history-back:hover:active) .history-item {
+.main:has(.history-back:hover:active) .history-item {
 	transition: left 10s linear 2147483640s, top 0s linear, z-index 214748s linear;
 	top: 100vh;
 }
 
-.history:has(.history-trigger:hover:active) .history-none-forward {
+.main:has(.history-trigger:hover:active) .history-none-forward {
 	transition: 0s;
 	z-index: 2147483642;
 }
-.history:has(.history-trigger:hover:active, .history-back:hover:active) .history-items {
+.main:has(.history-trigger:hover:active, .history-back:hover:active) .history-items {
 	transition: 0s;
 	top: 0px;
 }
@@ -138,64 +139,13 @@
 	top: 0;
 }
 
-.history:has(.history-forward:hover:active) .history-items {
+.main:has(.history-forward:hover:active) .history-items {
 	transition: 0s;
 	top: 0px;
 	left: -100.1vw;
 }
 
-/* .history-back, .history-forward {
-	transition: background 10s linear 2147483640s;
-	transition-behavior: allow-discrete;
-	background-color: #f46367;
-}
-
-.history:has(.history-item-check-back:hover) .history-back {
-	transition: 0s;
-	background-color: #c1e1ed;
-}
-.history:has(.history-item-check-forward:hover) .history-forward {
-	transition: 0s;
-	background-color: #c1e1ed;
-}
-.history:has(.history-none-back:hover) .history-back {
-	transition: 0s;
-	background-color: #f46368;
-}
-.history:has(.history-none-forward:hover) .history-forward {
-	transition: 0s;
-	background-color: #f46368;
-} */
-
-/* .history-back:active {
-
-} */
-
-/* .history-l-shifter, .history-r-shifter {
-	position: absolute;
-	transition: left 10s linear 2147483640s;
-	top: 0;
-	left: -10000vw;
-	width: 100vw;
-	height: 100vh;
-	background-color: #00ff0066;
-	z-index: 100;
-}
-
-.history-l-shifter:hover, .history-r-shifter:hover {
-	transition: left 0s linear 0.1s;
-	left: -10000.001vw;
-}
-.history:has(.history-l-shifter:hover) .history-item {
-	transition: left 1000s linear;
-	left: -1000000.001vw;
-}
-.history:has(.history-r-shifter:hover) .history-item {
-	transition: left 1000s linear;
-	left: 1000000.001vw;
-} */
-
-.cur {
+/* .cur {
 	transition: 10s linear 2147483640s;
 	left: -100000px;
 	position: absolute;
@@ -212,4 +162,4 @@
 .history:has(.history-none-back:hover) .cur:not(.cur-default) {
 	transition: 0s;
 	left: -100000.01px;
-}
+} */

@@ -4,16 +4,17 @@ use crate::config::{Config, emit_div};
 
 pub struct History {
     items: Vec<HistoryItem>,
+    default_id: u64,
 }
 
 static MAKE_SURE_WE_ONLY_USE_HISTORY_ONCE_LOL: OnceLock<()> = OnceLock::new();
 
 impl History {
-    pub fn new(items: Vec<HistoryItem>) -> Self {
+    pub fn new(items: Vec<HistoryItem>, default_id: u64) -> Self {
         MAKE_SURE_WE_ONLY_USE_HISTORY_ONCE_LOL
             .set(())
             .expect("can't use history more than once at the moment.");
-        Self { items }
+        Self { items, default_id }
     }
     pub fn emit_stack(&self, html: &mut String, css: &mut String, config: &Config) {
         emit_div(html, "history", |html| {
@@ -25,32 +26,29 @@ impl History {
             //     <button class="history-forward">-&gt;</button>
             // "##
             // ));
-            // for (i, item) in self.items.iter().enumerate() {
-            //     html.push_str(&format!(
-            //         r##"
-            //         <button class="history-trigger-{1} history-trigger">{0}:{1}</button>
-            //     "##,
-            //         i, item.id
-            //     ));
-            //     css.push_str(&format!(
-            //         r##"
-            //         .history-trigger-{0}:hover:active {{
-            //             background-color: blue;
-            //         }}
-            //         .history:has(.history-trigger-{0}:hover:active) .history-item-{0} {{
-            //             transition: 0s;
-            //             left: 0.01px;
-            //             top: 0.01px;
-            //             z-index: 2147483641;
-            //         }}
-            //         "##,
-            //         item.id
-            //     ));
-            //     // .history:has(.history-trigger-{0}:hover:active) .history-l-shifter {{
-            //     //     transition: 0s;
-            //     //     left: 0;
-            //     // }}
-            // }
+            for (i, item) in self.items.iter().enumerate() {
+                //     html.push_str(&format!(
+                //         r##"
+                //         <button class="history-trigger-{1} history-trigger">{0}:{1}</button>
+                //     "##,
+                //         i, item.id
+                //     ));
+                css.push_str(&format!(
+                    r##"
+                    .main:has(.history-trigger-{0}:hover:active) .history-item-{0} {{
+                        transition: 0s;
+                        left: 0.01px;
+                        top: 0.01px;
+                        z-index: 2147483641;
+                    }}
+                    "##,
+                    item.id
+                ));
+                //     // .history:has(.history-trigger-{0}:hover:active) .history-l-shifter {{
+                //     //     transition: 0s;
+                //     //     left: 0;
+                //     // }}
+            }
             // emit_div(html, "cur-display", |html| {
             //     for (_, item) in self.items.iter().enumerate() {
             //         emit_div(html, &format!("cur-{} cur", item.id), |html| {
@@ -75,26 +73,41 @@ impl History {
                             emit_div(html, "history-item-check-forward", |_| ());
                         },
                     );
-                    css.push_str(&format!(
-                        r##"
-                        .history:has(.history-item-{0} .history-item-reg:hover) .cur-{0} {{
-                            transition: 0s;
-                            left: 0px;
-                        }}
-                        .history:has(.history-item-{0} .history-item-reg:hover) .cur:not(.cur-{0}) {{
-                            transition: 0s;
-                            left: -100000.01px;
-                        }}
-                    "##,
-                        item.id
-                    ));
+                    // css.push_str(&format!(
+                    //     r##"
+                    //     .history:has(.history-item-{0} .history-item-reg:hover) .cur-{0} {{
+                    //         transition: 0s;
+                    //         left: 0px;
+                    //     }}
+                    //     .history:has(.history-item-{0} .history-item-reg:hover) .cur:not(.cur-{0}) {{
+                    //         transition: 0s;
+                    //         left: -100000.01px;
+                    //     }}
+                    // "##,
+                    //     item.id
+                    // ));
+                    for rule in &item.rules {
+                        css.push_str(&format!(
+                            r##".main:has(.history-item-{0} .history-item-reg:hover) {1}"##,
+                            item.id, rule
+                        ));
+                    }
                 }
             });
         });
+        let default_item = self.items.iter().find(|x| x.id == self.default_id).unwrap();
+        for rule in &default_item.rules {
+            // three .main:s to increase specificity!
+            css.push_str(&format!(r##".main.main.main:has(.onload:hover) {}"##, rule));
+            css.push_str(&format!(
+                r##".main:has(.history-none-back:hover) {}"##,
+                rule
+            ));
+        }
     }
 }
 
 pub struct HistoryItem {
     pub id: u64,
-    pub rule: String,
+    pub rules: Vec<String>,
 }

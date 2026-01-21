@@ -34,7 +34,33 @@
 	display: flex;
 	flex-grow: 1;
 	background-color: white;
+	position: relative;
 }
+
+.ie-site {
+	transition: z-index 214748s linear;
+	transition-behavior: allow-discrete;
+	z-index: -1;
+	position: absolute;
+	min-width: 100%;
+	min-height: 100%;
+}
+.ie-page {
+	transition: z-index 214748s linear;
+	transition-behavior: allow-discrete;
+	z-index: -1;
+	position: absolute;
+	min-width: 100%;
+	min-height: 100%;
+	background-color: white;
+}
+/* .ie-page-cover {
+	z-index: 1;
+	position: absolute;
+	min-width: 100%;
+	min-height: 100%;
+	background-color: white;
+} */
 
 .history-toolbar-container {
 	position: relative;
@@ -46,30 +72,43 @@
 .history-toolbar-container .toolbar-item:nth-child(1) {
 	position: relative;
 }
-.history-toolbar-container .toolbar-item:nth-child(2) {
+/* TODO: what is this fucking bullshit? */
+.history-toolbar-container .toolbar-item:nth-child(3) {
 	position: absolute;
 	z-index: 0;
 	top: 0;
 	left: 0;
 }
 .history-back, .history-forward {
-	z-index: -1;
+	/* this is -2 because transitions because FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU*/
+	z-index: -2;
 	transition: z-index 10s linear 2147483640s;
 	transition-behavior: allow-discrete;
 }
-.history:has(.history-item-check-back:hover) .history-back {
+.main:has(.history-item-check-back:hover) .history-back {
 	transition: 0s;
 	z-index: 1;
 }
-.history:has(.history-item-check-forward:hover) .history-forward {
+.main:has(.history-item-check-forward:hover) .history-forward {
 	transition: 0s;
 	z-index: 1;
 }
-.history:has(.history-none-back:hover) .history-back {
+.main:has(.history-none-back:hover) .history-back {
 	transition: 0s;
 	z-index: -1;
 }
-.history:has(.history-none-forward:hover) .history-forward {
+.main:has(.history-none-forward:hover) .history-forward {
 	transition: 0s;
 	z-index: -1;
+}
+.toolbar-single-click {
+	display: none;
+	position: absolute;
+	z-index: 5;
+	background-color: blue;
+	top: 0;
+	left: 0;
+}
+.toolbar-item:active + .toolbar-single-click {
+	display: block;
 }
