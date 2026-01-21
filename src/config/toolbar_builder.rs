@@ -49,14 +49,21 @@ impl ToolbarBuilder {
                         // classlist.push_str(&format!(" {id_class}"));
                         match item {
                             ToolbarItem::Normal(item) => {
-                                emit_div(html, "toolbar-item", |html| {
-                                    html.push_str(&format!(
-                                        r##"
-                                            <img src="{}" />
-                                            <p>{}</p>
-                                        "##,
-                                        item.icon, item.name
-                                    ));
+                                emit_div(html, "toolbar-item-outer", |html| {
+                                    emit_div(
+                                        html,
+                                        &format!("toolbar-item {}", item.class),
+                                        |html| {
+                                            html.push_str(&format!(
+                                                r##"
+                                                <img src="{}" />
+                                                <p>{}</p>
+                                            "##,
+                                                item.icon, item.name
+                                            ));
+                                        },
+                                    );
+                                    emit_div(html, "toolbar-item toolbar-single-click", |_| {});
                                 });
                             }
                             ToolbarItem::Html(item) => {
@@ -78,8 +85,8 @@ impl ToolbarGroup {
     fn new() -> Self {
         Self { items: Vec::new() }
     }
-    pub fn item(&mut self, name: &str, icon: &str) -> &mut Self {
-        self.items.push(ToolbarItem::new(name, icon));
+    pub fn item(&mut self, name: &str, icon: &str, class: &str) -> &mut Self {
+        self.items.push(ToolbarItem::new(name, icon, class));
         self
     }
     pub fn item_html(&mut self, mut func: impl FnMut(&mut String)) -> &mut Self {
@@ -97,6 +104,7 @@ pub enum ToolbarItem {
 
 pub struct ToolbarItemNormal {
     name: String,
+    class: String,
     icon: String,
 }
 pub struct ToolbarItemHtml {
@@ -104,10 +112,11 @@ pub struct ToolbarItemHtml {
 }
 
 impl ToolbarItem {
-    fn new(name: &str, icon: &str) -> Self {
+    fn new(name: &str, icon: &str, class: &str) -> Self {
         Self::Normal(ToolbarItemNormal {
             name: name.into(),
             icon: icon.into(),
+            class: class.into(),
         })
     }
     fn new_html(html: String) -> Self {

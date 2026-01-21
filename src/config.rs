@@ -686,7 +686,8 @@ impl Config {
         //         rule: format!(""),
         //     });
         // }
-        let history = History::new(history_items, format!("{}-{}", home_domain, "").hashed());
+        let default_id = format!("{}-{}", home_domain, "").hashed();
+        let history = History::new(history_items, default_id);
         history.emit_stack(html, css, self);
         self.emit_window(
             html,
@@ -782,25 +783,30 @@ impl Config {
                                         });
                                     });
                                 })
-                                .item("Stop", "../res/icons/stop-9.png")
-                                .item("Refresh", "../res/icons/refresh-9.png")
-                                .item("Home", "../res/icons/home-9.png")
+                                .item("Stop", "../res/icons/stop-9.png", "ie-tb-stop")
+                                .item("Refresh", "../res/icons/refresh-9.png", "ie-tb-refresh")
+                                .item(
+                                    "Home",
+                                    "../res/icons/home-9.png",
+                                    &format!("history-trigger history-trigger-{}", default_id),
+                                )
                         })
                         .group(|group| {
                             group
-                                .item("Search", "../res/icons/search-9.png")
-                                .item("Favorites", "../res/icons/favorites-9.png")
-                                .item("History", "../res/icons/history-9.png")
+                                .item("Search", "../res/icons/search-9.png", "ie-tb-search")
+                                .item(
+                                    "Favorites",
+                                    "../res/icons/favorites-9.png",
+                                    "ie-tb-favorites",
+                                )
+                                .item("History", "../res/icons/history-9.png", "ie-tb-history")
                         })
                         .group(|group| {
                             group
-                                .item("Mail", "../res/icons/mail-9.png")
-                                .item("Print", "../res/icons/print-9.png")
+                                .item("Mail", "../res/icons/mail-9.png", "ie-tb-mail")
+                                .item("Print", "../res/icons/print-9.png", "ie-tb-print")
                         })
                         .build(html, css, self);
-                    // emit_div(html, "ie-toolbar", |html| {
-                    //     let items =
-                    // });
                     emit_div(html, "ie-address-bar border-style-light-1", |html| {
                         html.push_str(&format!(
                             r##"

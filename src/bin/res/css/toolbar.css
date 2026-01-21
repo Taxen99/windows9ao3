@@ -40,6 +40,17 @@
 	height: 20px;
 }
 
-.toolbar-item p {
-
+.toolbar-item-outer {
+	position: relative;
+}
+.toolbar-single-click.toolbar-single-click {
+	display: none;
+	position: absolute;
+	z-index: 5;
+	background: none;
+	top: 0;
+	left: 0;
+}
+.toolbar-item:active+.toolbar-single-click {
+	display: block !important;
 }
