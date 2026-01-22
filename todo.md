@@ -17,3 +17,4 @@
 - [ ] make about do something
 - [ ] width&height: 0 + overflow shit = poor man's display none;
 - [ ] fix file name overflow (add ellipsis) + file selection (blue thingy)
+- [ ] make sure ao3.css matches output after entering into ao3 for real, as a quick and easy way to validate that we have valid styles. put both through minifier to normalize

@@ -101,22 +101,23 @@
 	transition: 0s;
 	z-index: 2147483642;
 }
-.main:has(.history-trigger:hover:active, .history-back:hover:active) .history-items {
+/* we add :is(_) to the second arg as to avoid ao3 messing us up by prepending '#workskin ' to whatever is after the comma. this probably works but I have not tested it yet... */
+.main:has(.history-trigger:hover:active, :is(.history-back:hover:active)) .history-items {
 	transition: 0s;
 	top: 0px;
 }
 
-.history:has(.history-item-reg:hover, .history-none-back:hover) .history-items {
+.history:has(.history-item-reg:hover, :is(.history-none-back:hover)) .history-items {
 	transition: 0s;
 	top: -100vh;
 	left: 0.01px;
 }
-.history:has(.history-item-check-back:hover, .history-none-back:hover) .history-items {
+.history:has(.history-item-check-back:hover, :is(.history-none-back:hover)) .history-items {
 	transition: 0s;
 	top: -200vh;
 	left: 0.01px;
 }
-.history:has(.history-item-check-forward:hover, .history-none-forward:hover) .history-items {
+.history:has(.history-item-check-forward:hover, :is(.history-none-forward:hover)) .history-items {
 	transition: 0s;
 	top: 200000.1px;
 	left: 0.01px;

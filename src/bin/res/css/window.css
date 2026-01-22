@@ -363,7 +363,7 @@ WINDOWS!!!
 .mb-submenu:hover {
 	display: block;
 }
-
+/* this comma is fine for ao3 bs*/
 .mb-submenu:has(.mb-submenu-item:not(.mb-disabled, details):active) {
 	display: none;
 }
@@ -395,7 +395,8 @@ WINDOWS!!!
 } */
 
 /* i call this the bullshit selector. no i shall not explain it. my life is a mistake. */
-.main:is(:not(:has(.menubar-item-state:active, .menubar-item:active)), :has(.mb-submenu-item:not(.mb-disabled, details):active)):active .menubar-item-state {
+/* the commas here should probably be fine for ao3. i messed with with some shit so if this breaks then you know what to do...! */
+.main:is(:not(:has(.menubar-item-state:active), :has(.menubar-item:active)), :has(.mb-submenu-item:not(.mb-disabled, details):active)):active .menubar-item-state {
 	/* .window *:not(.menubar-item):active { */
 	top: -2000.001px;
 	transition: top 0s linear;
