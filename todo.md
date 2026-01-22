@@ -15,3 +15,5 @@
 - [ ] fix window resizer (it should not be the icon (also what about iconless windows?))
 - [ ] upload all icon (local and web) to central location where they stay
 - [ ] make about do something
+- [ ] width&height: 0 + overflow shit = poor man's display none;
+- [ ] fix file name overflow (add ellipsis) + file selection (blue thingy)

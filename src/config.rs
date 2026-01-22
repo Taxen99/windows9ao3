@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::collections::{BTreeMap, HashMap};
 use std::hash::{DefaultHasher, Hash, Hasher};
 use std::path::{Path, PathBuf};
 use std::{fs, path};
@@ -69,7 +69,7 @@ impl FsEntry {
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Folder {
-    pub children: HashMap<String, FsEntry>,
+    pub children: BTreeMap<String, FsEntry>,
     pub offset: Option<(u32, u32)>,
 }
 #[derive(Debug, Serialize, Deserialize, PartialEq, Eq)]
@@ -239,65 +239,62 @@ impl Config {
                 "##));
                 //
                 emit_div(html, "window-main", |html| {
-                    // FIXME: this looks sussy, why two fe-mains?
                     emit_div(html, "fe-main", |html| {
-                        emit_div(html, "fe-main", |html| {
-                            emit_div(html, "fe-sideview border-style-light-1", |html| {
-                                html.push_str(
-                                    r##"<div class="fe-sideview-header">
-                                                    <p>All Folders</p>
-                                                </div>"##,
-                                );
-                                emit_div(html, "fe-sideview-view", |html| {
-                                    fn emit_folder(html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
-                                        let folder_hash = path.hashed();
-                                        let mut sub_folder_count = 0;
-                                        emit_div(html, &format!("fe-svv-child fe-svv-child-{}", folder_hash), |html| {
-                                            for (name, entry) in &folder.children {
-                                                if let FsEntry::Folder(sub_folder) = &entry {
-                                                    sub_folder_count += 1;
-                                                    emit_div(html, "fe-svv-item", |html| {
-                                                        html.push_str(&format!(
-                                                            r##"
-                                                            <div class="fe-svvi-group">
-                                                                <div class="fe-svvi-expander"></div>
-                                                                <p class="fe-svvi-name">{}</p>
-                                                            </div>"##,
-                                                            name
-                                                        ));
-                                                        let mut sub_path = path.clone();
-                                                        sub_path.push(name);
-                                                        emit_folder(html, css, sub_folder, sub_path);
-                                                    });
-                                                }
-                                            }
-                                        });
-                                        css.push_str(&format!(r##"
-                                        .fe-svv-child-{}::before {{
-                                            height: {}px;
-                                        }}
-                                        "##, folder_hash, 14 * sub_folder_count - 3));
-                                        dbg!(folder.children.len(), path);
-                                    }
-                                    emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
-                                });
-                            });
-                            emit_div(html, "fe-view-anchor", |html| {
-                                fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                        emit_div(html, "fe-sideview border-style-light-1", |html| {
+                            html.push_str(
+                                r##"<div class="fe-sideview-header">
+                                                <p>All Folders</p>
+                                            </div>"##,
+                            );
+                            emit_div(html, "fe-sideview-view", |html| {
+                                fn emit_folder(html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
                                     let folder_hash = path.hashed();
-                                    emit_div(html, &format!("fe-view border-style-dark-1 fe-view-{}", folder_hash), |html| {
-                                        config.emit_file_view_content(html, css, &path, true);
-                                    });
-                                    for (name, entry) in &folder.children {
-                                        if let FsEntry::Folder(sub_folder) = &entry {
-                                            let mut sub_path = path.clone();
-                                            sub_path.push(name);
-                                            emit_folder(config, html, css, sub_folder, sub_path);
+                                    let mut sub_folder_count = 0;
+                                    emit_div(html, &format!("fe-svv-child fe-svv-child-{}", folder_hash), |html| {
+                                        for (name, entry) in &folder.children {
+                                            if let FsEntry::Folder(sub_folder) = &entry {
+                                                sub_folder_count += 1;
+                                                emit_div(html, "fe-svv-item", |html| {
+                                                    html.push_str(&format!(
+                                                        r##"
+                                                        <div class="fe-svvi-group">
+                                                            <div class="fe-svvi-expander"></div>
+                                                            <p class="fe-svvi-name">{}</p>
+                                                        </div>"##,
+                                                        name
+                                                    ));
+                                                    let mut sub_path = path.clone();
+                                                    sub_path.push(name);
+                                                    emit_folder(html, css, sub_folder, sub_path);
+                                                });
+                                            }
                                         }
+                                    });
+                                    css.push_str(&format!(r##"
+                                    .fe-svv-child-{}::before {{
+                                        height: {}px;
+                                    }}
+                                    "##, folder_hash, 14 * sub_folder_count - 3));
+                                    dbg!(folder.children.len(), path);
+                                }
+                                emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
+                            });
+                        });
+                        emit_div(html, "fe-view-anchor", |html| {
+                            fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                                let folder_hash = path.hashed();
+                                emit_div(html, &format!("fe-view border-style-dark-1 fe-view-{}", folder_hash), |html| {
+                                    config.emit_file_view_content(html, css, &path, true);
+                                });
+                                for (name, entry) in &folder.children {
+                                    if let FsEntry::Folder(sub_folder) = &entry {
+                                        let mut sub_path = path.clone();
+                                        sub_path.push(name);
+                                        emit_folder(config, html, css, sub_folder, sub_path);
                                     }
                                 }
-                                emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
-                            });
+                            }
+                            emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
                         });
                     });
                 });
@@ -909,14 +906,18 @@ impl Config {
     ) {
         // dbg!(path);
         let folder = self.fs_entry(path).unwrap().as_folder().unwrap();
-        for (name, entry) in &folder.children {
+        for (i, (name, entry)) in folder.children.iter().enumerate() {
             // dbg!(name);
             let mut entry_path = path.to_owned();
             entry_path.push(name);
             let unique_hash: u64 = rand::rng().random();
             // let unique_hash =
             //     format!("{}___{}", entry_path.to_str().unwrap(), some_random_numer).hashed();
-            let offset = entry.offset().unwrap_or_default();
+            let mut offset = entry.offset().unwrap_or_default();
+            if is_in_explorer {
+                let cols = 5;
+                offset = (i as u32 % cols, i as u32 / cols);
+            }
             html.push_str(&format!(
                 r##"
                 <div class="desktop-item desktop-item-{}">

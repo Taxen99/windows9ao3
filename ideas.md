@@ -8,3 +8,6 @@
 ### random events
 - ad banner on common webpage(s) with virus download
 - get a stream of messages from some dude, probably trying to sell you something?
+
+### other
+- sheep.exe!!!

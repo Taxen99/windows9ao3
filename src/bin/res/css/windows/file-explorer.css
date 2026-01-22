@@ -50,6 +50,9 @@
 
 .fe-view p {
 	color: black;
+	max-height: 24px;
+	overflow: hidden;
+	overflow-wrap: anywhere;
 }
 
 .fe-sideview {
