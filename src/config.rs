@@ -247,37 +247,44 @@ impl Config {
                                             </div>"##,
                             );
                             emit_div(html, "fe-sideview-view", |html| {
-                                fn emit_folder(html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
+                                fn emit_folder(html: &mut String, css: &mut String, folder: &Folder, path: PathBuf, config: &Config) {
                                     let folder_hash = path.hashed();
                                     let mut sub_folder_count = 0;
                                     emit_div(html, &format!("fe-svv-child fe-svv-child-{}", folder_hash), |html| {
                                         for (name, entry) in &folder.children {
                                             if let FsEntry::Folder(sub_folder) = &entry {
                                                 sub_folder_count += 1;
+                                                let expandable = (sub_folder.children.iter().filter(|x| x.1.is_folder()).collect::<Vec<_>>().len() > 0).then_some("fe-svv-expandable").unwrap_or("");
                                                 emit_div(html, "fe-svv-item", |html| {
-                                                    html.push_str(&format!(
-                                                        r##"
-                                                        <div class="fe-svvi-group">
-                                                            <div class="fe-svvi-expander"></div>
-                                                            <p class="fe-svvi-name">{}</p>
-                                                        </div>"##,
-                                                        name
-                                                    ));
                                                     let mut sub_path = path.clone();
                                                     sub_path.push(name);
-                                                    emit_folder(html, css, sub_folder, sub_path);
+                                                    html.push_str(&format!(
+                                                        r##"
+                                                        <div class="fe-svvi-group {1}">
+                                                            <div class="fe-svvi-expander fe-svvi-expander-open"></div>
+                                                            <div class="fe-svvi-expander fe-svvi-expander-close"></div>
+                                                            <div class="fe-svvi-name fe-svvi-name-{2}"><p>{0}</p> <div class="desktop-item-double-clicker"></div></div>
+                                                            <div class="desktop-item-animator">
+                                                                <div class="desktop-item-animator-helper"></div>
+                                                            </div>
+                                                        </div>"##,
+                                                        name, expandable, sub_path.hashed()
+                                                    ));
+                                                    let condition = format!(".fe-svvi-name-{0} + .desktop-item-animator .desktop-item-animator-helper:hover", sub_path.hashed());
+                                                    config.emit_action(css, &Action::OpenFileExplorer(sub_path.hashed()), &condition);
+                                                    emit_folder(html, css, sub_folder, sub_path, config);
                                                 });
                                             }
                                         }
                                     });
-                                    css.push_str(&format!(r##"
-                                    .fe-svv-child-{}::before {{
-                                        height: {}px;
-                                    }}
-                                    "##, folder_hash, 14 * sub_folder_count - 3));
+                                    // css.push_str(&format!(r##"
+                                    // .fe-svv-child-{}::before {{
+                                    //     height: {}px;
+                                    // }}
+                                    // "##, folder_hash, 14 * sub_folder_count - 3));
                                     dbg!(folder.children.len(), path);
                                 }
-                                emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
+                                emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"), self);
                             });
                         });
                         emit_div(html, "fe-view-anchor", |html| {
@@ -1050,6 +1057,14 @@ impl Config {
                     .main:has({0}) .fe-view:not(.fe-view-{1}) {{
                         left: -20000.001px;
                         transition: left 0s linear !important;
+                    }}
+                    .main:has({0}) .fe-sideview-view .fe-svv-child:is(:has(.fe-svv-child-{1}), .fe-svv-child-{1}) {{
+                        height: 100%;
+                        transition: 0s;
+                    }}
+                    .main:has({0}) .fe-sideview-view :is(.fe-svv-expandable:has(+ .fe-svv-child-{1}), .fe-svv-expandable:has(+ .fe-svv-child .fe-svv-child-{1})) .fe-svvi-expander-open {{
+                        transition: 0s;
+	                    z-index: 1;
                     }}
                     "##,
                     condition, id

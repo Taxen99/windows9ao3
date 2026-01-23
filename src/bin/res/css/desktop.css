@@ -39,7 +39,7 @@ desktop!!!
 	left: 0;
 	width: 100%;
 	height: 100%;
-	/* background-color: #ff000099; */
+	background-color: #ff000099;
 	transition: top 0s linear 0.3s;
 }
 
@@ -64,7 +64,7 @@ desktop!!!
 	left: -100vw;
 	width: 200vw;
 	height: 100vh;
-	/* background-color: #ff000099; */
+	background-color: #ff000099;
 	z-index: 9999999;
 	/* TODO: look at all the z-indixes. this one should be the highest probably, since its a temp overlay over the whole screen*/
 	transition: top 0.2s linear 0.1s;
