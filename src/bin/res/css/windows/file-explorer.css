@@ -8,20 +8,37 @@
 
 /* .fe-address-bar p:nth-child(1) {} */
 
-.fe-address-bar p:nth-child(2) {
+.fe-addrb-anchor {
 	background-color: white;
 	flex-grow: 1;
 	display: flex;
 	padding: 1px;
+	position: relative;
+	height: 22px;
+}
+.fe-addrb-path {
+	flex-grow: 1;
+	display: flex;
+	transition: z-index 214748s linear;
+	transition-behavior: allow-discrete;
+	z-index: -100;
+	position: absolute;
+	max-width: 100%;
+	background-color: white;
+	/* justify-content: flex-end; */
+
+	white-space: nowrap;
+	overflow: scroll;
+	scrollbar-width: none;
+	user-select: text;
 }
 
-.fe-address-bar p:nth-child(2)::before {
+.fe-addrb-path::before {
 	content: "";
 	display: block;
 	width: 16px;
 	height: 16px;
-	background: url("https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png");
-	background-size: cover;
+	/* background-size: cover; */
 	margin-right: 5px;
 }
 

@@ -49,7 +49,23 @@ impl FileSystem {
                     }
                 }
             };
-        };
+        }
+        visit(&self.root, Path::new("/"), &mut func);
+    }
+    pub fn visit_all_folders(&self, mut func: impl FnMut(&Folder, &Path)) {
+        fn visit(f: &FsEntry, p: &Path, mut cb: &mut dyn FnMut(&Folder, &Path)) {
+            match f {
+                FsEntry::File(_) => (),
+                FsEntry::Folder(folder) => {
+                    cb(folder, p);
+                    for (child_name, child_entry) in &folder.children {
+                        let mut child_path = p.to_owned();
+                        child_path.push(child_name);
+                        visit(&child_entry, &child_path, cb);
+                    }
+                }
+            };
+        }
         visit(&self.root, Path::new("/"), &mut func);
     }
 }
@@ -208,36 +224,65 @@ impl Config {
             "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
             None,
             |html, css| {
-                html.push_str(&format!(r##"
-                <div class="window-header">
-                    <div class="menubar border-style-light-1">
-                        <div class="menubar-item">
-                            <div class="menubar-item-state"></div>
-                            <p>File</p>
-                            <div class="mb-submenu border-style-dark-2">
-                                <div class="mb-submenu-item">
-                                    <p>Open</p>
-                                </div>
-                                <div class="mb-submenu-item">
-                                    <p>Close</p>
-                                </div>
-                                <div class="mb-submenu-item">
-                                    <p>Redact</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Edit</p></div>
-                        <div class="menubar-item"><div class="menubar-item-state"></div><p>View</p></div>
-                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Go</p></div>
-                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Favorites</p></div>
-                        <div class="menubar-item"><div class="menubar-item-state"></div><p>Help</p></div>
-                    </div>
-                    <div class="fe-address-bar border-style-light-1">
-                        <p>Address</p>
-                        <p class="border-style-dark-1">My Computer</p>
-                    </div>
-                </div>
-                "##));
+                emit_div(html, "window-header", |html| {
+                    MenubarBuilder::new()
+                        .item("File", |item| {
+                            item
+                                .group(|group| {
+                                    group.sub("Exit", |i| i.action(Action::Close(Self::FILE_EXPLORER_ID)))
+                                })
+                        })
+                        .item("Help", |item| {
+                            item.group(|group| group.sub_disabled("Help Topics"))
+                                .group(|group| group.sub("About", |i| i.dummy()))
+                        })
+                        .build(html, css, self);
+                        emit_div(html, "fe-address-bar border-style-light-1", |html| {
+                            emit_p(html, "", "Address");
+                            emit_div(html, "fe-addrb-anchor border-style-dark-1", |html| {
+                                emit_div(html, "fe-addrb-blocker", |_| ());
+                                self.fs.visit_all_folders(|folder, path| {
+                                    let icon = self.icon_of_folder(folder);
+                                    emit_p(html, &format!("fe-addrb-path fe-addrb-{}", path.hashed()), &self.path_as_windows98y(path));
+                                    css.push_str(&format!(r##".fe-addrb-{}::before {{ background: url("{}") top left / cover; }}"##, path.hashed(), icon));
+                                });
+                            });
+                        });
+                                    //     <div class="fe-address-bar border-style-light-1">
+                //         <p>Address</p>
+                //         <p class="border-style-dark-1">My Computer</p>
+                //     </div>
+                });
+                // html.push_str(&format!(r##"
+                // <div class="window-header">
+                //     <div class="menubar border-style-light-1">
+                //         <div class="menubar-item">
+                //             <div class="menubar-item-state"></div>
+                //             <p>File</p>
+                //             <div class="mb-submenu border-style-dark-2">
+                //                 <div class="mb-submenu-item">
+                //                     <p>Open</p>
+                //                 </div>
+                //                 <div class="mb-submenu-item">
+                //                     <p>Close</p>
+                //                 </div>
+                //                 <div class="mb-submenu-item">
+                //                     <p>Redact</p>
+                //                 </div>
+                //             </div>
+                //         </div>
+                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>Edit</p></div>
+                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>View</p></div>
+                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>Go</p></div>
+                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>Favorites</p></div>
+                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>Help</p></div>
+                //     </div>
+                //     <div class="fe-address-bar border-style-light-1">
+                //         <p>Address</p>
+                //         <p class="border-style-dark-1">My Computer</p>
+                //     </div>
+                // </div>
+                // "##));
                 //
                 emit_div(html, "window-main", |html| {
                     emit_div(html, "fe-main", |html| {
@@ -1072,6 +1117,10 @@ impl Config {
                         transition: 0s;
 	                    z-index: 1;
                     }}
+                    .main:has({0}) .fe-addrb-{1} {{
+                        transition: 0s;
+	                    z-index: 2147483640;
+                    }}
                     "##,
                     condition, id
                 ));
@@ -1132,29 +1181,36 @@ impl Config {
     }
     fn icon_of(&self, entry: &FsEntry) -> String {
         match entry {
-            FsEntry::File(file) => match file.kind {
-                FileKind::App => self.app(&file.link).icon.clone(),
-                FileKind::Shortcut => self.icon_of(self.fs_entry(Path::new(&file.link)).unwrap()),
-                FileKind::Text => {
-                    "https://win98icons.alexmeub.com/icons/png/notepad_file-2.png".to_owned()
-                }
-                FileKind::Image => {
-                    "https://win98icons.alexmeub.com/icons/png/paint_file-5.png".to_owned()
-                }
-                FileKind::NativeApp => {
-                    match file.link.parse::<u64>().expect("native app id must be u64") {
-                        Self::INTERNET_EXPLORER_ID => {
-                            "https://win98icons.alexmeub.com/icons/png/msie1-2.png".to_owned()
-                        }
-                        _ => panic!("invalid native app id"),
+            FsEntry::File(file) => self.icon_of_file(file),
+            FsEntry::Folder(folder) => self.icon_of_folder(folder),
+        }
+    }
+    fn icon_of_folder(&self, file: &Folder) -> String {
+        // TODO: what if this resource disappears?
+        "https://win98icons.alexmeub.com/icons/png/directory_closed-4.png".to_owned()
+    }
+    fn icon_of_file(&self, file: &File) -> String {
+        match file.kind {
+            FileKind::App => self.app(&file.link).icon.clone(),
+            FileKind::Shortcut => self.icon_of(self.fs_entry(Path::new(&file.link)).unwrap()),
+            FileKind::Text => {
+                "https://win98icons.alexmeub.com/icons/png/notepad_file-2.png".to_owned()
+            }
+            FileKind::Image => {
+                "https://win98icons.alexmeub.com/icons/png/paint_file-5.png".to_owned()
+            }
+            FileKind::NativeApp => {
+                match file.link.parse::<u64>().expect("native app id must be u64") {
+                    Self::INTERNET_EXPLORER_ID => {
+                        "https://win98icons.alexmeub.com/icons/png/msie1-2.png".to_owned()
                     }
+                    _ => panic!("invalid native app id"),
                 }
-            },
-            FsEntry::Folder(_folder) => {
-                // TODO: what if this resource disappears?
-                "https://win98icons.alexmeub.com/icons/png/directory_closed-4.png".to_owned()
             }
         }
+    }
+    fn path_as_windows98y(&self, path: &Path) -> String {
+        path.to_str().unwrap().replace("/", "\\")
     }
 }
 fn emit_div(s: &mut String, class: &str, mut cb: impl FnMut(&mut String)) {
