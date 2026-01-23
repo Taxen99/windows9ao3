@@ -248,42 +248,7 @@ impl Config {
                                 });
                             });
                         });
-                                    //     <div class="fe-address-bar border-style-light-1">
-                //         <p>Address</p>
-                //         <p class="border-style-dark-1">My Computer</p>
-                //     </div>
                 });
-                // html.push_str(&format!(r##"
-                // <div class="window-header">
-                //     <div class="menubar border-style-light-1">
-                //         <div class="menubar-item">
-                //             <div class="menubar-item-state"></div>
-                //             <p>File</p>
-                //             <div class="mb-submenu border-style-dark-2">
-                //                 <div class="mb-submenu-item">
-                //                     <p>Open</p>
-                //                 </div>
-                //                 <div class="mb-submenu-item">
-                //                     <p>Close</p>
-                //                 </div>
-                //                 <div class="mb-submenu-item">
-                //                     <p>Redact</p>
-                //                 </div>
-                //             </div>
-                //         </div>
-                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>Edit</p></div>
-                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>View</p></div>
-                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>Go</p></div>
-                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>Favorites</p></div>
-                //         <div class="menubar-item"><div class="menubar-item-state"></div><p>Help</p></div>
-                //     </div>
-                //     <div class="fe-address-bar border-style-light-1">
-                //         <p>Address</p>
-                //         <p class="border-style-dark-1">My Computer</p>
-                //     </div>
-                // </div>
-                // "##));
-                //
                 emit_div(html, "window-main", |html| {
                     emit_div(html, "fe-main", |html| {
                         emit_div(html, "fe-sideview border-style-light-1", |html| {
@@ -331,6 +296,10 @@ impl Config {
                                     dbg!(folder.children.len(), path);
                                 }
                                 emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"), self);
+                            });
+                            emit_div(html, "fe-sideview-resizer-parent", |html| {
+                                emit_div(html, "fe-sideview-resizer fe-sideview-resizer-left", |_| {});
+                                emit_div(html, "fe-sideview-resizer fe-sideview-resizer-right", |_| {});
                             });
                         });
                         emit_div(html, "fe-view-anchor", |html| {
