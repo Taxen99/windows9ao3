@@ -48,6 +48,15 @@
 	transition: left 10s linear 2147483640s;
 }
 
+.fe-view > h1 {
+	margin-left: 20px;
+	margin-top: 5px;
+}
+
+.fe-view-content {
+	position: relative;
+}
+
 .fe-view p {
 	color: black;
 	max-height: 24px;

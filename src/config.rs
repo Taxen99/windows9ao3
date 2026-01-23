@@ -1,4 +1,5 @@
 use std::collections::{BTreeMap, HashMap};
+use std::ffi::OsStr;
 use std::hash::{DefaultHasher, Hash, Hasher};
 use std::path::{Path, PathBuf};
 use std::{fs, path};
@@ -291,7 +292,12 @@ impl Config {
                             fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
                                 let folder_hash = path.hashed();
                                 emit_div(html, &format!("fe-view border-style-dark-1 fe-view-{}", folder_hash), |html| {
-                                    config.emit_file_view_content(html, css, &path, true);
+                                    html.push_str(&format!(r##"
+                                        <h1>{}</h1>
+                                    "##, path.file_name().unwrap_or(OsStr::new("root")).to_str().unwrap()));
+                                    emit_div(html, "fe-view-content", |html| {
+                                        config.emit_file_view_content(html, css, &path, true);
+                                    });
                                 });
                                 for (name, entry) in &folder.children {
                                     if let FsEntry::Folder(sub_folder) = &entry {

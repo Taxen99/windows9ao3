@@ -67,7 +67,7 @@ desktop!!!
 	background-color: #ff000099;
 	z-index: 9999999;
 	/* TODO: look at all the z-indixes. this one should be the highest probably, since its a temp overlay over the whole screen*/
-	transition: top 0.2s linear 0.1s;
+	transition: top 0.3s linear 0.1s;
 }
 
 .desktop-item-animator-helper {
