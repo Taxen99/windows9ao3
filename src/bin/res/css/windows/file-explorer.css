@@ -23,7 +23,7 @@
 	transition-behavior: allow-discrete;
 	z-index: -100;
 	position: absolute;
-	max-width: 100%;
+	width: 100%;
 	background-color: white;
 	/* justify-content: flex-end; */
 
@@ -234,7 +234,7 @@
 }
 
 .fe-sideview-view {
-	overflow: scroll;
+	overflow: auto;
 }
 
 .fe-sideview-view::-webkit-scrollbar {

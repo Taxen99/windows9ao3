@@ -468,11 +468,12 @@ impl Config {
             }
             let id = path.hashed();
             let font_id = id + 1;
+            let filename = path.file_name().unwrap().to_str().unwrap();
             self.emit_window(
                 html,
                 css,
                 id,
-                "Notepad",
+                &format!("{} - Notepad", filename),
                 "https://win98icons.alexmeub.com/icons/png/notepad-5.png",
                 Some("window-kind-notepad"),
                 |html, css| {
@@ -635,11 +636,12 @@ impl Config {
                 return;
             }
             let id = path.hashed();
+            let filename = path.file_name().unwrap().to_str().unwrap();
             self.emit_window(
                 html,
                 css,
                 id,
-                "Quick View",
+                &format!("{} - Quick View", filename),
                 "https://win98icons.alexmeub.com/icons/png/magnifying_glass-0.png",
                 None,
                 |html, css| {
