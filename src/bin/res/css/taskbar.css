@@ -11,7 +11,13 @@
 	display: flex;
 }
 
+.tb-start {
+	position: relative;
+	width: 54px;
+}
+
 .tb-start-button {
+	position: absolute;
 	width: 54px;
 	height: 22px;
 	display: flex;
@@ -20,16 +26,47 @@
 	/* margin-bottom: 3px; */
 	font-size: 12px;
 	font-weight: bold;
+	/* z-index: 2147483647; */
+	/* transition-behavior: allow-discrete; */
 }
 
-.tb-start-button p {
+.tb-start-button.tb-start-button-unactive {
+	/* z-index: 0; */
+}
+.tb-start-button.tb-start-button-active {
+	position: relative;
+	transition: top 10s linear 2147483640s;
+	top: 200vh;
+	z-index: 1000;
+	border-width: 2px 1px 1px 2px;
+	--border-c1_tbsba: rgb(93, 93, 93);
+	--border-c2_tbsba: rgb(249, 249, 249);
+	border-color: var(--border-c1_tbsba) var(--border-c2_tbsba) var(--border-c2_tbsba) var(--border-c1_tbsba);
+	border-style: groove solid solid groove;
+	background-color: var(--window-background);
+}
+.main:active .tb-start-button-active {
+	top: 201vh;
+	transition: 0s;
+}
+.tb-start-button.tb-start-button-unactive:active + .tb-start-button.tb-start-button-active {
+	top: 0;
+	transition: 0s;
+}
+
+.tb-start-button-active-inner {
+	border: 1px dotted black;
+	padding: 1px;
+}
+
+.tb-sb-p {
 	display: flex;
 	flex-wrap: nowrap;
 	align-items: center;
 	justify-content: center;
 }
 
-.tb-start-button p::before {
+.tb-sb-p::before {
 	margin-right: 3px;
 	content: "";
 	width: 16px;
@@ -37,6 +74,37 @@
 	background-image: url("../res/icons/taskbar-windows-icon-9.png");
 	background-size: cover;
 	display: block;
+}
+
+.tb-start-menu {
+	width: 177px;
+	height: 342px;
+	display: flex;
+	flex-wrap: nowrap;
+	padding: 1px;
+	position: absolute;
+	bottom: 21px;
+	left: -2px;
+	background-color: var(--window-background);
+}
+
+.tb-sm-banner {
+	width: 21px;
+	height: 336px;
+	background-color: #0000A1;
+	display: flex;
+	flex-direction: column;
+}
+.tb-sm-banner img {
+	width: 21px;
+	height: 105px;
+	margin-top: auto;
+}
+.tb-sm-content {
+	/* background-color: red; */
+	flex-grow: 1;
+	font-weight: 100;
+	/* padding: 2px; */
 }
 
 .tb-item {

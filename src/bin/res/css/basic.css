@@ -29,6 +29,14 @@
 	border-style: solid ridge ridge solid;
 }
 
+.border-style-dark-3 {
+	border: 2px;
+	--border-c1_bsd3: rgb(251, 251, 251);
+	--border-c2_bsd3: rgb(97, 97, 97);
+	border-color: var(--border-c1_bsd3) var(--border-c2_bsd3) var(--border-c2_bsd3) var(--border-c1_bsd3);
+	border-style: groove ridge ridge groove;
+}
+
 details summary::-webkit-details-marker,
 details summary::marker {
 	display: none

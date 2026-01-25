@@ -11,6 +11,7 @@ use serde::{Deserialize, Serialize};
 use crate::config::history::{History, HistoryItem};
 use crate::config::internet_explorer::read_sites;
 use crate::config::menubar_builder::MenubarBuilder;
+use crate::config::startmenu_content::StartmenuContent;
 use crate::config::toolbar_builder::ToolbarBuilder;
 use crate::config::vertical_select::emit_vertical_select;
 use crate::css_var_remove::css_var_remove;
@@ -18,6 +19,7 @@ use crate::css_var_remove::css_var_remove;
 mod history;
 mod internet_explorer;
 mod menubar_builder;
+mod startmenu_content;
 mod toolbar_builder;
 mod vertical_select;
 
@@ -314,9 +316,43 @@ impl Config {
     fn emit_taskbar(&self, html: &mut String, css: &mut String) {
         self.emit_time_advancers(html, css);
         emit_div(html, "taskbar border-style-light-1", |html| {
-            emit_div(html, "tb-item", |html| {
-                emit_div(html, "tb-start-button border-style-asymmetric-1", |html| {
-                    emit_p(html, "", "Start");
+            emit_div(html, "tb-item tb-start", |html| {
+                emit_div(
+                    html,
+                    "tb-start-button tb-start-button-unactive border-style-asymmetric-1",
+                    |html| {
+                        emit_p(html, "tb-sb-p", "Start");
+                    },
+                );
+                emit_div(html, "tb-start-button tb-start-button-active", |html| {
+                    emit_div(html, "tb-start-button-active-inner", |html| {
+                        emit_p(html, "tb-sb-p", "Start");
+                    });
+                    emit_div(html, "tb-start-menu border-style-dark-3", |html| {
+                        emit_div(html, "tb-sm-banner", |html| {
+                            html.push_str(r##"<img src="../res/icons/windows98-start.png" />"##);
+                        });
+                        emit_div(html, "tb-sm-content", |html| {
+                            StartmenuContent::new()
+                                .group(|group| group
+                                    .item("Windows Update", "https://win98icons.alexmeub.com/icons/png/windows_update_small-2.png", "")
+                                )
+                                .group(|group| group
+                                    .item("Programs", "../res/icons/programs-9.png", "")
+                                    .item("Favorites", "https://win98icons.alexmeub.com/icons/png/directory_favorites_small-4.png", "")
+                                    .item("Documents", "https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs_cool-3.png", "")
+                                    .item("Settings", "https://win98icons.alexmeub.com/icons/png/settings_gear-4.png", "")
+                                    .item("Find", "https://win98icons.alexmeub.com/icons/png/search_file_2-4.png", "")
+                                    .item("Help", "https://win98icons.alexmeub.com/icons/png/help_book_small-2.png", "")
+                                    .item("Run", "https://win98icons.alexmeub.com/icons/png/application_hourglass_small-2.png", "")
+                                )
+                                .group(|group| group
+                                    .item("Log Off Kurtson...", "https://win98icons.alexmeub.com/icons/png/key_win-2.png", "")
+                                    .item("Shut Down", "https://win98icons.alexmeub.com/icons/png/shut_down_normal-2.png", "")
+                                )
+                                .build(html, css, self);
+                        });
+                    });
                 });
             });
             emit_div(html, "tb-item tb-quick-launch", |html| {
