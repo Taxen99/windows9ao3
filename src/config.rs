@@ -250,9 +250,14 @@ impl Config {
             transition: content 0s;
             content: "{1:02}"
 }}
+.main:has(.hour-advancer-{0}:hover) .dt-hour-hand {{
+    transition: 0s;
+    transform: translate(-22.64%, -78.78%) rotateZ({2}deg)
+}}
 "##,
                 i,
-                (i + 1) % 24
+                (i + 1) % 24,
+                -60 + ((i + 1) % 24) * 30
             ));
         }
         for i in 0..60 {
@@ -264,35 +269,41 @@ impl Config {
             content: "{1:02}";
             background: {color};
 }}
+.main:has(.minute-advancer-{0}:hover) .dt-minute-hand {{
+            transition: 0s;
+            transform: translate(-22.64%, -78.78%) rotateZ({2}deg)
+}}
 "##,
                 i,
-                (i + 1) % 60
+                (i + 1) % 60,
+                -60 + ((i + 1) % 60) * 6
             ));
         }
         css.push_str(&format!(
+            // .main:has(.onload:hover) .time-minute::before {{
+            //     transition: content 0s;
+            //     content: "{0:02}";
+            // }}
+            // .main:has(.onload:hover) .time-hour::before {{
+            //     transition: content 0s;
+            //     content: "{1:02}";
+            // }}
             r##"
-            .main:has(.onload:hover) .time-minute::before {{
-                transition: content 0s;
-                content: "{0:02}";
-            }}
-            .main:has(.onload:hover) .time-hour::before {{
-                transition: content 0s;
-                content: "{1:02}";
-            }}
-            .main:has(.onload:hover) .minute-advancer:nth-child({2}) {{
+            .main:has(.onload:hover) .minute-advancer:nth-child({}) {{
                 transition: 0s;
                 z-index: 2147483640;
-                top: 300vh;
+                top: 0;
             }}
-            .main:has(.onload:hover) .hour-advancer:nth-child({3}) {{
+            .main:has(.onload:hover) .hour-advancer:nth-child({}) {{
                 transition: 0s;
                 z-index: 2147483640 !important;
+                top: 0;
             }}
         "##,
+            // Self::INITIAL_TIME.1,
+            // Self::INITIAL_TIME.0,
             Self::INITIAL_TIME.1,
-            Self::INITIAL_TIME.0,
-            Self::INITIAL_TIME.1 + 1,
-            Self::INITIAL_TIME.0 + 1
+            Self::INITIAL_TIME.0
         ));
         css.push_str(
             r##"
@@ -1094,7 +1105,17 @@ impl Config {
                                     });
                                 });
                                 emit_div(html, "dt-time border-style-light-1", |html| {
-                                    //
+                                    emit_div(html, "dt-clock", |html| {
+                                        emit_div(html, "dt-second-hand", |_| {});
+                                        emit_div(html, "dt-minute-hand", |_| {});
+                                        emit_div(html, "dt-hour-hand", |_| {});
+                                        //
+                                    });
+                                    emit_div(html, "dt-time-display border-style-dark-1", |html| {
+                                        emit_div(html, "time-hour", |_| {});
+                                        emit_p(html, "", ":");
+                                        emit_div(html, "time-minute", |_| {});
+                                    });
                                 });
                             });
                             emit_div(html, "dt-timezone-panel border-style-light-1", |html| {

@@ -68,11 +68,6 @@
 	height: 21px;
 	padding: 2px;
 }
-.dt-time {
-	position: relative;
-	width: 170px;
-	height: 197px;
-}
 
 .dt-calendar {
 	display: flex;
@@ -206,4 +201,80 @@
 	height: 9px;
 	bottom: 1px;
 	z-index: -1;
+}
+
+.dt-time {
+	position: relative;
+	width: 170px;
+	height: 197px;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: space-between;
+	padding: 18px 0;
+}
+.dt-clock {
+	width: 127px;
+	height: 127px;
+	background-image: url("../res/icons/clock-background-9.png");
+	background-size: cover;
+	position: relative;
+}
+.dt-second-hand {
+	position: absolute;
+	border-top: 1px solid #87888E;
+	width: 40%;
+	height: 0px;
+	transition: transform 60s linear;
+	transform: translate(0, 0) rotateZ(-90deg);
+	top: 50%;
+	left: 50%;
+	transform-origin: center left;
+}
+.dt-minute-hand {
+	position: absolute;
+	background-image: url("../res/icons/clock-1-9.png");
+	background-size: cover;
+	width: 35%;
+	height: 30px;
+	/* transition: transform 60s linear; */
+	transition: transform 10s linear 2147483640s;
+	transform: translate(-22.64%, -78.78%) rotateZ(-90deg);
+	top: 50%;
+	left: 50%;
+	transform-origin: 22.64% 78.78%;
+}
+.dt-hour-hand {
+	position: absolute;
+	background-image: url("../res/icons/clock-2-9.png");
+	background-size: cover;
+	width: 35%;
+	height: 30px;
+	/* transition: transform 60s linear; */
+	transition: transform 10s linear 2147483640s;
+	transform: translate(-22.64%, -78.78%) rotateZ(180deg);
+	top: 50%;
+	left: 50%;
+	transform-origin: 22.64% 78.78%;
+}
+.main:has(.onload:hover) .dt-second-hand, .main:has(.minute-advancer:hover) .dt-second-hand {
+	transform: translate(0, 0) rotateZ(-450deg);
+	transition: 0s;
+}
+/* .main:has(.onload:hover) .dt-minute-hand {
+	transform: translate(-22.64%, -78.78%) rotateZ(-450deg);
+	transition: 0s;
+}
+.main:has(.onload:hover) .dt-hour-hand {
+	transform: translate(-22.64%, -78.78%) rotateZ(0deg);
+	transition: 0s;
+} */
+
+.dt-time-display {
+	display: flex;
+	width: 77px;
+	height: 21px;
+	background-color: white;
+	align-items: center;
+	padding-left: 2px;
 }
