@@ -11,9 +11,11 @@ pub fn main() {
     if let Some(wid) = args.get(1) {
         res.css.push_str(&format!(
             r##"
-            .window-{wid} {{
+            .main:has(.onload:hover) .window-{wid} {{
                 top:  50px !important;
                 left: 50px !important;
+                transition: 0s !important;
+                z-index: 2147483640;
             }}
         "##
         ));

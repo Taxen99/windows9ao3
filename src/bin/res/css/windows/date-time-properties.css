@@ -1,0 +1,209 @@
+.window.window-420 {
+	height: 420px;
+	width: 420px;
+}
+
+.dt-main {
+	display: flex;
+	flex-grow: 1;
+	position: relative;
+	padding: 8px;
+	flex-direction: column;
+}
+
+.dt-button {
+	width: 68px;
+	height: 23px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-bottom: 3px;
+}
+
+.dt-header.dt-header {
+	border-bottom: none;
+	width: 80px;
+	text-align: center;
+	padding: 4px;
+	position: relative;
+}
+.dt-header::after {
+	content: "";
+	display: block;
+	position: absolute;
+	bottom: -2px;
+	height: 4px;
+	background-color: var(--window-background);
+	left: 0;
+	right: 0;
+}
+
+.dt-view.dt-view {
+	flex-grow: 1;
+	display: flex;
+	flex-direction: column;
+	padding: 10px;
+}
+
+.dt-upper {
+	display: flex;
+	margin: 0 0 21px;
+	justify-content: space-between;
+}
+
+.dt-date {
+	position: relative;
+	width: 183px;
+	height: 197px;
+	padding: 8px;
+}
+.dt-date-upper {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+}
+.dt-month, .dt-year {
+	background-color: white;
+	width: 80px;
+	height: 21px;
+	padding: 2px;
+}
+.dt-time {
+	position: relative;
+	width: 170px;
+	height: 197px;
+}
+
+.dt-calendar {
+	display: flex;
+	flex-direction: column;
+	height: 130px;
+	background-color: white;
+}
+
+.dt-calendar-header {
+	background-color: #87888E;
+	height: 18px;
+	display: flex;
+	justify-content: center;
+	flex-wrap: nowrap;
+	padding: 2px 0;
+}
+.dt-calendar-header p {
+	margin: 0px 5px;
+	color: #C1C7C8;
+	width: 12px;
+}
+.dt-calendar-body {
+	display: flex;
+	flex-direction: column;
+}
+.dt-calendar-row {
+	display: flex;
+	flex-wrap: nowrap;
+	padding: 2px 0;
+	justify-content: center;
+}
+.dt-calendar-row p {
+	margin: 0px 4px;
+	width: 14px;
+	text-align: center;
+	transition: filter 10s linear 2147483640s, background-color 10s linear 2147483640s;
+}
+.main:has(.onload:hover) .dt-calendar-row:first-child p:nth-child(6) {
+	background-color: #FFFE5E;
+	filter: invert(100%);
+	transition: 0s;
+}
+
+.dt-calendar-row p:active {
+	background-color: #FFFE5E;
+	filter: invert(100%);
+	transition: 0s;
+}
+
+.dt-calendar-body:has(.dt-calendar-row p:active) .dt-calendar-row p:not(:active) {
+	background-color: white;
+	filter: invert(1%);
+	transition: 0s;
+}
+
+.dt-timezone-panel {
+	position: relative;
+	height: 75px;
+	padding: 12px 8px;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+}
+
+.dt-timezone {
+	height: 21px;
+	background-color: white;
+	white-space: nowrap;
+	display: flex;
+	align-items: center;
+	padding-left: 4px;
+	font-size: 11px;
+}
+
+.dt-timezone-bottom {
+	display: flex;
+}
+
+.dt-timezone-check {
+	margin-left: 4px;
+}
+
+.dt-footer {
+	margin-top: 6px;
+	display: flex;
+	justify-content: right;
+}
+
+.dt-date::before {
+	content: "Date";
+	background: var(--window-background);
+	padding: 2px;
+	position: absolute;
+	left: 7px;
+	top: -10px;
+}
+.dt-time::before {
+	content: "Time";
+	background: var(--window-background);
+	padding: 2px;
+	position: absolute;
+	left: 7px;
+	top: -10px;
+}
+.dt-timezone-panel::before {
+	content: "Time zone";
+	background: var(--window-background);
+	padding: 2px;
+	position: absolute;
+	left: 7px;
+	top: -10px;
+}
+.checkbox {
+	width: 13px;
+	height: 13px;
+	background-color: white;
+	position: relative;
+	z-index: 0;
+}
+.checkbox summary {
+	width: 100%;
+	height: 100%;
+	z-index: 100;
+}
+.checkbox[open]::before {
+	content: "";
+	background: url("../res/icons/check-9.png");
+	background-size: cover;
+	position: absolute;
+	width: 9px;
+	height: 9px;
+	bottom: 1px;
+	z-index: -1;
+}

@@ -16,8 +16,17 @@
 	overflow: hidden;
 	user-select: none;
 	font: medium sans-serif;
+	--window-background: #C0C0C0;
 	/* font-family: Arial, Helvetica, sans-serif; */
 	/* filter: url("filter.svg#vignette"); */
+}
+
+.border-style-asymmetric-1 {
+	border-width: 1px 2px 2px 1px;
+	--border-c1_npfb: rgb(249, 249, 249);
+	--border-c2_npfb: rgb(93, 93, 93);
+	border-color: var(--border-c1_npfb) var(--border-c2_npfb) var(--border-c2_npfb) var(--border-c1_npfb);
+	border-style: solid ridge ridge solid;
 }
 
 details summary::-webkit-details-marker,

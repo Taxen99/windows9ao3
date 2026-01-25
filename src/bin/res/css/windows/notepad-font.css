@@ -71,11 +71,6 @@
 .npf-button {
 	width: 68px;
 	height: 23px;
-	border-width: 1px 2px 2px 1px;
-	--border-c1_npfb: rgb(249, 249, 249);
-	--border-c2_npfb: rgb(93, 93, 93);
-	border-color: var(--border-c1_npfb) var(--border-c2_npfb) var(--border-c2_npfb) var(--border-c1_npfb);
-	border-style: solid ridge ridge solid;
 	display: flex;
 	align-items: center;
 	justify-content: center;

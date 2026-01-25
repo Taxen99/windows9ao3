@@ -172,6 +172,10 @@ impl BuildResult {
 impl Config {
     const FILE_EXPLORER_ID: u64 = 1;
     const INTERNET_EXPLORER_ID: u64 = 69;
+    const DATE_TIME_PROPERTIES_ID: u64 = 420;
+    const QUICK_LAUNCH_SUPPORTED_APPS: &[u64] =
+        &[Self::FILE_EXPLORER_ID, Self::INTERNET_EXPLORER_ID];
+    const INITIAL_TIME: (u32, u32) = (06, 34);
     // const NOTEPAD_ID: u64 = 2;
     // const NOTEPAD_FONT_ID: u64 = 3;
     pub fn build(mut self) -> BuildResult {
@@ -211,9 +215,175 @@ impl Config {
                 self.emit_np_window(html, &mut css);
                 self.emit_qv_window(html, &mut css);
                 self.emit_ie_window(html, &mut css);
+                self.emit_dt_window(html, &mut css);
             });
+            self.emit_taskbar(html, &mut css);
         });
+        self.emit_action(
+            &mut css,
+            &Action::OpenFileExplorer(Path::new("/").hashed()),
+            ".onload:hover",
+        );
         BuildResult::from_html_css(html, css)
+    }
+    fn emit_time_advancers(&self, html: &mut String, css: &mut String) {
+        emit_div(html, "minute-advancers", |html| {
+            for i in 0..60 {
+                emit_div(
+                    html,
+                    &format!("minute-advancer minute-advancer-{}", i),
+                    |_| (),
+                );
+            }
+        });
+        emit_div(html, "hour-advancers", |html| {
+            for i in 0..24 {
+                emit_div(html, &format!("hour-advancer hour-advancer-{}", i), |_| ());
+            }
+        });
+
+        for i in 0..24 {
+            css.push_str(&format!(
+                // NOTE: we must specify 'content' in the transition because something something transitions FUCK YOU (jkjk)
+                r##"
+.main:has(.hour-advancer-{0}:hover) .time-hour::before {{
+            transition: content 0s;
+            content: "{1:02}"
+}}
+"##,
+                i,
+                (i + 1) % 24
+            ));
+        }
+        for i in 0..60 {
+            let color = if i % 2 == 0 { "red" } else { "green" };
+            css.push_str(&format!(
+                r##"
+.main:has(.minute-advancer-{0}:hover) .time-minute::before {{
+            transition: content 0s;
+            content: "{1:02}";
+            background: {color};
+}}
+"##,
+                i,
+                (i + 1) % 60
+            ));
+        }
+        css.push_str(&format!(
+            r##"
+            .main:has(.onload:hover) .time-minute::before {{
+                transition: content 0s;
+                content: "{0:02}";
+            }}
+            .main:has(.onload:hover) .time-hour::before {{
+                transition: content 0s;
+                content: "{1:02}";
+            }}
+            .main:has(.onload:hover) .minute-advancer:nth-child({2}) {{
+                transition: 0s;
+                z-index: 2147483640;
+                top: 300vh;
+            }}
+            .main:has(.onload:hover) .hour-advancer:nth-child({3}) {{
+                transition: 0s;
+                z-index: 2147483640 !important;
+            }}
+        "##,
+            Self::INITIAL_TIME.1,
+            Self::INITIAL_TIME.0,
+            Self::INITIAL_TIME.1 + 1,
+            Self::INITIAL_TIME.0 + 1
+        ));
+        css.push_str(
+            r##"
+            
+        "##,
+        );
+    }
+    fn emit_taskbar(&self, html: &mut String, css: &mut String) {
+        self.emit_time_advancers(html, css);
+        emit_div(html, "taskbar border-style-light-1", |html| {
+            emit_div(html, "tb-item", |html| {
+                emit_div(html, "tb-start-button border-style-asymmetric-1", |html| {
+                    emit_p(html, "", "Start");
+                });
+            });
+            emit_div(html, "tb-item tb-quick-launch", |html| {
+                fn emit_quick_launch_item(
+                    html: &mut String,
+                    css: &mut String,
+                    config: &Config,
+                    app_id: u64,
+                ) {
+                    assert!(Config::QUICK_LAUNCH_SUPPORTED_APPS.contains(&app_id));
+                    let icon = match app_id {
+                        Config::FILE_EXPLORER_ID => {
+                            "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png"
+                        }
+                        Config::INTERNET_EXPLORER_ID => {
+                            "https://win98icons.alexmeub.com/icons/png/msie1-2.png"
+                        }
+                        _ => panic!(),
+                    };
+                    emit_div(html, "tb-ql-item-container", |html| {
+                        emit_div(
+                            html,
+                            &format!("tb-ql-item tb-ql-item-{} border-style-light-2", app_id),
+                            |html| {
+                                html.push_str(&format!(r##"<img src="{}" />"##, icon));
+                            },
+                        );
+                        emit_div(
+                            html,
+                            &format!(
+                                "tb-ql-item tb-ql-item-close tb-ql-item-close-{} border-style-light-2",
+                                app_id
+                            ),
+                            |html| {
+                                html.push_str(&format!(r##"<img src="{}" />"##, icon));
+                            },
+                        );
+                    });
+                    config.emit_action(
+                        css,
+                        &Action::Open(app_id),
+                        &format!(".tb-ql-item-{}:active", app_id),
+                    );
+                    config.emit_action(
+                        css,
+                        &Action::Close(app_id),
+                        &format!(".tb-ql-item-close-{}:active", app_id),
+                    );
+                }
+                emit_quick_launch_item(html, css, self, Self::FILE_EXPLORER_ID);
+                emit_quick_launch_item(html, css, self, Self::INTERNET_EXPLORER_ID);
+            });
+            emit_div(html, "tb-item tb-right", |html| {
+                emit_div(html, "tb-right-button border-style-light-2", |html| {
+                    html.push_str(r##"<img src="../res/icons/taskbar-right-combined-9.png" />"##);
+                    emit_div(html, "date-time-opener", |html| {
+                        emit_div(html, "time-hour", |html| {
+                            // for i in 0..24 {
+                            //     emit_p(html, &format!("time-hour-{}", i), &format!("{:2}", i));
+                            // }
+                        });
+                        emit_p(html, "", ":");
+                        emit_div(html, "time-minute", |html| {
+                            // for i in 0..60 {
+                            //     emit_p(html, &format!("time-minute-{}", i), &format!("{:2}", i));
+                            // }
+                        });
+                    });
+                    // emit_p(html, "date-time-opener", "10:12");
+                });
+                self.emit_action(
+                    css,
+                    &Action::Open(Self::DATE_TIME_PROPERTIES_ID),
+                    ".date-time-opener:active",
+                );
+            });
+            //
+        });
     }
     fn emit_fe_window(&self, html: &mut String, css: &mut String) {
         self.emit_window(
@@ -572,13 +742,17 @@ impl Config {
                                 });
                                 emit_div(html, "npf-confirm", |html| {
                                     emit_p(html, "npf-pad-p", "-");
-                                    emit_p(html, "npf-ok npf-button", "OK");
+                                    emit_p(
+                                        html,
+                                        "npf-ok npf-button border-style-asymmetric-1",
+                                        "OK",
+                                    );
                                     self.emit_action(
                                         css,
                                         &Action::Close(font_id),
                                         ".npf-button:active",
                                     );
-                                    // emit_p(html, "npf-cancel npf-button", "Cancel");
+                                    // emit_p(html, "npf-cancel npf-button border-style-asymmetric-1", "Cancel");
                                 });
                             });
                             emit_div(html, "npf-lower", |html| {
@@ -871,6 +1045,90 @@ impl Config {
             },
         );
     }
+    fn emit_dt_window(&self, html: &mut String, css: &mut String) {
+        assert!(Self::DATE_TIME_PROPERTIES_ID == 420); // change in css if changed!
+        self.emit_window(
+            html,
+            css,
+            Self::DATE_TIME_PROPERTIES_ID,
+            "Date/Time Properties",
+            "https://win98icons.alexmeub.com/icons/png/time_and_date-4.png",
+            None,
+            |html, css| {
+                emit_div(html, "window-main", |html| {
+                    emit_div(html, "dt-main", |html| {
+                        emit_p(html, "dt-header border-style-asymmetric-1", "Date & Time");
+                        emit_div(html, "dt-view border-style-asymmetric-1", |html| {
+                            emit_div(html, "dt-upper", |html| {
+                                emit_div(html, "dt-date border-style-light-1", |html| {
+                                    emit_div(html, "dt-date-upper", |html| {
+                                        emit_p(html, "dt-month border-style-dark-1", "November");
+                                        emit_p(html, "dt-year border-style-dark-1", "2001");
+                                    });
+                                    emit_div(html, "dt-calendar border-style-dark-1", |html| {
+                                        emit_div(html, "dt-calendar-header", |html| {
+                                            emit_p(html, "", "M");
+                                            emit_p(html, "", "T");
+                                            emit_p(html, "", "O");
+                                            emit_p(html, "", "T");
+                                            emit_p(html, "", "F");
+                                            emit_p(html, "", "L");
+                                            emit_p(html, "", "S");
+                                        });
+                                        emit_div(html, "dt-calendar-body", |html| {
+                                            let mut count = -2;
+                                            for row in 0..5 {
+                                                emit_div(html, "dt-calendar-row", |html| {
+                                                    for col in 0..7 {
+                                                        if count > 0 && count <= 30 {
+                                                            emit_p(html, "", &format!("{count}"));
+                                                        } else {
+                                                            emit_p(html, "", "");
+                                                        }
+                                                        count+= 1;
+                                                    }
+                                                });
+                                            }
+                                        });
+                                        //
+                                    });
+                                });
+                                emit_div(html, "dt-time border-style-light-1", |html| {
+                                    //
+                                });
+                            });
+                            emit_div(html, "dt-timezone-panel border-style-light-1", |html| {
+                                emit_p(
+                                    html,
+                                    "dt-timezone border-style-dark-1",
+                                    "(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
+                                );
+                                emit_div(html, "dt-timezone-bottom", |html| {
+                                    // emit_div(html, "checkbox border-style-dark-1", |html| {
+                                    //     //
+                                    // });
+                                    html.push_str(r##"<details class="checkbox border-style-dark-1 dt-timezone-checkbox"><summary></summary></details>"##);
+                                    emit_p(
+                                        html,
+                                        "dt-timezone-check",
+                                        "Automatically adjust clock for daylight saving changes",
+                                    );
+                                });
+                            });
+                        });
+                        emit_div(html, "dt-footer", |html| {
+                            emit_p(html, "dt-ok dt-button border-style-asymmetric-1", "OK");
+                            self.emit_action(
+                                css,
+                                &Action::Close(Self::DATE_TIME_PROPERTIES_ID),
+                                ".dt-ok:active",
+                            );
+                        });
+                    })
+                });
+            },
+        );
+    }
     fn emit_window(
         &self,
         html: &mut String,
@@ -913,6 +1171,14 @@ impl Config {
             </div>
         "##,
         );
+        if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
+            // we need additional logic in this case!
+            self.emit_action(
+                css,
+                &Action::Close(id),
+                &format!(".window-{0} .window-exiter:active", id),
+            );
+        }
         css.push_str(&format!(
             r##"
                             .window-{0} .mover {{
@@ -1038,6 +1304,17 @@ impl Config {
                     }}"##,
                     condition, id,
                 ));
+                if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
+                    css.push_str(&format!(
+                        r##"
+                        .main:has({0}) .tb-ql-item-close-{1} {{
+                            transition: 0s;
+                            z-index: -2;
+                        }}
+                        "##,
+                        condition, id,
+                    ));
+                }
             }
             Action::Open(id) => {
                 // TODO: this is Really shitty (tm). Also why the FUCK does this work (especially with touchpad taps????). Investigate!!!!
@@ -1066,6 +1343,17 @@ impl Config {
                     "##,
                     condition, id,
                 ));
+                if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
+                    css.push_str(&format!(
+                        r##"
+                        .main:has({0}) .tb-ql-item-close-{1} {{
+                            transition: 0s;
+                            z-index: 2;
+                        }}
+                        "##,
+                        condition, id,
+                    ));
+                }
             }
             Action::OpenFileExplorer(id) => {
                 // TODO: for now we don't do this, as to not preemtively complicate design.

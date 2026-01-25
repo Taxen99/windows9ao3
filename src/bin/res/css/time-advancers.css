@@ -1,0 +1,73 @@
+.minute-advancers, .hour-advancers {
+	/* width: 100%;
+	height: 100%; */
+	position: relative;
+	/* z-index: 2147483645; */
+	/* transition: ; */
+	counter-reset: foo;
+}
+
+.minute-advancer {
+	width: 100vw;
+	height: 100vh;
+	/* background-color: aquamarine; */
+	/* z-index: 2147483640; */
+	z-index: -100;
+	position: absolute;
+	transition: z-index 10s linear 2147483640s, top 0s linear 60s;
+	transition-behavior: allow-discrete;
+	top: 0px;
+	counter-increment: foo;
+}
+.hour-advancer {
+	width: 100vw;
+	height: 100vh;
+	/* background-color: aquamarine; */
+	/* z-index: 2147483640; */
+	z-index: -100;
+	position: absolute;
+	transition: z-index 10s linear 2147483640s, top 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+	top: 1000vh;
+}
+
+.minute-advancer::before {
+	content: counter(foo);
+	font-size: xx-large;
+	background-color: brown;
+	color: blue;
+	inset: 50%;
+	position: absolute;
+}
+
+.minute-advancers:has(.minute-advancer:last-child:hover) + .hour-advancers .hour-advancer {
+	transition: z-index 10s linear 2147483640s, top 0s linear;
+	top: 0px;
+}
+.hour-advancers:has(.hour-advancer:hover) .hour-advancer {
+	transition: 0s;
+	top: 1002vh;
+	z-index: -69;
+}
+
+.minute-advancer:hover {
+	transition: 0s linear;
+	z-index: -101;
+	top: 1002vh;
+}
+.minute-advancer:hover + .minute-advancer, .minute-advancers:has(.minute-advancer:hover:last-child) .minute-advancer:first-child {
+	transition: 0s;
+	z-index: 2147483640;
+	top: 300vh;
+}
+.hour-advancer:hover + .hour-advancer, .hour-advancers:has(.hour-advancer:hover:last-child) .hour-advancer:first-child {
+	transition: 0s;
+	z-index: 2147483640 !important;
+}
+
+
+.time-hour::before, .time-minute::before {
+	content: "--";
+	transition: content 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+}

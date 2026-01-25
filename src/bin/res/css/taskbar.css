@@ -1,0 +1,131 @@
+.taskbar.taskbar {
+	z-index: 2;
+	position: absolute;
+	left: 0;
+	right: 0;
+	bottom: 0;
+	height: 28px;
+	background-color: var(--window-background);
+	border-style: groove none none;
+	padding: 2px 8px;
+	display: flex;
+}
+
+.tb-start-button {
+	width: 54px;
+	height: 22px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	/* margin-bottom: 3px; */
+	font-size: 12px;
+	font-weight: bold;
+}
+
+.tb-start-button p {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	justify-content: center;
+}
+
+.tb-start-button p::before {
+	margin-right: 3px;
+	content: "";
+	width: 16px;
+	height: 14px;
+	background-image: url("../res/icons/taskbar-windows-icon-9.png");
+	background-size: cover;
+	display: block;
+}
+
+.tb-item {
+	display: flex;
+	flex-wrap: nowrap;
+}
+
+.tb-item:not(:first-child) {
+	margin-left: 13px;
+}
+.tb-item:not(:first-child)::before {
+	content: "";
+	display: block;
+	position: absolute;
+	height: 22px;
+	border-left: 2px groove rgb(238, 238, 238);
+	transform: translateX(-10px);
+}
+.tb-item:not(:first-child)::after {
+	content: "";
+	display: block;
+	position: absolute;
+	height: 18px;
+	width: 3px;
+	margin: 2px 0;
+	border: 1px solid;
+	border-color: rgb(238, 238, 238) #87888E #87888E rgb(238, 238, 238);
+	transform: translateX(-6px);
+}
+
+.tb-ql-item {
+	width: 23px;
+	height: 22px;
+	padding: 2px;
+}
+.tb-ql-item:not(:hover) {
+	border: 1px solid transparent;
+}
+.tb-ql-item img {
+	width: 16px;
+	height: 16px;
+}
+
+.tb-ql-item:not(.tb-ql-item-close) {
+	background-color: aqua;
+}
+
+.tb-ql-item.tb-ql-item-close {
+	position: absolute;
+	z-index: -1;
+	transition: z-index 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+	background-color: red;
+	top: 0;
+	left: 0;
+}
+
+.tb-ql-item-container {
+	position: relative;
+}
+
+.tb-right.tb-right.tb-right {
+	margin-left: auto;
+}
+
+.tb-right-button.tb-right-button.tb-right-button {
+	width: 98px;
+	height: 22px;
+	border-style: inset;
+	font-size: 12px;
+	font-weight: 100;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	flex-wrap: nowrap;
+	padding: 0 24px 0 2px;
+}
+
+.tb-right-button img {
+	width: 33px;
+	height: 16px;
+}
+
+.tb-right.tb-right.tb-right::after {
+	display: none;
+}
+.tb-right.tb-right.tb-right::before {
+	transform: translateX(-4px);
+}
+.date-time-opener {
+	display: flex;
+}

@@ -193,7 +193,6 @@ WINDOWS!!!
 	left: -2000px;
 	/* left: 0px; */
 	top: 0px;
-	--window-background: #C0C0C0;
 	padding: 2px;
 	background-color: 1px;
 	background-color: var(--window-background);
