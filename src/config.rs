@@ -427,6 +427,10 @@ impl Config {
                                 emit_p(html, "", &name);
                             },
                         );
+                        emit_div(html, &format!("tb-app-inner tb-app-inner-active"), |html| {
+                            html.push_str(&format!(r##"<img src="{}" />"##, icon));
+                            emit_p(html, "", &name);
+                        });
                     });
                     self.emit_action(css, &Action::Focus(id), &format!(".tb-app-{}:active", id));
                 }
@@ -1458,6 +1462,14 @@ impl Config {
 .main:has({0}) .window:not(.window-{1}).window.window .window-titlebar {{
     background: linear-gradient(to right, rgb(126, 126, 125), rgb(187, 187, 187));
     transition: background 0s linear;
+}}
+.main:has({0}) .tb-app-{1} .tb-app-inner-active {{
+    transition: 0s;
+    z-index: 1;
+}}
+.main:has({0}) .tb-app:not(.tb-app-{1}) .tb-app-inner-active {{
+    transition: 0s;
+    z-index: -1;
 }}
                     "##,
                     condition, id,

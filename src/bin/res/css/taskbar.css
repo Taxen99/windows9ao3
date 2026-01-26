@@ -215,6 +215,7 @@
 	/* flex-grow: 1; */
 	flex: 1;
 	min-width: 0;
+	position: relative;
 }
 .tb-app-inner {
 	display: flex;
@@ -225,6 +226,31 @@
 	font-size: 12px;
 	font-weight: 100;
 	margin-right: 2px;
+	background-color: var(--window-background);
+	height: 22px;
+}
+.tb-app-inner-active.tb-app-inner-active {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: -5;
+	transition-behavior: allow-discrete;
+	transition: z-index 10s linear 2147483640s;
+	border-width: 2px;
+	--border-c1_tbai: rgb(93, 93, 93);
+	--border-c2_tbai: rgb(249, 249, 249);
+	border-color: var(--border-c1_tbai) var(--border-c2_tbai) var(--border-c2_tbai) var(--border-c1_tbai);
+	border-style: groove;
+	background-color: white;
+	background-image:
+		linear-gradient(45deg, #dedede 25%, transparent 25%),
+		linear-gradient(-45deg, #dedede 25%, transparent 25%),
+		linear-gradient(45deg, transparent 75%, #dedede 75%),
+		linear-gradient(-45deg, transparent 75%, #dedede 75%);
+	background-size: 2px 2px;
+	background-position: 0 0, 0 1px, 1px -1px, -1px 0px;
 }
 .tb-app-inner p {
 	white-space: nowrap;
