@@ -168,6 +168,7 @@
 
 .tb-right.tb-right.tb-right {
 	margin-left: auto;
+	padding-left: 4px;
 }
 
 .tb-right-button.tb-right-button.tb-right-button {
@@ -196,4 +197,47 @@
 }
 .date-time-opener {
 	display: flex;
+}
+
+.tb-apps {
+	/**/
+	/* flex-grow: 1; */
+	flex: 1;
+	min-width: 0;
+}
+
+.tb-app {
+	transition: max-width 10s linear 2147483640s;
+	/* max-width: 122px; */
+	max-width: 0.01px;
+	transition-behavior: allow-discrete;
+	overflow: clip;
+	/* flex-grow: 1; */
+	flex: 1;
+	min-width: 0;
+}
+.tb-app-inner {
+	display: flex;
+	flex-wrap: nowrap;
+	align-items: center;
+	padding: 1px;
+	padding-left: 2px;
+	font-size: 12px;
+	font-weight: 100;
+	margin-right: 2px;
+}
+.tb-app-inner p {
+	white-space: nowrap;
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+.main:has(.onload:hover) .tb-app {
+	transition: 0s;
+	max-width: 0px;
+}
+
+.tb-app img {
+	margin-right: 2px;
+	width: 16px;
+	height: 16px;
 }

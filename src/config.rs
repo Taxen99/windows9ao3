@@ -1,4 +1,5 @@
-use std::collections::{BTreeMap, HashMap};
+use std::cell::RefCell;
+use std::collections::{BTreeMap, HashMap, HashSet};
 use std::ffi::OsStr;
 use std::hash::{DefaultHasher, Hash, Hasher};
 use std::path::{Path, PathBuf};
@@ -110,6 +111,14 @@ pub struct File {
 pub struct Config {
     pub apps: Vec<App>,
     pub fs: FileSystem,
+    // NOTE: building *should* be deterministic, but recalculating shit is boring and beta cuck behaviour. be the sigma. have the skibidi rizz.
+    #[serde(skip)]
+    pub state: RefCell<ConfigState>,
+}
+
+#[derive(Debug, Default)]
+pub struct ConfigState {
+    windows: HashSet<(u64, String, String)>,
 }
 
 pub enum Action {
@@ -404,6 +413,21 @@ impl Config {
                 }
                 emit_quick_launch_item(html, css, self, Self::FILE_EXPLORER_ID);
                 emit_quick_launch_item(html, css, self, Self::INTERNET_EXPLORER_ID);
+            });
+            emit_div(html, "tb-item tb-apps", |html| {
+                let windows = self.state.borrow().windows.clone();
+                for (id, name, icon) in windows {
+                    emit_div(html, &format!("tb-app tb-app-{}", id), |html| {
+                        emit_div(
+                            html,
+                            &format!("tb-app-inner border-style-asymmetric-1"),
+                            |html| {
+                                html.push_str(&format!(r##"<img src="{}" />"##, icon));
+                                emit_p(html, "", &name);
+                            },
+                        );
+                    });
+                }
             });
             emit_div(html, "tb-item tb-right", |html| {
                 emit_div(html, "tb-right-button border-style-light-2", |html| {
@@ -1196,6 +1220,14 @@ impl Config {
         extra_classes: Option<&str>,
         mut cb: impl FnMut(&mut String, &mut String),
     ) {
+        if !self
+            .state
+            .borrow_mut()
+            .windows
+            .insert((id, name.into(), icon.into()))
+        {
+            panic!("the fook are you doing?");
+        }
         html.push_str(&format!(
             r##"
             <div class="window window-{0} {2}">
@@ -1358,7 +1390,12 @@ impl Config {
                         top: 0.002px;
                         left: -2000.002px;
                         transition: top 0s linear 0s, left 0s linear 0s !important;
-                    }}"##,
+                    }}
+                    .main:has({0}) .tb-app-{1} {{
+                        max-width: 0px;
+                        transition: 0s;
+                    }}
+                    "##,
                     condition, id,
                 ));
                 if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
@@ -1396,6 +1433,10 @@ impl Config {
 .main:has({0}) .window:not(.window-{1}).window.window .window-titlebar {{
     background: linear-gradient(to right, rgb(126, 126, 125), rgb(187, 187, 187));
     transition: background 0s linear;
+}}
+.main:has({0}) .tb-app-{1} {{
+    max-width: 160px;
+    transition: 0s;
 }}
                     "##,
                     condition, id,
