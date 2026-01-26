@@ -223,12 +223,11 @@ WINDOWS!!!
 	transition: background 0s linear;
 }
 
-.window:has(.window-exiter:active) {
+/* .window:has(.window-exiter:active) {
 	top: 0.002px;
 	left: -2000.002px;
 	transition: top 0s linear 0s, left 0s linear 0s;
-	/* transform: rotateZ(90deg); */
-}
+} */
 
 /* .window-exiter > p {
 	text-align: center;
@@ -301,10 +300,10 @@ WINDOWS!!!
 	font-size: 10px;
 }
 
-.window-exiter:active {
+/* .window-exiter:active {
 	border-color: var(--border-c2) var(--border-c1) var(--border-c1) var(--border-c2);
 	border-style: inset solid solid inset;
-}
+} */
 
 .window-content {
 	font-size: 12px;

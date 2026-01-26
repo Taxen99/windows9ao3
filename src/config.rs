@@ -124,6 +124,7 @@ pub struct ConfigState {
 pub enum Action {
     Close(u64),
     Open(u64),
+    Focus(u64),
     OpenFileExplorer(u64),
     OpenNotepad(u64),
 }
@@ -427,6 +428,7 @@ impl Config {
                             },
                         );
                     });
+                    self.emit_action(css, &Action::Focus(id), &format!(".tb-app-{}:active", id));
                 }
             });
             emit_div(html, "tb-item tb-right", |html| {
@@ -1260,14 +1262,11 @@ impl Config {
             </div>
         "##,
         );
-        if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
-            // we need additional logic in this case!
-            self.emit_action(
-                css,
-                &Action::Close(id),
-                &format!(".window-{0} .window-exiter:active", id),
-            );
-        }
+        self.emit_action(
+            css,
+            &Action::Close(id),
+            &format!(".window-{0} .window-exiter:active", id),
+        );
         css.push_str(&format!(
             r##"
                             .window-{0} .mover {{
@@ -1411,14 +1410,40 @@ impl Config {
                 }
             }
             Action::Open(id) => {
-                // TODO: this is Really shitty (tm). Also why the FUCK does this work (especially with touchpad taps????). Investigate!!!!
-                // NOTE: we have extra ".window"s because css selector specificity...
+                self.emit_action(css, &Action::Focus(*id), condition);
+                // we don't need to set transition for the window, since that is done in focus!
                 css.push_str(&format!(
                     r##"
                     .main:has({0}) .window-{1}.window.window {{
                         top: 30px;
                         left: 30px;
-                        transition: top 0s linear 0s, left 0s linear 0s, z-index 0s linear;
+                    }}
+                    .main:has({0}) .tb-app-{1} {{
+                        max-width: 160px;
+                        transition: 0s;
+                    }}
+                    "##,
+                    condition, id,
+                ));
+                if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
+                    css.push_str(&format!(
+                        r##"
+                        .main:has({0}) .tb-ql-item-close-{1} {{
+                            transition: 0s;
+                            z-index: 2;
+                        }}
+                        "##,
+                        condition, id,
+                    ));
+                }
+            }
+            Action::Focus(id) => {
+                // TODO: this is Really shitty (tm). Also why the FUCK does this work (especially with touchpad taps????). Investigate!!!!
+                // NOTE: we have extra ".window"s because css selector specificity...
+                css.push_str(&format!(
+                    r##"
+                    .main:has({0}) .window-{1}.window.window {{
+                        transition: 0s;
                         z-index: 2147483640;
                     }}
 
@@ -1434,24 +1459,9 @@ impl Config {
     background: linear-gradient(to right, rgb(126, 126, 125), rgb(187, 187, 187));
     transition: background 0s linear;
 }}
-.main:has({0}) .tb-app-{1} {{
-    max-width: 160px;
-    transition: 0s;
-}}
                     "##,
                     condition, id,
                 ));
-                if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
-                    css.push_str(&format!(
-                        r##"
-                        .main:has({0}) .tb-ql-item-close-{1} {{
-                            transition: 0s;
-                            z-index: 2;
-                        }}
-                        "##,
-                        condition, id,
-                    ));
-                }
             }
             Action::OpenFileExplorer(id) => {
                 // TODO: for now we don't do this, as to not preemtively complicate design.
