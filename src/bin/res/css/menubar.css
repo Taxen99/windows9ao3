@@ -1,0 +1,141 @@
+.menubar {
+	padding: 1px;
+	/* padding-left: 10px; */
+	display: flex;
+	/* column-gap: 10px; */
+	height: 24px;
+	align-items: center;
+	/* position: relative; */
+}
+
+.menubar.menubar-short {
+	height: 20px;
+}
+
+.menubar-item {
+	padding: 1px 7px;
+}
+
+.menubar-item {
+	border: 1px inset transparent;
+	position: relative;
+	/* overflow: hidden; */
+}
+
+.menubar-item:hover {
+	border: 1px inset rgb(238, 238, 238);
+}
+
+.menubar-item-state:hover~.mb-submenu,
+.mb-submenu:hover {
+	display: block;
+}
+
+/* this comma is fine for ao3 bs*/
+.mb-submenu:has(.mb-submenu-item:not(.mb-disabled, details):active) {
+	display: none;
+}
+
+.menubar-item-state {
+	content: "";
+	position: absolute;
+	width: 100%;
+	height: 110%;
+	/* background-color: #00007B; */
+	left: 0px;
+	/* top: 0px; */
+	top: -2000px;
+	transition: top 10s linear 2147483640s;
+	/* transition-behavior: allow-discrete; */
+}
+
+.menubar:has(.menubar-item:active) .menubar-item-state {
+	top: 0px;
+	transition: top 0s linear;
+}
+
+.menubar-item-state:hover {
+	background-color: green !important;
+}
+
+/* .menubar-item-state:hover {
+	background-color: green !important;
+} */
+
+/* i call this the bullshit selector. no i shall not explain it. my life is a mistake. */
+/* the commas here should probably be fine for ao3. i messed with with some shit so if this breaks then you know what to do...! */
+.main:is(:not(:has(.menubar-item-state:active), :has(.menubar-item:active)), :has(.mb-submenu-item:not(.mb-disabled, details):active)):active .menubar-item-state {
+	/* .window *:not(.menubar-item):active { */
+	top: -2000.001px;
+	transition: top 0s linear;
+	/* background-color: red; */
+}
+
+.mb-submenu {
+	display: none;
+	position: absolute;
+	z-index: 3;
+	background-color: var(--window-background);
+	min-width: 120px;
+	transform: translate(-8px, 2px);
+	padding: 1px;
+}
+
+.mb-submenu-item {
+
+	/* display: flex;
+	align-items: center; */
+}
+
+.mb-submenu-item p {
+	margin-left: 16px;
+	padding: 2px 0;
+	padding-left: 5px;
+	white-space: nowrap;
+	margin-right: 16px;
+}
+
+.mb-disabled {
+	color: #87888E;
+}
+
+.mb-submenu-separator {
+	width: 100%;
+	margin: 3px 0;
+	padding: 0 1px;
+}
+
+.mb-submenu-separator::before {
+	content: "";
+	display: block;
+	width: 100%;
+	border-bottom: 2px;
+	--border-c1_sep: rgb(238, 238, 238);
+	border-bottom-color: var(--border-c1_sep);
+	border-bottom-style: groove;
+}
+
+.mb-submenu-item:hover {
+	background-color: #0000A1;
+	color: white;
+}
+
+.mb-submenu-item[open] summary::before {
+	content: "";
+	width: 9px;
+	height: 9px;
+	display: block;
+	background-image: url("../res/icons/check-9.png");
+	background-size: cover;
+	/* margin-right: 8px; */
+	position: absolute;
+	transform: translate(5px, 3px);
+}
+
+.mb-submenu-item[open]:hover summary::before {
+	filter: invert();
+}
+
+.menubar-item::first-letter {
+	text-decoration: underline;
+}

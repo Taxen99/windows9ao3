@@ -182,28 +182,10 @@ WINDOWS!!!
 
 .window {
 	transition: left 10s linear 2147483640s, top 10s linear 2147483640s, z-index 10s linear 2147483640s;
-	/* transition: left 10s linear 2147483640s, top 10s linear 2147483640s; */
 	transition-behavior: allow-discrete;
-	display: flex;
-	flex-direction: column;
-	/* border: 5px ridge whitesmoke; */
-	width: 500px;
-	height: 400px;
 	position: absolute;
 	left: -2000px;
-	/* left: 0px; */
 	top: 0px;
-	padding: 2px;
-	background-color: 1px;
-	background-color: var(--window-background);
-	border: 2px;
-	--border-c1_w: rgb(251, 251, 251);
-	--border-c2_w: rgb(97, 97, 97);
-	border-color: var(--border-c1_w) var(--border-c2_w) var(--border-c2_w) var(--border-c1_w);
-	border-style: groove ridge ridge groove;
-	/* overflow: hidden; */
-	/* z-index: 0; */
-
 }
 
 .window:active {
@@ -223,18 +205,7 @@ WINDOWS!!!
 	transition: background 0s linear;
 }
 
-/* .window:has(.window-exiter:active) {
-	top: 0.002px;
-	left: -2000.002px;
-	transition: top 0s linear 0s, left 0s linear 0s;
-} */
-
-/* .window-exiter > p {
-	text-align: center;
-} */
-
 .window-content {
-	/* background-color: #C0C0C0; */
 	width: 100%;
 	height: auto;
 	flex-grow: 1;
@@ -249,7 +220,6 @@ WINDOWS!!!
 	transition-behavior: allow-discrete;
 	border-bottom: 1px solid gray;
 	background: linear-gradient(to right, rgb(126, 126, 126), rgb(187, 187, 187));
-	/* background: linear-gradient(to right, #00007B, #3B79B9); */
 	display: flex;
 	column-gap: 3px;
 	align-items: center;
@@ -260,7 +230,6 @@ WINDOWS!!!
 	display: flex;
 	align-items: center;
 	color: white;
-	/* font-family: 'Courier New', Courier, monospace; */
 	font-weight: 400;
 	font-size: 13px;
 	padding-bottom: 0px;
@@ -271,7 +240,6 @@ WINDOWS!!!
 	margin-right: 3px;
 	width: 16px;
 	height: 14px;
-	/* border: 1px outset; */
 	border-width: 1px 2px 2px 1px;
 	--border-c1: rgb(249, 249, 249);
 	--border-c2: rgb(93, 93, 93);
@@ -300,188 +268,12 @@ WINDOWS!!!
 	font-size: 10px;
 }
 
-/* .window-exiter:active {
-	border-color: var(--border-c2) var(--border-c1) var(--border-c1) var(--border-c2);
-	border-style: inset solid solid inset;
-} */
-
 .window-content {
 	font-size: 12px;
 	display: flex;
-	/* flex-wrap: wrap; */
 	flex-direction: column;
 	background-color: var(--window-background);
 	font-weight: 100;
-}
-
-.border-style-light-1 {
-	border: 2px;
-	--border-c1_b: rgb(238, 238, 238);
-	--border-c2_b: rgb(170, 170, 170);
-	border-color: var(--border-c1_b) var(--border-c1_b) var(--border-c1_b) var(--border-c1_b);
-	border-style: groove groove groove groove;
-}
-.border-style-light-2 {
-	border: 1px;
-	--border-c1_bsl2: rgb(238, 238, 238);
-	--border-c2_bsl2: rgb(170, 170, 170);
-	border-color: var(--border-c1_bsl2) var(--border-c1_bsl2) var(--border-c1_bsl2) var(--border-c1_bsl2);
-	border-style: outset;
-}
-
-.menubar {
-	padding: 1px;
-	/* padding-left: 10px; */
-	display: flex;
-	/* column-gap: 10px; */
-	height: 24px;
-	align-items: center;
-	/* position: relative; */
-}
-
-.menubar.menubar-short {
-	height: 20px;
-}
-
-.menubar-item {
-	padding: 1px 7px;
-}
-
-.menubar-item {
-	border: 1px inset transparent;
-	position: relative;
-	/* overflow: hidden; */
-}
-
-.menubar-item:hover {
-	border: 1px inset rgb(238, 238, 238);
-}
-
-.menubar-item-state:hover~.mb-submenu,
-.mb-submenu:hover {
-	display: block;
-}
-/* this comma is fine for ao3 bs*/
-.mb-submenu:has(.mb-submenu-item:not(.mb-disabled, details):active) {
-	display: none;
-}
-
-.menubar-item-state {
-	content: "";
-	position: absolute;
-	width: 100%;
-	height: 110%;
-	/* background-color: #00007B; */
-	left: 0px;
-	/* top: 0px; */
-	top: -2000px;
-	transition: top 10s linear 2147483640s;
-	/* transition-behavior: allow-discrete; */
-}
-
-.menubar:has(.menubar-item:active) .menubar-item-state {
-	top: 0px;
-	transition: top 0s linear;
-}
-
-.menubar-item-state:hover {
-	background-color: green !important;
-}
-
-/* .menubar-item-state:hover {
-	background-color: green !important;
-} */
-
-/* i call this the bullshit selector. no i shall not explain it. my life is a mistake. */
-/* the commas here should probably be fine for ao3. i messed with with some shit so if this breaks then you know what to do...! */
-.main:is(:not(:has(.menubar-item-state:active), :has(.menubar-item:active)), :has(.mb-submenu-item:not(.mb-disabled, details):active)):active .menubar-item-state {
-	/* .window *:not(.menubar-item):active { */
-	top: -2000.001px;
-	transition: top 0s linear;
-	/* background-color: red; */
-}
-
-.mb-submenu {
-	display: none;
-	position: absolute;
-	z-index: 3;
-	background-color: var(--window-background);
-	min-width: 120px;
-	transform: translate(-8px, 2px);
-	padding: 1px;
-}
-
-.mb-submenu-item {
-
-	/* display: flex;
-	align-items: center; */
-}
-.mb-submenu-item p {
-	margin-left: 16px;
-	padding: 2px 0;
-	padding-left: 5px;
-	white-space: nowrap;
-	margin-right: 16px;
-}
-
-.mb-disabled {
-	color: #87888E;
-}
-
-.mb-submenu-separator {
-	width: 100%;
-	margin: 3px 0;
-	padding: 0 1px;
-}
-
-.mb-submenu-separator::before {
-	content: "";
-	display: block;
-	width: 100%;
-	border-bottom: 2px;
-	--border-c1_sep: rgb(238, 238, 238);
-	border-bottom-color: var(--border-c1_sep);
-	border-bottom-style: groove;
-}
-
-.mb-submenu-item:hover {
-	background-color: #0000A1;
-	color: white;
-}
-
-.mb-submenu-item[open] summary::before {
-	content: "";
-	width: 9px;
-	height: 9px;
-	display: block;
-	background-image: url("../res/icons/check-9.png");
-	background-size: cover;
-	/* margin-right: 8px; */
-	position: absolute;
-	transform: translate(5px, 3px);
-}
-.mb-submenu-item[open]:hover summary::before {
-	filter: invert();
-}
-
-.menubar-item::first-letter {
-	text-decoration: underline;
-}
-
-.border-style-dark-1 {
-	border: 2px;
-	--border-c1_c: rgb(97, 97, 97);
-	--border-c2_c: rgb(251, 251, 251);
-	border-color: var(--border-c1_c) var(--border-c2_c) var(--border-c2_c) var(--border-c1_c);
-	border-style: ridge groove groove ridge;
-}
-.border-style-dark-2 {
-	border: 2px;
-	--border-c1_bb: rgb(238, 238, 238);
-	/* --border-c2_bb: rgb(170, 170, 170); */
-	--border-c2_bb: rgb(97, 97, 97);
-	border-color: var(--border-c1_bb) var(--border-c2_bb) var(--border-c2_bb) var(--border-c1_bb);
-	border-style: ridge groove groove ridge;
 }
 
 .window-main {
@@ -493,4 +285,128 @@ WINDOWS!!!
 
 .window-main.window-main-nopadtop {
 	padding-top: 0px;
+}
+
+.window-inner {
+	transition: left 10s linear 2147483640s, top 10s linear 2147483640s, bottom 10s linear 2147483640s, right 10s linear 2147483640s;
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	/* width: 500px;
+	height: 400px; */
+	left: 0;
+	top: 0;
+	right: -500px;
+	bottom: -400px;
+	padding: 2px;
+	background-color: 1px;
+	background-color: var(--window-background);
+	border: 2px;
+	--border-c1_w: rgb(251, 251, 251);
+	--border-c2_w: rgb(97, 97, 97);
+	border-color: var(--border-c1_w) var(--border-c2_w) var(--border-c2_w) var(--border-c1_w);
+	border-style: groove ridge ridge groove;
+	--minwi: 2000px;
+	--maxwi: -2000px;
+	--twi: 1s;
+	min-width: 300px;
+	min-height: 200px;
+}
+
+.wra {
+	position: absolute;
+	background-color: #ff000055;
+	z-index: 69420;
+}
+.wra-hor {
+	width: 10px;
+	cursor: col-resize;
+}
+.wra-ver {
+	height: 10px;
+	cursor: row-resize;
+}
+.wra-hor .wr {
+	top: -100vh;
+	bottom: -100vh;
+	width: 100vw;
+}
+.wr-left {
+	right: 100%;
+}
+.wr-right {
+	left: 100%;
+}
+.wra-ver .wr {
+	left: -100vw;
+	right: -100vw;
+	height: 100vh;
+}
+.wr-up {
+	bottom: 100%;
+}
+.wr-down {
+	top: 100%;
+}
+.wr {
+	display: none;
+	background-color: #3B79B844;
+	position: absolute;
+}
+.wra:active .wr {
+	display: block;
+}
+.wra-hor-left {
+	top: 0;
+	bottom: 0;
+	left: -5px;
+}
+.wra-hor-right {
+	top: 0;
+	bottom: 0;
+	right: -5px;
+}
+.wra-ver-up {
+	left: 0;
+	right: 0;
+	top: -5px;
+}
+.wra-ver-down {
+	left: 0;
+	right: 0;
+	bottom: -5px;
+}
+
+.window-inner:has(.wra-hor-left .wr-left:hover) {
+	transition: left var(--twi) linear, top 10s linear 2147483640s, bottom 10s linear 2147483640s, right 10s linear 2147483640s;
+	left: var(--maxwi);
+}
+.window-inner:has(.wra-hor-left .wr-right:hover) {
+	transition: left var(--twi) linear, top 10s linear 2147483640s, bottom 10s linear 2147483640s, right 10s linear 2147483640s;
+	left: var(--minwi);
+}
+.window-inner:has(.wra-hor-right .wr-right:hover) {
+	transition: left 10s linear 2147483640s, top 10s linear 2147483640s, bottom 10s linear 2147483640s, right var(--twi) linear;
+	right: var(--maxwi);
+}
+.window-inner:has(.wra-hor-right .wr-left:hover) {
+	transition: left 10s linear 2147483640s, top 10s linear 2147483640s, bottom 10s linear 2147483640s, right var(--twi) linear;
+	right: var(--minwi);
+}
+
+.window-inner:has(.wra-ver-up .wr-up:hover) {
+	transition: left 10s linear 2147483640s, top var(--twi) linear, bottom 10s linear 2147483640s, right 10s linear 2147483640s;
+	top: var(--maxwi);
+}
+.window-inner:has(.wra-ver-up .wr-down:hover) {
+	transition: left 10s linear 2147483640s, top var(--twi) linear, bottom 10s linear 2147483640s, right 10s linear 2147483640s;
+	top: var(--minwi);
+}
+.window-inner:has(.wra-ver-down .wr-down:hover) {
+	transition: left 10s linear 2147483640s, top 10s linear 2147483640s, bottom var(--twi) linear, right 10s linear 2147483640s;
+	bottom: var(--maxwi);
+}
+.window-inner:has(.wra-ver-down .wr-up:hover) {
+	transition: left 10s linear 2147483640s, top 10s linear 2147483640s, bottom var(--twi) linear, right 10s linear 2147483640s;
+	bottom: var(--minwi);
 }

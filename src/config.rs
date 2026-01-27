@@ -1224,7 +1224,7 @@ impl Config {
         name: &str,
         icon: &str,
         extra_classes: Option<&str>,
-        mut cb: impl FnMut(&mut String, &mut String),
+        mut func: impl FnMut(&mut String, &mut String),
     ) {
         if !self
             .state
@@ -1234,37 +1234,54 @@ impl Config {
         {
             panic!("the fook are you doing?");
         }
-        html.push_str(&format!(
-            r##"
-            <div class="window window-{0} {2}">
-                <div class="window-titlebar">
-                    <div class="mover">
-                        <div class="mover-hand mover-hand-Q mover-hand-up mover-hand-left "></div>
-                        <div class="mover-hand mover-hand-W mover-hand-up "></div>
-                        <div class="mover-hand mover-hand-E mover-hand-up mover-hand-right "></div>
-                        <div class="mover-hand mover-hand-A mover-hand-left "></div>
-                        <div class="mover-hand mover-hand-D mover-hand-right "></div>
-                        <div class="mover-hand mover-hand-Z mover-hand-down mover-hand-left "></div>
-                        <div class="mover-hand mover-hand-X mover-hand-down  "></div>
-                        <div class="mover-hand mover-hand-C mover-hand-down mover-hand-right "></div>
-                    </div>
-                    <div class="window-name">
-                        <p>{1}</p>
-                    </div>
-                    <div class="window-exiter"></div>
-                </div>
-                <div class="window-content">
-            "##,
-            id,
-            name,
-            extra_classes.unwrap_or("")
-        ));
-        cb(html, css);
-        html.push_str(
-            r##"
-                </div>
-            </div>
-        "##,
+        emit_div(
+            html,
+            &format!(
+                "window window-{0} window-{1}",
+                id,
+                extra_classes.unwrap_or("")
+            ),
+            |html| {
+                emit_div(html, "window-inner", |html| {
+                    emit_div(html, "wra wra-hor wra-hor-left", |html| {
+                        emit_div(html, "wr wr-left", |_| {});
+                        emit_div(html, "wr wr-right", |_| {});
+                    });
+                    emit_div(html, "wra wra-hor wra-hor-right", |html| {
+                        emit_div(html, "wr wr-left", |_| {});
+                        emit_div(html, "wr wr-right", |_| {});
+                    });
+                    emit_div(html, "wra wra-ver wra-ver-up", |html| {
+                        emit_div(html, "wr wr-up", |_| {});
+                        emit_div(html, "wr wr-down", |_| {});
+                    });
+                    emit_div(html, "wra wra-ver wra-ver-down", |html| {
+                        emit_div(html, "wr wr-up", |_| {});
+                        emit_div(html, "wr wr-down", |_| {});
+                    });
+                    emit_div(html, "window-titlebar", |html| {
+                        html.push_str(r##"
+                            <div class="mover">
+                                <div class="mover-hand mover-hand-Q mover-hand-up mover-hand-left "></div>
+                                <div class="mover-hand mover-hand-W mover-hand-up "></div>
+                                <div class="mover-hand mover-hand-E mover-hand-up mover-hand-right "></div>
+                                <div class="mover-hand mover-hand-A mover-hand-left "></div>
+                                <div class="mover-hand mover-hand-D mover-hand-right "></div>
+                                <div class="mover-hand mover-hand-Z mover-hand-down mover-hand-left "></div>
+                                <div class="mover-hand mover-hand-X mover-hand-down  "></div>
+                                <div class="mover-hand mover-hand-C mover-hand-down mover-hand-right "></div>
+                            </div>
+                        "##);
+                        emit_div(html, "window-name", |html| {
+                            emit_p(html, "", name);
+                        });
+                        emit_div(html, "window-exiter", |_| {});
+                    });
+                    emit_div(html, "window-content", |html| {
+                        func(html, css);
+                    });
+                });
+            },
         );
         self.emit_action(
             css,
@@ -1273,11 +1290,11 @@ impl Config {
         );
         css.push_str(&format!(
             r##"
-                            .window-{0} .mover {{
-                                background: url("{1}");
-                                background-size: cover;
-                            }}
-                            "##,
+            .window-{0} .mover {{
+                background: url("{1}");
+                background-size: cover;
+            }}
+            "##,
             id, icon,
         ));
     }

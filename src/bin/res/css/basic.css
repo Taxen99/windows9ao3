@@ -21,6 +21,39 @@
 	/* filter: url("filter.svg#vignette"); */
 }
 
+.border-style-light-1 {
+	border: 2px;
+	--border-c1_b: rgb(238, 238, 238);
+	--border-c2_b: rgb(170, 170, 170);
+	border-color: var(--border-c1_b) var(--border-c1_b) var(--border-c1_b) var(--border-c1_b);
+	border-style: groove groove groove groove;
+}
+
+.border-style-light-2 {
+	border: 1px;
+	--border-c1_bsl2: rgb(238, 238, 238);
+	--border-c2_bsl2: rgb(170, 170, 170);
+	border-color: var(--border-c1_bsl2) var(--border-c1_bsl2) var(--border-c1_bsl2) var(--border-c1_bsl2);
+	border-style: outset;
+}
+
+.border-style-dark-1 {
+	border: 2px;
+	--border-c1_c: rgb(97, 97, 97);
+	--border-c2_c: rgb(251, 251, 251);
+	border-color: var(--border-c1_c) var(--border-c2_c) var(--border-c2_c) var(--border-c1_c);
+	border-style: ridge groove groove ridge;
+}
+
+.border-style-dark-2 {
+	border: 2px;
+	--border-c1_bb: rgb(238, 238, 238);
+	/* --border-c2_bb: rgb(170, 170, 170); */
+	--border-c2_bb: rgb(97, 97, 97);
+	border-color: var(--border-c1_bb) var(--border-c2_bb) var(--border-c2_bb) var(--border-c1_bb);
+	border-style: ridge groove groove ridge;
+}
+
 .border-style-asymmetric-1 {
 	border-width: 1px 2px 2px 1px;
 	--border-c1_npfb: rgb(249, 249, 249);
