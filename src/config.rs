@@ -231,6 +231,7 @@ impl Config {
             });
             self.emit_taskbar(html, &mut css);
         });
+        self.emit_mover_anchor_css(&mut css);
         self.emit_action(
             &mut css,
             &Action::OpenFileExplorer(Path::new("/").hashed()),
@@ -1216,6 +1217,20 @@ impl Config {
             },
         );
     }
+    const MOVER_ANCHORS_COUNT: usize = 20;
+    fn emit_mover_anchor_css(&self, css: &mut String) {
+        for i in 0..Self::MOVER_ANCHORS_COUNT {
+            css.push_str(&format!(
+                r##"
+                .window-titlebar:has(.mover-anchor-{0}:active) .mover {{
+                    left: {1:.5}%;
+                }}        
+                "##,
+                i,
+                ((i as f32 / Self::MOVER_ANCHORS_COUNT as f32) * 100.0),
+            ));
+        }
+    }
     fn emit_window(
         &self,
         html: &mut String,
@@ -1260,6 +1275,11 @@ impl Config {
                         emit_div(html, "wr wr-down", |_| {});
                     });
                     emit_div(html, "window-titlebar", |html| {
+                        emit_div(html, "mover-anchors", |html| {
+                            for i in 0..Self::MOVER_ANCHORS_COUNT {
+                                emit_div(html, &format!("mover-anchor mover-anchor-{i}"), |_| ());
+                            }
+                        });
                         html.push_str(r##"
                             <div class="mover">
                                 <div class="mover-hand mover-hand-Q mover-hand-up mover-hand-left "></div>
@@ -1272,6 +1292,7 @@ impl Config {
                                 <div class="mover-hand mover-hand-C mover-hand-down mover-hand-right "></div>
                             </div>
                         "##);
+                        emit_div(html, "window-icon", |_| {});
                         emit_div(html, "window-name", |html| {
                             emit_p(html, "", name);
                         });
@@ -1290,7 +1311,7 @@ impl Config {
         );
         css.push_str(&format!(
             r##"
-            .window-{0} .mover {{
+            .window-{0} .window-icon {{
                 background: url("{1}");
                 background-size: cover;
             }}
