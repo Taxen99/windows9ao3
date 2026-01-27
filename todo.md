@@ -1,21 +1,22 @@
 - [ ] window close animation (maybe not?)
-- [ ] window content proper
-- [ ] blue title bar for focus (ie gray for unfocused)
+- [x] window content proper
+- [x] blue title bar for focus (ie gray for unfocused)
 - [ ] normalize styles on #workskin
 - [ ] fix borders
 - [x] border-box!!!
-- [ ] window resizing
+- [x] window resizing
 - [ ] fix the animators when parented by pos-relative shit
 - [ ] optimize selectors/css/html/shit
 - [ ] ALWAYS (though messure difference!!! might not be worth it) PREFER TRANSFORM OVER LEFT/UP FOR TRANSITIONS!!!!! see: https://www.joshwcomeau.com/animation/css-transitions/
-- [ ] focus window when opened
+- [x] focus window when opened
 - [ ] dynamic window titles (and icons?)
 - [ ] fix inline TODO:s
 - [ ] fix the border color situation (unify into one set of global vars like a reasonable person)
-- [ ] fix window resizer (it should not be the icon (also what about iconless windows?))
+- [x] fix window resizer (it should not be the icon (also what about iconless windows?))
 - [ ] upload all icon (local and web) to central location where they stay
 - [ ] make about do something
-- [ ] width&height: 0 + overflow shit = poor man's display none;
+- [x] width&height: 0 + overflow shit = poor man's display none;
 - [ ] fix file name overflow (add ellipsis) + file selection (blue thingy)
 - [ ] make sure ao3.css matches output after entering into ao3 for real, as a quick and easy way to validate that we have valid styles. put both through minifier to normalize
 - [ ] combine same actions to reduce css size
+- [ ] minify class names when outputting for ao3
