@@ -15,7 +15,7 @@
 	padding: 1px;
 	position: relative;
 	height: 22px;
-	z-index: 5;
+	z-index: 0;
 }
 .fe-addrb-path {
 	flex-grow: 1;
