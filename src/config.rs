@@ -128,7 +128,7 @@ pub enum Action {
     Close(u64),
     Open(u64),
     // CloseDialog(u64),
-    // OpenDialog(u64),
+    OpenDialog(u64),
     Focus(u64),
     OpenFileExplorer(u64),
     OpenNotepad(u64),
@@ -231,23 +231,10 @@ impl Config {
                 self.emit_ie_window(html, &mut css);
                 self.emit_dt_window(html, &mut css);
             });
-            {
-                let dia_id = 123;
-                self.add_dialog(
-                    Dialog::new(
-                        dia_id,
-                        "Are you sure?",
-                        window::DialogueSymbol::Error,
-                        window::DialogueKind::Ok,
-                        "Are you really sure you want to complete the operation (sigma rizz)?",
-                    )
-                    .trigger(".onload:hover"),
-                );
-            }
+            self.emit_taskbar(html, &mut css);
             for dialog in self.state.borrow().dialogs_to_be_added.clone() {
                 dialog.build(html, &mut css, &self);
             }
-            self.emit_taskbar(html, &mut css);
         });
         self.emit_mover_anchor_css(&mut css);
         self.emit_action(
@@ -374,15 +361,25 @@ impl Config {
                                     .item("Favorites", "https://win98icons.alexmeub.com/icons/png/directory_favorites_small-4.png", "")
                                     .item("Documents", "https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs_cool-3.png", "")
                                     .item("Settings", "https://win98icons.alexmeub.com/icons/png/settings_gear-4.png", "")
-                                    .item("Find", "https://win98icons.alexmeub.com/icons/png/search_file_2-4.png", "")
-                                    .item("Help", "https://win98icons.alexmeub.com/icons/png/help_book_small-2.png", "")
-                                    .item("Run", "https://win98icons.alexmeub.com/icons/png/application_hourglass_small-2.png", "")
+                                    .item("Find", "https://win98icons.alexmeub.com/icons/png/search_file_2-4.png", "sm-find")
+                                    .item("Help", "https://win98icons.alexmeub.com/icons/png/help_book_small-2.png", "sm-help")
+                                    .item("Run", "https://win98icons.alexmeub.com/icons/png/application_hourglass_small-2.png", "sm-run")
                                 )
                                 .group(|group| group
                                     .item("Log Off Kurtson...", "https://win98icons.alexmeub.com/icons/png/key_win-2.png", "")
                                     .item("Shut Down", "https://win98icons.alexmeub.com/icons/png/shut_down_normal-2.png", "")
                                 )
                                 .build(html, css, self);
+                            self.add_dialog(
+                                Dialog::new(
+                                    "taskbar-unknown".hashed(),
+                                    "Taskbar",
+                                    window::DialogueSymbol::Error,
+                                    window::DialogueKind::Ok,
+                                    "Error: Unknown error.",
+                                )
+                                .trigger(":is(.sm-find, .sm-help, .sm-run):active"),
+                            );
                         });
                     });
                 });
@@ -1381,6 +1378,19 @@ impl Config {
                         condition, id,
                     ));
                 }
+            }
+            Action::OpenDialog(id) => {
+                // we can ommit a bunch of stuff here since dialogs are special. also we want to open it in the center!
+                self.emit_action(css, &Action::Focus(*id), condition);
+                css.push_str(&format!(
+                    r##"
+                    .main:has({0}) .window-{1}.window.window {{
+                        top: 50vh;
+                        left: 50vw;
+                    }}
+                    "##,
+                    condition, id,
+                ));
             }
             Action::Focus(id) => {
                 // TODO: this is Really shitty (tm). Also why the FUCK does this work (especially with touchpad taps????). Investigate!!!!

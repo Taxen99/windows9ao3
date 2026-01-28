@@ -212,7 +212,7 @@ impl Dialog {
             "##
         ));
         if let Some(trigger) = self.trigger.as_deref() {
-            config.emit_action(css, &Action::Open(self.id), trigger);
+            config.emit_action(css, &Action::OpenDialog(self.id), trigger);
         }
         w.build(html, css, config, |html, css| {
             emit_div(html, "window-main", |html| {

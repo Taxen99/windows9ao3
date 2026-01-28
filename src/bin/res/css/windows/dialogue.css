@@ -6,6 +6,8 @@
 	right: unset;
 	bottom: unset;
 	min-width: 296px;
+	/* this is to help center it when opened */
+	transform: translate(-50%, -50%);
 }
 
 .dialogue-main {
@@ -17,7 +19,7 @@
 .dialogue-upper {
 	margin-bottom: 17px;
 	display: flex;
-	justify-content: center;
+	/* justify-content: center; */
 	align-items: center;
 }
 .dialogue-symbol {
