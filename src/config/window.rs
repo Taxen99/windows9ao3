@@ -156,6 +156,7 @@ pub struct Dialog {
     pub symbol: DialogueSymbol,
     pub kind: DialogueKind,
     pub content: String,
+    pub trigger: Option<String>,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
@@ -185,10 +186,15 @@ impl Dialog {
             symbol,
             kind,
             content: content.into(),
+            trigger: None,
         }
     }
     pub fn icon(mut self, icon: &str) -> Self {
         self.icon = Some(icon.into());
+        self
+    }
+    pub fn trigger(mut self, trigger: &str) -> Self {
+        self.trigger = Some(trigger.into());
         self
     }
     pub fn build(self, html: &mut String, css: &mut String, config: &Config) {
@@ -205,6 +211,9 @@ impl Dialog {
             </div>
             "##
         ));
+        if let Some(trigger) = self.trigger.as_deref() {
+            config.emit_action(css, &Action::Open(self.id), trigger);
+        }
         w.build(html, css, config, |html, css| {
             emit_div(html, "window-main", |html| {
                 emit_div(html, "dialogue-main", |html| {
@@ -238,6 +247,7 @@ impl Dialog {
                             );
                         }
                     });
+                    config.emit_action(css, &Action::Close(self.id), &format!(".window-{} .dialogue-button:active", self.id));
                 });
             });
         });

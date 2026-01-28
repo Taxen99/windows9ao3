@@ -233,15 +233,16 @@ impl Config {
             });
             {
                 let dia_id = 123;
-                self.add_dialog(Dialog::new(
-                    dia_id,
-                    "Are you sure?",
-                    window::DialogueSymbol::Error,
-                    window::DialogueKind::YesNo,
-                    "Are you really sure you want to complete the operation (sigma rizz)?",
-                ));
-                // .build(html, &mut css, &self);
-                self.emit_action(&mut css, &Action::Open(dia_id), ".onload:hover");
+                self.add_dialog(
+                    Dialog::new(
+                        dia_id,
+                        "Are you sure?",
+                        window::DialogueSymbol::Error,
+                        window::DialogueKind::Ok,
+                        "Are you really sure you want to complete the operation (sigma rizz)?",
+                    )
+                    .trigger(".onload:hover"),
+                );
             }
             for dialog in self.state.borrow().dialogs_to_be_added.clone() {
                 dialog.build(html, &mut css, &self);
