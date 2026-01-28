@@ -1,0 +1,80 @@
+/* i am not british but i do think that 'dialogue' looks cooler than 'dialog'. */
+
+.dialogue .window-inner {
+	/* right: -296px; */
+	/* bottom: -118px; */
+	right: unset;
+	bottom: unset;
+	min-width: 296px;
+}
+
+.dialogue-main {
+	display: flex;
+	flex-grow: 1;
+	flex-direction: column;
+	padding: 11px;
+}
+.dialogue-upper {
+	margin-bottom: 17px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+.dialogue-symbol {
+	width: 32px;
+	height: 32px;
+	margin-right: 17px;
+}
+.dialogue-lower {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.dialogue-button {
+	width: 73px;
+	height: 23px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 2px;
+}
+.dialogue-button:first-child {
+	margin-right: 11px;
+}
+.dialogue-button p {
+	width: 67px;
+	height: 15px;
+	text-align: center;
+}
+.dialogue-button-focus {
+	outline: 1px solid black;
+}
+.dialogue-button-focus p {
+	outline: 1px dotted black;
+}
+
+.dialogue-ding {
+	left: -2000px;
+	right: -2000px;
+	top: -2000px;
+	bottom: -2000px;
+	position: absolute;
+}
+
+.dialogue-ding audio {
+	width: 100%;
+	height: 100%;
+	opacity: 0;
+}
+
+/* NOTE: this is hot, webkit-specific, garbage! but since we're not supporting firefox or god forbid safari anyways, it doesn't matter! */
+.dialogue-ding audio::-webkit-media-controls-play-button {
+	transform: scale(1000000) !important;
+	z-index: 1000 !important;
+	cursor: default !important;
+}
+.dialogue-ding audio::-webkit-media-controls-enclosure {
+	max-height: unset !important;
+	height: 100% !important;
+}

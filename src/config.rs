@@ -15,6 +15,7 @@ use crate::config::menubar_builder::MenubarBuilder;
 use crate::config::startmenu_content::StartmenuContent;
 use crate::config::toolbar_builder::ToolbarBuilder;
 use crate::config::vertical_select::emit_vertical_select;
+use crate::config::window::{Dialog, Window};
 use crate::css_var_remove::css_var_remove;
 
 mod history;
@@ -23,6 +24,7 @@ mod menubar_builder;
 mod startmenu_content;
 mod toolbar_builder;
 mod vertical_select;
+mod window;
 
 #[derive(Debug, Serialize, Deserialize)]
 pub struct App {
@@ -119,11 +121,14 @@ pub struct Config {
 #[derive(Debug, Default)]
 pub struct ConfigState {
     windows: HashSet<(u64, String, String)>,
+    dialogs_to_be_added: Vec<Dialog>,
 }
 
 pub enum Action {
     Close(u64),
     Open(u64),
+    // CloseDialog(u64),
+    // OpenDialog(u64),
     Focus(u64),
     OpenFileExplorer(u64),
     OpenNotepad(u64),
@@ -206,13 +211,10 @@ impl Config {
             });
             emit_div(html, "windows-container", |html| {
                 for w in &self.apps {
-                    self.emit_window(
+                    Window::new(w.name.hashed(), &w.name).icon(&w.icon).build(
                         html,
                         &mut css,
-                        w.name.hashed(),
-                        &w.name,
-                        &w.icon,
-                        None,
+                        &self,
                         |html, css| {
                             html.push_str(&format!(
                                 r##"<div class="content-inner">
@@ -229,6 +231,21 @@ impl Config {
                 self.emit_ie_window(html, &mut css);
                 self.emit_dt_window(html, &mut css);
             });
+            {
+                let dia_id = 123;
+                self.add_dialog(Dialog::new(
+                    dia_id,
+                    "Are you sure?",
+                    window::DialogueSymbol::Error,
+                    window::DialogueKind::YesNo,
+                    "Are you really sure you want to complete the operation (sigma rizz)?",
+                ));
+                // .build(html, &mut css, &self);
+                self.emit_action(&mut css, &Action::Open(dia_id), ".onload:hover");
+            }
+            for dialog in self.state.borrow().dialogs_to_be_added.clone() {
+                dialog.build(html, &mut css, &self);
+            }
             self.emit_taskbar(html, &mut css);
         });
         self.emit_mover_anchor_css(&mut css);
@@ -238,6 +255,9 @@ impl Config {
             ".onload:hover",
         );
         BuildResult::from_html_css(html, css)
+    }
+    fn add_dialog(&self, dialog: Dialog) {
+        self.state.borrow_mut().dialogs_to_be_added.push(dialog);
     }
     fn emit_time_advancers(&self, html: &mut String, css: &mut String) {
         emit_div(html, "minute-advancers", |html| {
@@ -464,13 +484,10 @@ impl Config {
         });
     }
     fn emit_fe_window(&self, html: &mut String, css: &mut String) {
-        self.emit_window(
-            html,
-            css,
+        Window::new(
             Self::FILE_EXPLORER_ID,
-            "File Explorer",
-            "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
-            None,
+            "File Explorer",).icon(
+            "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png").build(html, css,self,
             |html, css| {
                 emit_div(html, "window-header", |html| {
                     MenubarBuilder::new()
@@ -686,14 +703,10 @@ impl Config {
             let id = path.hashed();
             let font_id = id + 1;
             let filename = path.file_name().unwrap().to_str().unwrap();
-            self.emit_window(
-                html,
-                css,
-                id,
-                &format!("{} - Notepad", filename),
-                "https://win98icons.alexmeub.com/icons/png/notepad-5.png",
-                Some("window-kind-notepad"),
-                |html, css| {
+            Window::new(id, &format!("{} - Notepad", filename))
+                .icon("https://win98icons.alexmeub.com/icons/png/notepad-5.png")
+                .extra_classes("window-kind-notepad")
+                .build(html, css, self, |html, css| {
                     emit_div(html, "window-header", |html| {
                         let word_wrap_toggle_id = 8336941761795208;
                         css.push_str(&format!(
@@ -785,16 +798,10 @@ impl Config {
                             // });
                         })
                     });
-                },
-            );
-            self.emit_window(
-                html,
-                css,
-                font_id,
-                "Font",
-                "https://win98icons.alexmeub.com/icons/png/font_tt-0.png",
-                None,
-                |html, css| {
+                });
+            Window::new(font_id, "Font")
+                .icon("https://win98icons.alexmeub.com/icons/png/font_tt-0.png")
+                .build(html, css, self, |html, css| {
                     emit_div(html, "window-main", |html| {
                         emit_div(html, "npf-main", |html| {
                             emit_div(html, "npf-upper", |html| {
@@ -847,8 +854,7 @@ impl Config {
                             });
                         });
                     });
-                },
-            );
+                });
         });
     }
     fn emit_qv_window(&self, html: &mut String, css: &mut String) {
@@ -858,14 +864,9 @@ impl Config {
             }
             let id = path.hashed();
             let filename = path.file_name().unwrap().to_str().unwrap();
-            self.emit_window(
-                html,
-                css,
-                id,
-                &format!("{} - Quick View", filename),
-                "https://win98icons.alexmeub.com/icons/png/magnifying_glass-0.png",
-                None,
-                |html, css| {
+            Window::new(id, &format!("{} - Quick View", filename))
+                .icon("https://win98icons.alexmeub.com/icons/png/magnifying_glass-0.png")
+                .build(html, css, self, |html, css| {
                     emit_div(html, "window-header", |html| {
                         // let word_wrap_toggle_id = 8336941761795208;
                         // css.push_str(&format!(
@@ -925,8 +926,7 @@ impl Config {
                             });
                         })
                     });
-                },
-            );
+                });
         });
     }
     fn emit_ie_window(&self, html: &mut String, css: &mut String) {
@@ -967,19 +967,14 @@ impl Config {
         let default_id = format!("{}-{}", home_domain, "").hashed();
         let history = History::new(history_items, default_id);
         history.emit_stack(html, css, self);
-        self.emit_window(
-            html,
-            css,
-            Self::INTERNET_EXPLORER_ID,
-            "Internet Explorer",
-            "https://win98icons.alexmeub.com/icons/png/html-5.png",
-            None,
-            |html, css| {
+        Window::new(Self::INTERNET_EXPLORER_ID, "Internet Explorer")
+            .icon("https://win98icons.alexmeub.com/icons/png/html-5.png")
+            .build(html, css, self, |html, css| {
                 // TODO: window resizing and shit
                 css.push_str(&format!(
-                    r##".window.window-{} {{
-                        width: 600px;
-                        height: 600px;
+                    r##".window.window-{} .window-inner {{
+                        right: -600px;
+                        bottom: -600px;
                     }}"##,
                     Self::INTERNET_EXPLORER_ID
                 ));
@@ -1120,19 +1115,14 @@ impl Config {
                         });
                     });
                 });
-            },
-        );
+            });
     }
     fn emit_dt_window(&self, html: &mut String, css: &mut String) {
         assert!(Self::DATE_TIME_PROPERTIES_ID == 420); // change in css if changed!
-        self.emit_window(
-            html,
-            css,
-            Self::DATE_TIME_PROPERTIES_ID,
-            "Date/Time Properties",
-            "https://win98icons.alexmeub.com/icons/png/time_and_date-4.png",
-            None,
-            |html, css| {
+        Window::new(Self::DATE_TIME_PROPERTIES_ID, "Date/Time Properties")
+            .should_appear_in_taskbar(false)
+            .exitable(false)
+            .build(html, css, self, |html, css| {
                 emit_div(html, "window-main", |html| {
                     emit_div(html, "dt-main", |html| {
                         emit_p(html, "dt-header border-style-asymmetric-1", "Date & Time");
@@ -1230,94 +1220,6 @@ impl Config {
                 ((i as f32 / Self::MOVER_ANCHORS_COUNT as f32) * 100.0),
             ));
         }
-    }
-    fn emit_window(
-        &self,
-        html: &mut String,
-        css: &mut String,
-        id: u64,
-        name: &str,
-        icon: &str,
-        extra_classes: Option<&str>,
-        mut func: impl FnMut(&mut String, &mut String),
-    ) {
-        if !self
-            .state
-            .borrow_mut()
-            .windows
-            .insert((id, name.into(), icon.into()))
-        {
-            panic!("the fook are you doing?");
-        }
-        emit_div(
-            html,
-            &format!(
-                "window window-{0} window-{1}",
-                id,
-                extra_classes.unwrap_or("")
-            ),
-            |html| {
-                emit_div(html, "window-inner", |html| {
-                    emit_div(html, "wra wra-hor wra-hor-left", |html| {
-                        emit_div(html, "wr wr-left", |_| {});
-                        emit_div(html, "wr wr-right", |_| {});
-                    });
-                    emit_div(html, "wra wra-hor wra-hor-right", |html| {
-                        emit_div(html, "wr wr-left", |_| {});
-                        emit_div(html, "wr wr-right", |_| {});
-                    });
-                    emit_div(html, "wra wra-ver wra-ver-up", |html| {
-                        emit_div(html, "wr wr-up", |_| {});
-                        emit_div(html, "wr wr-down", |_| {});
-                    });
-                    emit_div(html, "wra wra-ver wra-ver-down", |html| {
-                        emit_div(html, "wr wr-up", |_| {});
-                        emit_div(html, "wr wr-down", |_| {});
-                    });
-                    emit_div(html, "window-titlebar", |html| {
-                        emit_div(html, "mover-anchors", |html| {
-                            for i in 0..Self::MOVER_ANCHORS_COUNT {
-                                emit_div(html, &format!("mover-anchor mover-anchor-{i}"), |_| ());
-                            }
-                        });
-                        html.push_str(r##"
-                            <div class="mover">
-                                <div class="mover-hand mover-hand-Q mover-hand-up mover-hand-left "></div>
-                                <div class="mover-hand mover-hand-W mover-hand-up "></div>
-                                <div class="mover-hand mover-hand-E mover-hand-up mover-hand-right "></div>
-                                <div class="mover-hand mover-hand-A mover-hand-left "></div>
-                                <div class="mover-hand mover-hand-D mover-hand-right "></div>
-                                <div class="mover-hand mover-hand-Z mover-hand-down mover-hand-left "></div>
-                                <div class="mover-hand mover-hand-X mover-hand-down  "></div>
-                                <div class="mover-hand mover-hand-C mover-hand-down mover-hand-right "></div>
-                            </div>
-                        "##);
-                        emit_div(html, "window-icon", |_| {});
-                        emit_div(html, "window-name", |html| {
-                            emit_p(html, "", name);
-                        });
-                        emit_div(html, "window-exiter", |_| {});
-                    });
-                    emit_div(html, "window-content", |html| {
-                        func(html, css);
-                    });
-                });
-            },
-        );
-        self.emit_action(
-            css,
-            &Action::Close(id),
-            &format!(".window-{0} .window-exiter:active", id),
-        );
-        css.push_str(&format!(
-            r##"
-            .window-{0} .window-icon {{
-                background: url("{1}");
-                background-size: cover;
-            }}
-            "##,
-            id, icon,
-        ));
     }
     fn emit_file_view_content(
         &self,
@@ -1637,6 +1539,9 @@ fn emit_div(s: &mut String, class: &str, mut cb: impl FnMut(&mut String)) {
 }
 fn emit_p(s: &mut String, class: &str, content: &str) {
     s.push_str(&format!(r##"<p class="{class}">{content}</p>"##));
+}
+fn emit_img(s: &mut String, class: &str, src: &str) {
+    s.push_str(&format!(r##"<img class="{class}" src="{src}" />"##));
 }
 fn load_css() -> String {
     let mut res = String::new();

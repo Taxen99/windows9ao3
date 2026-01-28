@@ -204,6 +204,7 @@
 .window-icon {
 	width: 16px;
 	height: 16px;
+	margin: 1px;
 }
 
 .content-inner {
@@ -218,7 +219,10 @@
 	display: flex;
 	column-gap: 3px;
 	align-items: center;
+	/* idk man css is weird*/
+	min-height: 18px;
 	height: 18px;
+	/* */
 	position: relative;
 	z-index: 999;
 }
@@ -228,8 +232,11 @@
 	align-items: center;
 	color: white;
 	font-weight: 400;
-	font-size: 13px;
+	font-size: 12px;
 	padding-bottom: 0px;
+	margin-left: 2px;
+	/* behind mover anchor shit */
+	z-index: -2;
 }
 
 .window-exiter {
@@ -306,8 +313,8 @@
 	--minwi: 2000px;
 	--maxwi: -2000px;
 	--twi: 1s;
-	min-width: 300px;
-	min-height: 200px;
+	min-width: 100px;
+	min-height: 100px;
 }
 
 .wra {
