@@ -15,7 +15,7 @@ use crate::config::menubar_builder::MenubarBuilder;
 use crate::config::startmenu_content::StartmenuContent;
 use crate::config::toolbar_builder::ToolbarBuilder;
 use crate::config::vertical_select::emit_vertical_select;
-use crate::config::window::{Dialog, Window};
+use crate::config::window::{Dialog, DialogueKind, DialogueSymbol, Window};
 use crate::css_var_remove::css_var_remove;
 
 mod history;
@@ -232,6 +232,16 @@ impl Config {
                 self.emit_dt_window(html, &mut css);
             });
             self.emit_taskbar(html, &mut css);
+            self.add_dialog(
+                Dialog::new(
+                    "action-dialog".hashed(),
+                    "About",
+                    DialogueSymbol::Error,
+                    DialogueKind::Ok,
+                    "Error: Could not locate Application Info.",
+                )
+                .trigger(&format!(".mb-submenu-item-{}:active", "about".hashed())),
+            );
             for dialog in self.state.borrow().dialogs_to_be_added.clone() {
                 dialog.build(html, &mut css, &self);
             }
@@ -492,12 +502,94 @@ impl Config {
                         .item("File", |item| {
                             item
                                 .group(|group| {
-                                    group.sub("Exit", |i| i.action(Action::Close(Self::FILE_EXPLORER_ID)))
+                                    group.sub_disabled("New")
+                                })
+                                .group(|group| group
+                                    .sub_disabled("Create Shortcut")
+                                    .sub_disabled("Delete")
+                                    .sub_disabled("Rename")
+                                    .sub_disabled("Properties")
+                                )
+                                .group(|group| group
+                                        .sub("Work Offline", |item| item.html_toggle())
+                                        .sub("Exit", |i| i.action(Action::Close(Self::FILE_EXPLORER_ID)))
+                                )
+                        })
+                        .item("Edit", |item| {
+                            item
+                                .group(|group| {
+                                    group.sub_disabled("Undo")
+                                })
+                                .group(|group| group
+                                    .sub_disabled("Cut")
+                                    .sub_disabled("Copy")
+                                    .sub_disabled("Paste")
+                                    .sub_disabled("Paste Shortcut")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Select All")
+                                    .sub_disabled("Invert Selection")
+                                )
+                        })
+                        .item("View", |item| {
+                            item
+                                .group(|group| group
+                                    .sub_disabled("Toolbars")
+                                    .sub_disabled("Status Bar")
+                                    .sub_disabled("Explorer Bar")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("as Web Page")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Large Icons")
+                                    .sub_disabled("Small Icons")
+                                    .sub_disabled("List")
+                                    .sub_disabled("Details")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Customize this Folder")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Arrange Icons")
+                                    .sub_disabled("Line Up Icons")
+                                )
+                                .group(|group| group
+                                    .sub("Refresh", |item| item.dummy())
+                                    .sub_disabled("Folder Options")
+                                )
+                        })
+                        .item("Go", |item| {
+                            item
+                                .group(|group| group
+                                    .sub_disabled("Back")
+                                    .sub_disabled("Forward")
+                                    .sub_disabled("Up One Level")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Home Page")
+                                    .sub_disabled("Channel Guide")
+                                    .sub_disabled("Search the Web")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Mail")
+                                    .sub_disabled("News")
+                                    .sub_disabled("My Computer")
+                                    .sub_disabled("Address Book")
+                                    .sub_disabled("Internet Call")
+                                )
+                        })
+                        .item("Favorites", |item| {
+                            item
+                                .group(|group| {
+                                    group
+                                        .sub_disabled("Add to Favorites")
+                                        .sub_disabled("Organize Favorites")
                                 })
                         })
                         .item("Help", |item| {
                             item.group(|group| group.sub_disabled("Help Topics"))
-                                .group(|group| group.sub("About", |i| i.dummy()))
+                                .group(|group| group.sub("About", |i| i.dummy().id("about".hashed())))
                         })
                         .build(html, css, self);
                         emit_div(html, "fe-address-bar border-style-light-1", |html| {
@@ -757,8 +849,9 @@ impl Config {
                                 })
                             })
                             .item("Help", |item| {
-                                item.group(|group| group.sub_disabled("Help Topics"))
-                                    .group(|group| group.sub("About Notepad", |i| i.dummy()))
+                                item.group(|group| group.sub_disabled("Help Topics")).group(
+                                    |group| group.sub("About", |i| i.dummy().id("about".hashed())),
+                                )
                             })
                             .build(html, css, self);
                     });
@@ -898,8 +991,9 @@ impl Config {
                                 .group(|group| group.sub_disabled("Font..."))
                             })
                             .item("Help", |item| {
-                                item.group(|group| group.sub_disabled("Help Topics"))
-                                    .group(|group| group.sub("About", |i| i.dummy()))
+                                item.group(|group| group.sub_disabled("Help Topics")).group(
+                                    |group| group.sub("About", |i| i.dummy().id("about".hashed())),
+                                )
                             })
                             .build(html, css, self);
                     });
@@ -1000,7 +1094,9 @@ impl Config {
                         // })
                         .item("Help", |item| {
                             item.group(|group| group.sub_disabled("Help Topics"))
-                                .group(|group| group.sub("About", |i| i.dummy()))
+                                .group(|group| {
+                                    group.sub("About", |i| i.dummy().id("about".hashed()))
+                                })
                         })
                         .build(html, css, self);
                     ToolbarBuilder::new()
