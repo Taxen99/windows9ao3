@@ -226,7 +226,7 @@
 	width: 40%;
 	height: 0px;
 	transition: transform 60s linear;
-	transform: translate(0, 0) rotateZ(-90deg);
+	transform: translate(0, 0) rotate(-90deg);
 	top: 50%;
 	left: 50%;
 	transform-origin: center left;
@@ -239,7 +239,7 @@
 	height: 30px;
 	/* transition: transform 60s linear; */
 	transition: transform 10s linear 2147483640s;
-	transform: translate(-22.64%, -78.78%) rotateZ(-90deg);
+	transform: translate(-22.64%, -78.78%) rotate(-90deg);
 	top: 50%;
 	left: 50%;
 	transform-origin: 22.64% 78.78%;
@@ -252,21 +252,21 @@
 	height: 30px;
 	/* transition: transform 60s linear; */
 	transition: transform 10s linear 2147483640s;
-	transform: translate(-22.64%, -78.78%) rotateZ(180deg);
+	transform: translate(-22.64%, -78.78%) rotate(180deg);
 	top: 50%;
 	left: 50%;
 	transform-origin: 22.64% 78.78%;
 }
 .main:has(.onload:hover) .dt-second-hand, .main:has(.minute-advancer:hover) .dt-second-hand {
-	transform: translate(0, 0) rotateZ(-450deg);
+	transform: translate(0, 0) rotate(-450deg);
 	transition: 0s;
 }
 /* .main:has(.onload:hover) .dt-minute-hand {
-	transform: translate(-22.64%, -78.78%) rotateZ(-450deg);
+	transform: translate(-22.64%, -78.78%) rotate(-450deg);
 	transition: 0s;
 }
 .main:has(.onload:hover) .dt-hour-hand {
-	transform: translate(-22.64%, -78.78%) rotateZ(0deg);
+	transform: translate(-22.64%, -78.78%) rotate(0deg);
 	transition: 0s;
 } */
 

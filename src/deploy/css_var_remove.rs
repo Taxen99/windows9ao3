@@ -27,7 +27,7 @@ pub fn css_var_remove(css_file: &str) -> String {
     for (name, value) in vars {
         modified_css_file = modified_css_file.replace(format!("var(--{name})").as_str(), value);
     }
-    modified_css_file = modified_css_file.replace("calc(25px / 3)", "8.33333px");
+    modified_css_file = modified_css_file.replace("calc(16px * 2)", "32px");
     let modified_css_file = modified_css_file
         .lines()
         .enumerate()

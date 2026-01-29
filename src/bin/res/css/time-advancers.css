@@ -4,7 +4,7 @@
 	position: relative;
 	/* z-index: 2147483645; */
 	/* transition: ; */
-	counter-reset: foo;
+	/* counter-reset: foo; */
 }
 
 .minute-advancer {
@@ -17,7 +17,7 @@
 	transition: z-index 10s linear 2147483640s, top 0s linear 60s;
 	transition-behavior: allow-discrete;
 	top: 0px;
-	counter-increment: foo;
+	/* counter-increment: foo; */
 }
 .hour-advancer {
 	width: 100vw;
@@ -31,14 +31,14 @@
 	top: 1000vh;
 }
 
-.minute-advancer::before {
+/* .minute-advancer::before {
 	content: counter(foo);
 	font-size: xx-large;
 	background-color: brown;
 	color: blue;
 	inset: 50%;
 	position: absolute;
-}
+} */
 
 .minute-advancers:has(.minute-advancer:last-child:hover) + .hour-advancers .hour-advancer {
 	transition: z-index 10s linear 2147483640s, top 0s linear;

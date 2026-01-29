@@ -133,7 +133,7 @@
 }
 
 .mb-submenu-item[open]:hover summary::before {
-	filter: invert();
+	filter: invert(100%);
 }
 
 .menubar-item::first-letter {

@@ -9,6 +9,7 @@ use enum_as_inner::EnumAsInner;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
+// use crate::ao3_html_css_compressor;
 use crate::config::history::{History, HistoryItem};
 use crate::config::internet_explorer::read_sites;
 use crate::config::menubar_builder::MenubarBuilder;
@@ -16,7 +17,7 @@ use crate::config::startmenu_content::StartmenuContent;
 use crate::config::toolbar_builder::ToolbarBuilder;
 use crate::config::vertical_select::emit_vertical_select;
 use crate::config::window::{Dialog, DialogueKind, DialogueSymbol, Window};
-use crate::css_var_remove::css_var_remove;
+// use crate::css_var_remove::css_var_remove;
 
 mod history;
 mod internet_explorer;
@@ -109,6 +110,11 @@ pub struct File {
     pub offset: Option<(u32, u32)>,
 }
 
+#[derive(Debug, Default)]
+pub struct BuildOptions {
+    pub initial_window: Option<u64>,
+}
+
 #[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub apps: Vec<App>,
@@ -122,8 +128,10 @@ pub struct Config {
 pub struct ConfigState {
     windows: HashSet<(u64, String, String)>,
     dialogs_to_be_added: Vec<Dialog>,
+    actions_to_be_added: HashMap<Action, Vec<String>>,
 }
 
+#[derive(Debug, Hash, PartialEq, Eq, Clone)]
 pub enum Action {
     Close(u64),
     Open(u64),
@@ -134,7 +142,7 @@ pub enum Action {
     OpenNotepad(u64),
 }
 
-trait HashedExt {
+pub trait HashedExt {
     fn hashed(self) -> u64;
 }
 impl<T> HashedExt for &T
@@ -153,38 +161,40 @@ where
 pub struct BuildResult {
     pub html: String,
     pub css: String,
-    pub ao3_html: String,
-    pub ao3_css: String,
+    // pub ao3_html: String,
+    // pub ao3_css: String,
 }
-impl BuildResult {
-    fn from_html_css(html_in: String, css_in: String) -> BuildResult {
-        let html = format!(
-            r##"
-            <!DOCTYPE html>
-            <html lang="en">
-            <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <title>Document</title>
-                <link rel="stylesheet" href="style.css">
-            </head>
-            <body>
-                {html_in}
-            </body>
-            </html>
-            "##
-        );
-        let ao3_html = html_in;
-        let css = css_in;
-        let ao3_css = css_var_remove(&css);
-        Self {
-            html,
-            css,
-            ao3_html,
-            ao3_css,
-        }
-    }
-}
+// impl BuildResult {
+//     fn from_html_css(html_in: String, css_in: String) -> BuildResult {
+//         let html = format!(
+//             r##"
+//             <!DOCTYPE html>
+//             <html lang="en">
+//             <head>
+//                 <meta charset="UTF-8">
+//                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+//                 <title>Document</title>
+//                 <link rel="stylesheet" href="style.css">
+//             </head>
+//             <body>
+//                 {html_in}
+//             </body>
+//             </html>
+//             "##
+//         );
+//         let ao3_html = html_in;
+//         let css = css_in;
+//         let ao3_css = css_var_remove(&css);
+//         // let (ao3_html, ao3_css) =
+//         //     ao3_html_css_compressor::compress_html_css_for_ao3(ao3_html, ao3_css);
+//         Self {
+//             html,
+//             css,
+//             ao3_html,
+//             ao3_css,
+//         }
+//     }
+// }
 
 impl Config {
     const FILE_EXPLORER_ID: u64 = 1;
@@ -195,7 +205,7 @@ impl Config {
     const INITIAL_TIME: (u32, u32) = (06, 34);
     // const NOTEPAD_ID: u64 = 2;
     // const NOTEPAD_FONT_ID: u64 = 3;
-    pub fn build(mut self) -> BuildResult {
+    pub fn build(mut self, opt: BuildOptions) -> BuildResult {
         self.app_apps_to_desktop();
 
         let mut css = String::new();
@@ -242,7 +252,8 @@ impl Config {
                 )
                 .trigger(&format!(".mb-submenu-item-{}:active", "about".hashed())),
             );
-            for dialog in self.state.borrow().dialogs_to_be_added.clone() {
+            let dialogs_cloned = { self.state.borrow().dialogs_to_be_added.clone() };
+            for dialog in dialogs_cloned {
                 dialog.build(html, &mut css, &self);
             }
         });
@@ -252,7 +263,13 @@ impl Config {
             &Action::OpenFileExplorer(Path::new("/").hashed()),
             ".onload:hover",
         );
-        BuildResult::from_html_css(html, css)
+        if let Some(initial_window_id) = opt.initial_window {
+            self.emit_action(&mut css, &Action::Open(initial_window_id), ".onload:hover");
+        }
+        // NOTE: this must be last
+        self.emit_actions_for_real(&mut html, &mut css);
+        // BuildResult::from_html_css(html, css)
+        BuildResult { html, css }
     }
     fn add_dialog(&self, dialog: Dialog) {
         self.state.borrow_mut().dialogs_to_be_added.push(dialog);
@@ -283,7 +300,7 @@ impl Config {
 }}
 .main:has(.hour-advancer-{0}:hover) .dt-hour-hand {{
     transition: 0s;
-    transform: translate(-22.64%, -78.78%) rotateZ({2}deg)
+    transform: translate(-22.64%, -78.78%) rotate({2}deg)
 }}
 "##,
                 i,
@@ -302,7 +319,7 @@ impl Config {
 }}
 .main:has(.minute-advancer-{0}:hover) .dt-minute-hand {{
             transition: 0s;
-            transform: translate(-22.64%, -78.78%) rotateZ({2}deg)
+            transform: translate(-22.64%, -78.78%) rotate({2}deg)
 }}
 "##,
                 i,
@@ -1419,141 +1436,186 @@ impl Config {
         }
     }
     fn emit_action(&self, css: &mut String, action: &Action, condition: &str) {
+        self.state
+            .borrow_mut()
+            .actions_to_be_added
+            .entry(action.clone())
+            .or_default()
+            .push(condition.into());
         match action {
-            Action::Close(id) => {
-                css.push_str(&format!(
-                    r##"
-                    .main:has({0}) .window-{1} {{
-                        top: 0.002px;
-                        left: -2000.002px;
-                        transition: top 0s linear 0s, left 0s linear 0s !important;
-                    }}
-                    .main:has({0}) .tb-app-{1} {{
-                        max-width: 0px;
-                        transition: 0s;
-                    }}
-                    "##,
-                    condition, id,
-                ));
-                if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
-                    css.push_str(&format!(
-                        r##"
-                        .main:has({0}) .tb-ql-item-close-{1} {{
-                            transition: 0s;
-                            z-index: -2;
-                        }}
-                        "##,
-                        condition, id,
-                    ));
-                }
-            }
             Action::Open(id) => {
                 self.emit_action(css, &Action::Focus(*id), condition);
-                // we don't need to set transition for the window, since that is done in focus!
-                css.push_str(&format!(
-                    r##"
-                    .main:has({0}) .window-{1}.window.window {{
-                        top: 30px;
-                        left: 30px;
-                    }}
-                    .main:has({0}) .tb-app-{1} {{
-                        max-width: 160px;
-                        transition: 0s;
-                    }}
-                    "##,
-                    condition, id,
-                ));
-                if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
+            }
+            Action::OpenDialog(id) => {
+                self.emit_action(css, &Action::Focus(*id), condition);
+            }
+            _ => (),
+        }
+        // css.push_str(&format!(
+        //     r##"
+        //     .main:has({0}) .action-trigger-{1} {{
+        //         transition: 0s;
+        //         width: 100vw;
+        //     }}
+        //     "##,
+        //     condition,
+        //     action.hashed(),
+        // ));
+    }
+    fn emit_actions_for_real(&self, html: &mut String, css: &mut String) {
+        for (action, conditions) in self.state.borrow().actions_to_be_added.iter() {
+            // let hash = action.hashed();
+            // emit_div(
+            //     html,
+            //     &format!("action-trigger action-trigger-{0}", hash),
+            //     |_| (),
+            // );
+            // let condition = format!("action-trigger-{0}:hover", hash);
+            let condition = {
+                let mut condition = String::new();
+                for c in conditions {
+                    condition.push_str(&c);
+                    condition.push(',');
+                }
+                // remove final comma!
+                condition.pop().unwrap();
+                // NOTE: wrap in :is to prevent ao3 from fucking us over by not being able to parse css selectors correctly
+                format!(":is({0})", condition)
+            };
+            match action {
+                Action::Close(id) => {
                     css.push_str(&format!(
                         r##"
-                        .main:has({0}) .tb-ql-item-close-{1} {{
+                        .main:has({0}) .window-{1} {{
+                            top: 0.002px;
+                            left: -2000.002px;
+                            transition: top 0s linear 0s, left 0s linear 0s !important;
+                        }}
+                        .main:has({0}) .tb-app-{1} {{
+                            max-width: 0px;
                             transition: 0s;
-                            z-index: 2;
+                        }}
+                        "##,
+                        condition, id,
+                    ));
+                    if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
+                        css.push_str(&format!(
+                            r##"
+                            .main:has({0}) .tb-ql-item-close-{1} {{
+                                transition: 0s;
+                                z-index: -2;
+                            }}
+                            "##,
+                            condition, id,
+                        ));
+                    }
+                }
+                Action::Open(id) => {
+                    // we don't need to set transition for the window, since that is done in focus!
+                    css.push_str(&format!(
+                        r##"
+                        .main:has({0}) .window-{1}.window.window {{
+                            top: 30px;
+                            left: 30px;
+                        }}
+                        .main:has({0}) .tb-app-{1} {{
+                            max-width: 160px;
+                            transition: 0s;
+                        }}
+                        "##,
+                        condition, id,
+                    ));
+                    if Self::QUICK_LAUNCH_SUPPORTED_APPS.contains(&id) {
+                        css.push_str(&format!(
+                            r##"
+                            .main:has({0}) .tb-ql-item-close-{1} {{
+                                transition: 0s;
+                                z-index: 2;
+                            }}
+                            "##,
+                            condition, id,
+                        ));
+                    }
+                }
+                Action::OpenDialog(id) => {
+                    // we can ommit a bunch of stuff here since dialogs are special. also we want to open it in the center!
+                    css.push_str(&format!(
+                        r##"
+                        .main:has({0}) .window-{1}.window.window {{
+                            top: 50vh;
+                            left: 50vw;
                         }}
                         "##,
                         condition, id,
                     ));
                 }
-            }
-            Action::OpenDialog(id) => {
-                // we can ommit a bunch of stuff here since dialogs are special. also we want to open it in the center!
-                self.emit_action(css, &Action::Focus(*id), condition);
-                css.push_str(&format!(
-                    r##"
-                    .main:has({0}) .window-{1}.window.window {{
-                        top: 50vh;
-                        left: 50vw;
-                    }}
-                    "##,
-                    condition, id,
-                ));
-            }
-            Action::Focus(id) => {
-                // TODO: this is Really shitty (tm). Also why the FUCK does this work (especially with touchpad taps????). Investigate!!!!
-                // NOTE: we have extra ".window"s because css selector specificity...
-                css.push_str(&format!(
-                    r##"
-                    .main:has({0}) .window-{1}.window.window {{
-                        transition: 0s;
-                        z-index: 2147483640;
-                    }}
-
-.main:has({0}) .window:not(.window-{1}).window.window {{
-    z-index: 1;
-    transition: left 10s linear 2147483640s, top 10s linear 2147483640s, z-index 214748s linear;
-}}
-.main:has({0}) .window-{1}.window.window .window-titlebar {{
-    background: linear-gradient(to right, #00007B, #3B79B8);
-    transition: background 0s linear;
-}}
-.main:has({0}) .window:not(.window-{1}).window.window .window-titlebar {{
-    background: linear-gradient(to right, rgb(126, 126, 125), rgb(187, 187, 187));
-    transition: background 0s linear;
-}}
-.main:has({0}) .tb-app-{1} .tb-app-inner-active {{
-    transition: 0s;
-    z-index: 1;
-}}
-.main:has({0}) .tb-app:not(.tb-app-{1}) .tb-app-inner-active {{
-    transition: 0s;
-    z-index: -1;
-}}
-                    "##,
-                    condition, id,
-                ));
-            }
-            Action::OpenFileExplorer(id) => {
-                // TODO: for now we don't do this, as to not preemtively complicate design.
-                // self.emit_action(css, Action::Open(Self::FILE_EXPLORER_ID), condition);
-                css.push_str(&format!(
-                    r##"
-                    .main:has({0}) .fe-view-{1} {{
-                        left: 0px;
-                        transition: left 0s linear !important;
-                    }}
-                    .main:has({0}) .fe-view:not(.fe-view-{1}) {{
-                        left: -20000.001px;
-                        transition: left 0s linear !important;
-                    }}
-                    .main:has({0}) .fe-sideview-view .fe-svv-child:is(:has(.fe-svv-child-{1}), .fe-svv-child-{1}) {{
-                        height: 100%;
-                        transition: 0s;
-                    }}
-                    .main:has({0}) .fe-sideview-view :is(.fe-svv-expandable:has(+ .fe-svv-child-{1}), .fe-svv-expandable:has(+ .fe-svv-child .fe-svv-child-{1})) .fe-svvi-expander-open {{
-                        transition: 0s;
-	                    z-index: 1;
-                    }}
-                    .main:has({0}) .fe-addrb-{1} {{
-                        transition: 0s;
-	                    z-index: 2147483640;
-                    }}
-                    "##,
-                    condition, id
-                ));
-            }
-            Action::OpenNotepad(id) => {
-                // self.emit_action(css, Action::Open(Self::NOTEPAD_ID), condition);
-                todo!();
+                Action::Focus(id) => {
+                    // TODO: this is Really shitty (tm). Also why the FUCK does this work (especially with touchpad taps????). Investigate!!!!
+                    // NOTE: we have extra ".window"s because css selector specificity...
+                    css.push_str(&format!(
+                        r##"
+                        .main:has({0}) .window-{1}.window.window {{
+                            transition: 0s;
+                            z-index: 2147483640;
+                        }}
+    
+    .main:has({0}) .window:not(.window-{1}).window.window {{
+        z-index: 1;
+        transition: left 10s linear 2147483640s, top 10s linear 2147483640s, z-index 214748s linear;
+    }}
+    .main:has({0}) .window-{1}.window.window .window-titlebar {{
+        background: linear-gradient(to right, #00007B, #3B79B8);
+        transition: background 0s linear;
+    }}
+    .main:has({0}) .window:not(.window-{1}).window.window .window-titlebar {{
+        background: linear-gradient(to right, rgb(126, 126, 125), rgb(187, 187, 187));
+        transition: background 0s linear;
+    }}
+    .main:has({0}) .tb-app-{1} .tb-app-inner-active {{
+        transition: 0s;
+        z-index: 1;
+    }}
+    .main:has({0}) .tb-app:not(.tb-app-{1}) .tb-app-inner-active {{
+        transition: 0s;
+        z-index: -1;
+    }}
+                        "##,
+                        condition, id,
+                    ));
+                }
+                Action::OpenFileExplorer(id) => {
+                    // TODO: for now we don't do this, as to not preemtively complicate design.
+                    // self.emit_action(css, Action::Open(Self::FILE_EXPLORER_ID), condition);
+                    css.push_str(&format!(
+                        r##"
+                        .main:has({0}) .fe-view-{1} {{
+                            left: 0px;
+                            transition: left 0s linear !important;
+                        }}
+                        .main:has({0}) .fe-view:not(.fe-view-{1}) {{
+                            left: -20000.001px;
+                            transition: left 0s linear !important;
+                        }}
+                        .main:has({0}) .fe-sideview-view .fe-svv-child:is(:has(.fe-svv-child-{1}), .fe-svv-child-{1}) {{
+                            height: 100%;
+                            transition: 0s;
+                        }}
+                        .main:has({0}) .fe-sideview-view :is(.fe-svv-expandable:has(+ .fe-svv-child-{1}), .fe-svv-expandable:has(+ .fe-svv-child .fe-svv-child-{1})) .fe-svvi-expander-open {{
+                            transition: 0s;
+                            z-index: 1;
+                        }}
+                        .main:has({0}) .fe-addrb-{1} {{
+                            transition: 0s;
+                            z-index: 2147483640;
+                        }}
+                        "##,
+                        condition, id
+                    ));
+                }
+                Action::OpenNotepad(id) => {
+                    // self.emit_action(css, Action::Open(Self::NOTEPAD_ID), condition);
+                    todo!();
+                }
             }
         }
     }

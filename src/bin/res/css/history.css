@@ -1,5 +1,5 @@
 .history {
-	counter-reset: foo;
+	/* counter-reset: foo; */
 	/* TODO: remove this! */
 	position: absolute;
 	/* top: 0;
@@ -24,7 +24,7 @@
 	width: 100vw;
 	height: 100vh;
 	/* background-color: #ff000066; */
-	counter-increment: foo;
+	/* counter-increment: foo; */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -86,11 +86,11 @@
 	background-color: #00bfff55;
 }
 
-.history-item::after {
+/* .history-item::after {
 	content: counter(foo);
 	font-size: 60px;
 	background-color: blue;
-}
+} */
 
 .main:has(.history-back:hover:active) .history-item {
 	transition: left 10s linear 2147483640s, top 0s linear, z-index 214748s linear;

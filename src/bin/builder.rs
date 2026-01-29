@@ -1,31 +1,88 @@
-use std::{env::args, fs};
+use std::{
+    collections::HashMap,
+    env::{self, args},
+    fs,
+    path::Path,
+};
 
-use arcthing::config::Config;
+use arcthing::{
+    config::{BuildOptions, Config},
+    deploy,
+    resource_resolver::{self, ResouceKind, get_resource_path},
+};
+
+// struct Arg {
+//     name: &'static str,
+// }
+
+struct ArgParser {
+    // args: Vec<Arg>,
+}
+
+impl ArgParser {
+    fn parse() -> HashMap<String, String> {
+        let mut args = env::args().peekable();
+        let mut map: HashMap<String, String> = HashMap::new();
+        loop {
+            let arg = args.next();
+            match arg {
+                Some(arg) => {
+                    if let Some(arg) = arg.strip_prefix("--") {
+                        if let Some(value) = args.peek() {
+                            if value.strip_prefix("--").is_some() {
+                                map.insert(arg.into(), "".into());
+                                continue;
+                            } else {
+                                map.insert(arg.into(), value.clone());
+                            }
+                        } else {
+                            map.insert(arg.into(), "".into());
+                            break;
+                        }
+                    }
+                }
+                None => break,
+            }
+        }
+        map
+    }
+}
 
 pub fn main() {
-    // panic!();
-    // let config: Config = toml::from_str(&fs::read_to_string("config.toml").unwrap()).unwrap();
-    let args: Vec<_> = args().collect();
-    let config: Config = ron::from_str(&fs::read_to_string("config.ron").unwrap()).unwrap();
-    let mut res = config.build();
-    if let Some(wid) = args.get(1) {
-        res.css.push_str(&format!(
-            r##"
-            .main:has(.onload:hover) .window-{wid} {{
-                top:  50px !important;
-                left: 50px !important;
-                transition: 0s !important;
-                z-index: 2147483640;
-            }}
-        "##
-        ));
+    // let arg_parser = ArgParser {
+    //     args: vec![
+    //         Arg {
+    //             name: "open-window",
+    //         },
+    //         Arg { name: "deploy" },
+    //     ],
+    // };
+    let parsed = ArgParser::parse();
+    let mut build_opt: BuildOptions = Default::default();
+    let mut deploy = false;
+    for (arg, value) in parsed {
+        //
+        match arg.as_str() {
+            "initial-window" => {
+                build_opt.initial_window = Some(value.parse::<u64>().expect("invalid window id"))
+            }
+            "deploy" => {
+                deploy = true;
+            }
+            _ => (),
+        }
     }
+    let config: Config = ron::from_str(&fs::read_to_string("config.ron").unwrap()).unwrap();
+    let res = config.build(build_opt);
     let _ = fs::create_dir("output");
-    // if fs::read_to_string("output/index.html").unwrap_or_default() != res.html {
-    //     // avoid reloading page if html didn't change.
-    fs::write("output/style.css", res.css).unwrap();
-    fs::write("output/index.html", res.html).unwrap();
-    // }
-    fs::write("output/ao3.html", res.ao3_html).unwrap();
-    fs::write("output/ao3.css", res.ao3_css).unwrap();
+    let resolved_res = resource_resolver::resolve_resources(&res, |kind, res| {
+        format!("../{}", get_resource_path(kind, res).to_str().unwrap())
+    });
+    fs::write("output/style.css", &resolved_res.css).unwrap();
+    fs::write("output/index.html", &resolved_res.html).unwrap();
+    if deploy {
+        deploy::deploy(&res);
+    }
+    // fs::write("output/ao3.html", res.ao3_html).unwrap();
+    // fs::write("output/ao3.css", res.ao3_css).unwrap();
 }
