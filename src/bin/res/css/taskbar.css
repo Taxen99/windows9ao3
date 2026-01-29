@@ -71,7 +71,7 @@
 	content: "";
 	width: 16px;
 	height: 14px;
-	background-image: url("../res/icons/taskbar-windows-icon-9.png");
+	background-image: url("@icon:taskbar-windows-icon");
 	background-size: cover;
 	display: block;
 }

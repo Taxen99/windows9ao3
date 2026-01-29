@@ -376,7 +376,7 @@ impl Config {
                     });
                     emit_div(html, "tb-start-menu border-style-dark-3", |html| {
                         emit_div(html, "tb-sm-banner", |html| {
-                            html.push_str(r##"<img src="../res/icons/windows98-start.png" />"##);
+                            html.push_str(r##"<img src="@icon:windows98-start" />"##);
                         });
                         emit_div(html, "tb-sm-content", |html| {
                             StartmenuContent::new()
@@ -384,7 +384,7 @@ impl Config {
                                     .item("Windows Update", "https://win98icons.alexmeub.com/icons/png/windows_update_small-2.png", "")
                                 )
                                 .group(|group| group
-                                    .item("Programs", "../res/icons/programs-9.png", "")
+                                    .item("Programs", "@icon:programs", "")
                                     .item("Favorites", "https://win98icons.alexmeub.com/icons/png/directory_favorites_small-4.png", "")
                                     .item("Documents", "https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs_cool-3.png", "")
                                     .item("Settings", "https://win98icons.alexmeub.com/icons/png/settings_gear-4.png", "")
@@ -483,7 +483,7 @@ impl Config {
             });
             emit_div(html, "tb-item tb-right", |html| {
                 emit_div(html, "tb-right-button border-style-light-2", |html| {
-                    html.push_str(r##"<img src="../res/icons/taskbar-right-combined-9.png" />"##);
+                    html.push_str(r##"<img src="@icon:taskbar-right-combined" />"##);
                     emit_div(html, "date-time-opener", |html| {
                         emit_div(html, "time-hour", |html| {
                             // for i in 0..24 {
@@ -616,7 +616,7 @@ impl Config {
                                 self.fs.visit_all_folders(|folder, path| {
                                     let icon = self.icon_of_folder(folder);
                                     emit_p(html, &format!("fe-addrb-path fe-addrb-{}", path.hashed()), &self.path_as_windows98y(path));
-                                    css.push_str(&format!(r##".fe-addrb-{}::before {{ background: url("{}") top left / cover; }}"##, path.hashed(), icon));
+                                    css.push_str(&format!(r##".fe-addrb-{}::before {{ background: url("{}"); background-size: cover; }}"##, path.hashed(), icon));
                                 });
                             });
                         });
@@ -1021,16 +1021,17 @@ impl Config {
                             //     fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
                             //         let folder_hash = path.hashed();
                             emit_div(html, &format!("qv-view border-style-dark-1"), |html| {
-                                let path = Path::new("./res").join(&file.link);
-                                let _ = path
-                                    .metadata()
-                                    .expect(&format!("resource {} does not exist", &file.link));
+                                // let path = Path::new("./res").join(&file.link);
+                                let res_name = file.link.strip_prefix("img/").unwrap();
+                                // let _ = path
+                                //     .metadata()
+                                //     .expect(&format!("resource {} does not exist", &file.link));
                                 html.push_str(&format!(
                                     r##"
                                         <img src="{}" />
                                     "##,
                                     // TODO: fix!
-                                    &format!("../{}", path.to_str().unwrap()),
+                                    &format!("img:{}", res_name),
                                 ));
                             });
                         })
@@ -1119,8 +1120,8 @@ impl Config {
                     ToolbarBuilder::new()
                         .group(|group| {
                             group
-                                // .item("Back", "../res/icons/back-9.png")
-                                // .item("Forward", "../res/icons/forward-9.png")
+                                // .item("Back", "@icon:back")
+                                // .item("Forward", "@icon:forward")
                                 .item_html(|html| {
                                     emit_div(html, "history-toolbar-container", |html| {
                                         emit_div(html, "toolbar-item history-back", |html| {
@@ -1129,7 +1130,7 @@ impl Config {
                                                 <img src="{}" />
                                                 <p>{}</p>
                                             "##,
-                                                "../res/icons/back-9.png", "Back"
+                                                "@icon:back", "Back"
                                             ));
                                         });
                                         emit_div(html, "toolbar-item toolbar-single-click", |_| ());
@@ -1139,7 +1140,7 @@ impl Config {
                                                 <img src="{}" />
                                                 <p>{}</p>
                                             "##,
-                                                "../res/icons/back-no-9.png", "Back"
+                                                "@icon:back-no", "Back"
                                             ));
                                         });
                                     });
@@ -1152,7 +1153,7 @@ impl Config {
                                             <img src="{}" />
                                             <p>{}</p>
                                         "##,
-                                                "../res/icons/forward-9.png", "Forward"
+                                                "@icon:forward", "Forward"
                                             ));
                                         });
                                         emit_div(html, "toolbar-item toolbar-single-click", |_| ());
@@ -1162,33 +1163,31 @@ impl Config {
                                             <img src="{}" />
                                             <p>{}</p>
                                         "##,
-                                                "../res/icons/forward-no-9.png", "Forward"
+                                                "@icon:forward-no", "Forward"
                                             ));
                                         });
                                     });
                                 })
-                                .item("Stop", "../res/icons/stop-9.png", "ie-tb-stop")
-                                .item("Refresh", "../res/icons/refresh-9.png", "ie-tb-refresh")
+                                .item("Stop", "@icon:stop", "ie-tb-stop")
+                                .item("Refresh", "@icon:refresh", "ie-tb-refresh")
                                 .item(
                                     "Home",
-                                    "../res/icons/home-9.png",
+                                    "@icon:home",
                                     &format!("history-trigger history-trigger-{}", default_id),
                                 )
                         })
                         .group(|group| {
                             group
-                                .item("Search", "../res/icons/search-9.png", "ie-tb-search")
-                                .item(
-                                    "Favorites",
-                                    "../res/icons/favorites-9.png",
-                                    "ie-tb-favorites",
-                                )
-                                .item("History", "../res/icons/history-9.png", "ie-tb-history")
+                                .item("Search", "@icon:search", "ie-tb-search")
+                                .item("Favorites", "@icon:favorites", "ie-tb-favorites")
+                                .item("History", "@icon:history", "ie-tb-history")
                         })
                         .group(|group| {
-                            group
-                                .item("Mail", "../res/icons/mail-9.png", "ie-tb-mail")
-                                .item("Print", "../res/icons/print-9.png", "ie-tb-print")
+                            group.item("Mail", "@icon:mail", "ie-tb-mail").item(
+                                "Print",
+                                "@icon:print",
+                                "ie-tb-print",
+                            )
                         })
                         .build(html, css, self);
                     emit_div(html, "ie-address-bar border-style-light-1", |html| {

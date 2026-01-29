@@ -65,13 +65,13 @@ const AO3_GIT_PATH: &str = "ao3-git";
 //     }
 // }
 fn do_shit_for_res_type(resource_kind: ResouceKind, name: &str) -> String {
-    let dir_name = resource_kind.folder_name();
+    // let dir_name = resource_kind.folder_name();
     let path = Path::new(&get_resource_path(resource_kind, &name)).to_owned();
+    dbg!(&path);
+    assert!(path.exists() && path.is_file());
     let hash = (resource_kind, &path).hashed();
     let ext = path.extension().unwrap().to_owned();
-    let target_path = Path::new(AO3_GIT_PATH)
-        .join(hash.to_string())
-        .with_extension(ext);
+    let target_path = Path::new(&hash.to_string()).with_extension(ext);
     if !target_path.exists() {
         fs::copy(path, &target_path).unwrap();
         println!("created {}", target_path.to_str().unwrap());
@@ -82,10 +82,12 @@ fn do_shit_for_res_type(resource_kind: ResouceKind, name: &str) -> String {
     )
 }
 
-pub fn deploy(build_result: &BuildResult) {
+pub fn deploy(build_result: &BuildResult) -> BuildResult {
     let css = css_var_remove(&build_result.css);
-    let (html, css) = compress_html_css_for_ao3(build_result.html.clone(), css);
+    // let (html, css) = compress_html_css_for_ao3(build_result.html.clone(), css);
+    let (html, css) = (build_result.html.clone(), css);
     let res = resolve_resources(&BuildResult { html, css }, |kind, res| {
         do_shit_for_res_type(kind, res)
     });
+    res
 }

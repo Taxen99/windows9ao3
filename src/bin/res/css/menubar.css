@@ -125,7 +125,7 @@
 	width: 9px;
 	height: 9px;
 	display: block;
-	background-image: url("../res/icons/check-9.png");
+	background-image: url("@icon:check");
 	background-size: cover;
 	/* margin-right: 8px; */
 	position: absolute;

@@ -207,7 +207,7 @@ impl Dialog {
         w = w.inject_outside(&format!(
             r##"
             <div class="dialogue-ding">
-                <audio controls="controls" src="../res/audio/ding.wav">
+                <audio controls="controls" src="@audio:ding.wav">
             </div>
             "##
         ));
@@ -219,7 +219,7 @@ impl Dialog {
                 emit_div(html, "dialogue-main", |html| {
                     emit_div(html, "dialogue-upper", |html| {
                         let symbol_src = match self.symbol {
-                            DialogueSymbol::Error => "../res/icons/dialogue-err-9.png",
+                            DialogueSymbol::Error => "@icon:dialogue-err",
                         };
                         emit_img(html, "dialogue-symbol", symbol_src);
                         emit_div(html, "dialogue-view", |html| {

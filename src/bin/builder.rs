@@ -81,7 +81,9 @@ pub fn main() {
     fs::write("output/style.css", &resolved_res.css).unwrap();
     fs::write("output/index.html", &resolved_res.html).unwrap();
     if deploy {
-        deploy::deploy(&res);
+        let ao3_res = deploy::deploy(&res);
+        fs::write("output/ao3.css", &ao3_res.css).unwrap();
+        fs::write("output/ao3.html", &ao3_res.html).unwrap();
     }
     // fs::write("output/ao3.html", res.ao3_html).unwrap();
     // fs::write("output/ao3.css", res.ao3_css).unwrap();

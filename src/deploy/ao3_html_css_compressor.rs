@@ -16,6 +16,7 @@ pub fn gen_a_few_valid_single_char_class_names() -> Vec<char> {
 }
 
 pub fn compress_html_css_for_ao3(html: String, mut css: String) -> (String, String) {
+    panic!("this is broken!!");
     let doc = nipper::Document::from(&html);
     let mut class_map: HashMap<String, String> = HashMap::new();
     let mut class_names_iter = gen_a_few_valid_single_char_class_names().into_iter();

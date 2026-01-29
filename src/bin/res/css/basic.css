@@ -82,7 +82,10 @@ details summary::marker {
 
 .onload {
 	position: absolute;
-	inset: 0;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
 	z-index: 2147483647;
 	transition: z-index 10s linear 2147483640s;
 	transition-behavior: allow-discrete;

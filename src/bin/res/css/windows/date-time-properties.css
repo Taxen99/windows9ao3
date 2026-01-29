@@ -194,7 +194,7 @@
 }
 .checkbox[open]::before {
 	content: "";
-	background: url("../res/icons/check-9.png");
+	background: url("@icon:check");
 	background-size: cover;
 	position: absolute;
 	width: 9px;
@@ -216,7 +216,7 @@
 .dt-clock {
 	width: 127px;
 	height: 127px;
-	background-image: url("../res/icons/clock-background-9.png");
+	background-image: url("@icon:clock-background");
 	background-size: cover;
 	position: relative;
 }
@@ -233,7 +233,7 @@
 }
 .dt-minute-hand {
 	position: absolute;
-	background-image: url("../res/icons/clock-1-9.png");
+	background-image: url("@icon:clock-1");
 	background-size: cover;
 	width: 35%;
 	height: 30px;
@@ -246,7 +246,7 @@
 }
 .dt-hour-hand {
 	position: absolute;
-	background-image: url("../res/icons/clock-2-9.png");
+	background-image: url("@icon:clock-2");
 	background-size: cover;
 	width: 35%;
 	height: 30px;

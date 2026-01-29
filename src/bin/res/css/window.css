@@ -262,7 +262,7 @@
 	width: 9px;
 	height: 9px;
 	display: block;
-	background-image: url("../res/icons/exit-9.png");
+	background-image: url("@icon:exit");
 	background-size: cover;
 }
 
