@@ -71,14 +71,15 @@ fn do_shit_for_res_type(resource_kind: ResouceKind, name: &str) -> String {
     assert!(path.exists() && path.is_file());
     let hash = (resource_kind, &path).hashed();
     let ext = path.extension().unwrap().to_owned();
-    let target_path = Path::new(&hash.to_string()).with_extension(ext);
+    let filename = Path::new(&hash.to_string()).with_extension(ext);
+    let target_path = Path::new(AO3_GIT_PATH).join(&filename);
     if !target_path.exists() {
         fs::copy(path, &target_path).unwrap();
         println!("created {}", target_path.to_str().unwrap());
     }
     format!(
         "https://taxen99.github.io/wao3/{}",
-        target_path.to_str().unwrap()
+        filename.to_str().unwrap()
     )
 }
 

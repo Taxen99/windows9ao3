@@ -78,12 +78,34 @@ pub fn main() {
     let resolved_res = resource_resolver::resolve_resources(&res, |kind, res| {
         format!("../{}", get_resource_path(kind, res).to_str().unwrap())
     });
-    fs::write("output/style.css", &resolved_res.css).unwrap();
-    fs::write("output/index.html", &resolved_res.html).unwrap();
+    {
+        let html = format!(
+            r##"
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>Document</title>
+                <link rel="stylesheet" href="style.css">
+            </head>
+            <body>
+                {}
+            </body>
+            </html>
+            "##,
+            &resolved_res.html
+        );
+        fs::write("output/style.css", &resolved_res.css).unwrap();
+        fs::write("output/index.html", html).unwrap();
+    }
     if deploy {
         let ao3_res = deploy::deploy(&res);
         fs::write("output/ao3.css", &ao3_res.css).unwrap();
         fs::write("output/ao3.html", &ao3_res.html).unwrap();
+    } else {
+        let _ = fs::remove_file("output/ao3.css");
+        let _ = fs::remove_file("output/ao3.html");
     }
     // fs::write("output/ao3.html", res.ao3_html).unwrap();
     // fs::write("output/ao3.css", res.ao3_css).unwrap();
