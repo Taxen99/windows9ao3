@@ -109,7 +109,7 @@ TODO: currently not used, remove?
 	/* --l1: 100px; */
 	--l2: 200px;
 	--c: #00000013;
-	display: none;
+	/* display: none; */
 }
 
 .screen-tint-A {

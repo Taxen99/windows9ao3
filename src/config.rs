@@ -174,51 +174,69 @@ impl Config {
         let mut css = String::new();
         let mut html = String::new();
         css.push_str(&load_css());
-        emit_div(&mut html, "main", |html| {
-            emit_div(html, "onload", |_| ());
-            emit_div(html, "desktop", |html| {
-                if let Some(desktop) = self.fs.root.as_folder().unwrap().children.get("desktop") {
-                    let _ = desktop.as_folder().expect("desktop must be folder");
-                    self.emit_file_view_content(html, &mut css, Path::new("/desktop"), false);
-                }
-            });
-            emit_div(html, "windows-container", |html| {
-                for w in &self.apps {
-                    Window::new(w.name.hashed(), &w.name).icon(&w.icon).build(
-                        html,
-                        &mut css,
-                        &self,
-                        |html, _css| {
-                            html.push_str(&format!(
-                                r##"<div class="content-inner">
-                                    <p>{}</p>
-                                </div>"##,
-                                w.content
-                            ));
-                        },
+        emit_div(&mut html, "outer-centerer", |html| {
+            emit_div(html, "crt-outerest", |html| {
+                html.push_str(r##"<img src="@img:crt.png" class="crt-image" />"##);
+                emit_div(html, "main", |html| {
+                    emit_div(html, "screen-tints", |html| {
+                        emit_div(html, "screen-tint-A", |html| {});
+                        emit_div(html, "screen-tint-B", |html| {});
+                        emit_div(html, "screen-tint-C", |html| {});
+                        emit_div(html, "screen-tint-D", |html| {});
+                    });
+                    emit_div(html, "onload", |_| ());
+                    emit_div(html, "desktop", |html| {
+                        if let Some(desktop) =
+                            self.fs.root.as_folder().unwrap().children.get("desktop")
+                        {
+                            let _ = desktop.as_folder().expect("desktop must be folder");
+                            self.emit_file_view_content(
+                                html,
+                                &mut css,
+                                Path::new("/desktop"),
+                                false,
+                            );
+                        }
+                    });
+                    emit_div(html, "windows-container", |html| {
+                        for w in &self.apps {
+                            Window::new(w.name.hashed(), &w.name).icon(&w.icon).build(
+                                html,
+                                &mut css,
+                                &self,
+                                |html, _css| {
+                                    html.push_str(&format!(
+                                        r##"<div class="content-inner">
+                                            <p>{}</p>
+                                        </div>"##,
+                                        w.content
+                                    ));
+                                },
+                            );
+                        }
+                        self.emit_fe_window(html, &mut css);
+                        self.emit_np_window(html, &mut css);
+                        self.emit_qv_window(html, &mut css);
+                        self.emit_ie_window(html, &mut css);
+                        self.emit_dt_window(html, &mut css);
+                    });
+                    self.emit_taskbar(html, &mut css);
+                    self.add_dialog(
+                        Dialog::new(
+                            "action-dialog".hashed(),
+                            "About",
+                            DialogueSymbol::Error,
+                            DialogueKind::Ok,
+                            "Error: Could not locate Application Info.",
+                        )
+                        .trigger(&format!(".mb-submenu-item-{}:active", "about".hashed())),
                     );
-                }
-                self.emit_fe_window(html, &mut css);
-                self.emit_np_window(html, &mut css);
-                self.emit_qv_window(html, &mut css);
-                self.emit_ie_window(html, &mut css);
-                self.emit_dt_window(html, &mut css);
+                    let dialogs_cloned = { self.state.borrow().dialogs_to_be_added.clone() };
+                    for dialog in dialogs_cloned {
+                        dialog.build(html, &mut css, &self);
+                    }
+                });
             });
-            self.emit_taskbar(html, &mut css);
-            self.add_dialog(
-                Dialog::new(
-                    "action-dialog".hashed(),
-                    "About",
-                    DialogueSymbol::Error,
-                    DialogueKind::Ok,
-                    "Error: Could not locate Application Info.",
-                )
-                .trigger(&format!(".mb-submenu-item-{}:active", "about".hashed())),
-            );
-            let dialogs_cloned = { self.state.borrow().dialogs_to_be_added.clone() };
-            for dialog in dialogs_cloned {
-                dialog.build(html, &mut css, &self);
-            }
         });
         self.emit_mover_anchor_css(&mut css);
         self.emit_action(

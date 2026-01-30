@@ -9,10 +9,28 @@
 	padding: 0;
 }
 
-.main {
+.outer-centerer {
+	width: 100%;
+	display: flex;
+	justify-content: center;
+}
+
+.crt-outerest {
 	position: relative;
-	width: 100vw;
-	height: 100vh;
+}
+
+.crt-image {
+	height: 800px;
+	width: 1000px;
+	display: block;
+}
+
+.main {
+	top: 89px;
+	left: 104px;
+	width: 806px;
+	height: 590px;
+	position: absolute;
 	overflow: hidden;
 	user-select: none;
 	font: medium sans-serif;
