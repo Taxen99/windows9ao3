@@ -1435,11 +1435,12 @@ impl Config {
                 }
                 Action::OpenDialog(id) => {
                     // we can ommit a bunch of stuff here since dialogs are special. also we want to open it in the center!
+                    // TODO: what if we change .main size? this should be computed!
                     css.push_str(&format!(
                         r##"
                         .main:has({0}) .window-{1}.window.window {{
-                            top: 50vh;
-                            left: 50vw;
+                            top: 295px;
+                            left: 403px;
                         }}
                         "##,
                         condition, id,
