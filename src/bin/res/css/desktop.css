@@ -6,19 +6,14 @@ desktop!!!
 	position: absolute;
 	width: 100%;
 	height: 100%;
-	/* TODO: remove? */
 	background: radial-gradient(#008080, #006060 90%);
-	/* background: #008080; */
 }
 
 .desktop-item {
-	/* border: 1px dotted black; */
 	width: 54px;
 	height: 64px;
 	display: flex;
-	/* justify-content: center; */
 	align-items: center;
-	/* flex-wrap: wrap; */
 	flex-direction: column;
 	padding: 2px;
 	position: absolute;

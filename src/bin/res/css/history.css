@@ -7,7 +7,6 @@
 	width: 100%;
 	height: 100%; */
 	z-index: 2147483645;
-	/* --max-items: 1000; */
 }
 
 .history-items {
@@ -145,22 +144,3 @@
 	top: 0px;
 	left: -100.1vw;
 }
-
-/* .cur {
-	transition: 10s linear 2147483640s;
-	left: -100000px;
-	position: absolute;
-}
-.cur.cur-default {
-	transition: 10s linear 2147483640s;
-	left: 0.01px;
-	position: absolute;
-}
-.history:has(.history-none-back:hover) .cur-default {
-	transition: 0s;
-	left: 0px;
-}
-.history:has(.history-none-back:hover) .cur:not(.cur-default) {
-	transition: 0s;
-	left: -100000.01px;
-} */

@@ -6,8 +6,6 @@
 	border-top: none !important;
 }
 
-/* .ie-address-bar p:nth-child(1) {} */
-
 .ie-address-bar p:nth-child(2) {
 	background-color: white;
 	flex-grow: 1;
@@ -55,13 +53,6 @@
 	min-height: 100%;
 	background-color: white;
 }
-/* .ie-page-cover {
-	z-index: 1;
-	position: absolute;
-	min-width: 100%;
-	min-height: 100%;
-	background-color: white;
-} */
 
 .history-toolbar-container {
 	position: relative;
@@ -81,7 +72,7 @@
 	left: 0;
 }
 .history-back, .history-forward {
-	/* this is -2 because transitions because FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU*/
+	/* this is -2 because transitions because FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU FUCK YOU */
 	z-index: -2;
 	transition: z-index 10s linear 2147483640s;
 	transition-behavior: allow-discrete;

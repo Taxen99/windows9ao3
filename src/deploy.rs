@@ -1,9 +1,4 @@
-use std::{
-    collections::HashMap,
-    fs,
-    hash::{DefaultHasher, Hash, Hasher},
-    path::Path,
-};
+use std::{fs, path::Path};
 
 use crate::{
     config::{BuildResult, HashedExt},
@@ -16,56 +11,7 @@ mod css_var_remove;
 
 const AO3_GIT_PATH: &str = "ao3-git";
 
-// fn do_shit_for_res_type(
-//     resource_kind: ResouceKind,
-//     map: &mut HashMap<(ResouceKind, String), String>,
-// ) {
-//     let dir_name = resource_kind.folder_name();
-//     for entry in Path::new("res").join(dir_name).read_dir().unwrap() {
-//         let entry = entry.unwrap();
-//         if entry.file_type().unwrap().is_file() {
-//             // let name = match resource_kind {
-//             //     ResouceKind::Icon => {
-//             //         let name = entry
-//             //             .path()
-//             //             .with_extension("")
-//             //             .file_name()
-//             //             .unwrap()
-//             //             .to_str()
-//             //             .unwrap()
-//             //             .to_owned();
-//             //         if name.ends_with("-9") {
-//             //             continue;
-//             //         }
-//             //         name
-//             //     }
-//             //     ResouceKind::Audio => entry
-//             //         .path()
-//             //         .with_extension("")
-//             //         .file_name()
-//             //         .unwrap()
-//             //         .to_str()
-//             //         .unwrap()
-//             //         .to_owned(),
-//             // };
-//             let hash = (resource_kind, entry.path()).hashed();
-//             let ext = entry.path().extension().unwrap().to_owned();
-//             let target_path = Path::new(AO3_GIT_PATH)
-//                 .join(hash.to_string())
-//                 .with_extension(ext);
-//             if !target_path.exists() {
-//                 fs::copy(entry.path(), &target_path).unwrap();
-//                 println!("created {}", target_path.to_str().unwrap());
-//             }
-//             map.insert(
-//                 (resource_kind, name),
-//                 target_path.to_str().unwrap().to_owned(),
-//             );
-//         }
-//     }
-// }
 fn do_shit_for_res_type(resource_kind: ResouceKind, name: &str) -> String {
-    // let dir_name = resource_kind.folder_name();
     let path = Path::new(&get_resource_path(resource_kind, &name)).to_owned();
     dbg!(&path);
     assert!(path.exists() && path.is_file());

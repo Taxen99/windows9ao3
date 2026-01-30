@@ -1,5 +1,4 @@
 use std::{
-    env::args,
     fs,
     path::{Path, PathBuf},
 };

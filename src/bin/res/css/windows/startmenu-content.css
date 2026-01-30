@@ -24,12 +24,9 @@
 }
 
 .smc-item {
-	/* width: 150px; */
 	height: 32px;
 	display: flex;
 	align-items: center;
-	/* justify-content: center; */
-	/* font-size: 11px; */
 }
 
 /* .smc-item:not(:hover),

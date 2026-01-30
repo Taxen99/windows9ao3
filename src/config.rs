@@ -9,7 +9,6 @@ use enum_as_inner::EnumAsInner;
 use rand::Rng;
 use serde::{Deserialize, Serialize};
 
-// use crate::ao3_html_css_compressor;
 use crate::config::history::{History, HistoryItem};
 use crate::config::internet_explorer::read_sites;
 use crate::config::menubar_builder::MenubarBuilder;
@@ -17,7 +16,6 @@ use crate::config::startmenu_content::StartmenuContent;
 use crate::config::toolbar_builder::ToolbarBuilder;
 use crate::config::vertical_select::emit_vertical_select;
 use crate::config::window::{Dialog, DialogueKind, DialogueSymbol, Window};
-// use crate::css_var_remove::css_var_remove;
 
 mod history;
 mod internet_explorer;
@@ -44,7 +42,7 @@ pub struct FileSystem {
 
 impl FileSystem {
     pub fn visit_all_files(&self, mut func: impl FnMut(&File, &Path)) {
-        fn visit(f: &FsEntry, p: &Path, mut cb: &mut dyn FnMut(&File, &Path)) {
+        fn visit(f: &FsEntry, p: &Path, cb: &mut dyn FnMut(&File, &Path)) {
             match f {
                 FsEntry::File(file) => cb(file, p),
                 FsEntry::Folder(folder) => {
@@ -59,7 +57,7 @@ impl FileSystem {
         visit(&self.root, Path::new("/"), &mut func);
     }
     pub fn visit_all_folders(&self, mut func: impl FnMut(&Folder, &Path)) {
-        fn visit(f: &FsEntry, p: &Path, mut cb: &mut dyn FnMut(&Folder, &Path)) {
+        fn visit(f: &FsEntry, p: &Path, cb: &mut dyn FnMut(&Folder, &Path)) {
             match f {
                 FsEntry::File(_) => (),
                 FsEntry::Folder(folder) => {
@@ -161,40 +159,7 @@ where
 pub struct BuildResult {
     pub html: String,
     pub css: String,
-    // pub ao3_html: String,
-    // pub ao3_css: String,
 }
-// impl BuildResult {
-//     fn from_html_css(html_in: String, css_in: String) -> BuildResult {
-//         let html = format!(
-//             r##"
-//             <!DOCTYPE html>
-//             <html lang="en">
-//             <head>
-//                 <meta charset="UTF-8">
-//                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-//                 <title>Document</title>
-//                 <link rel="stylesheet" href="style.css">
-//             </head>
-//             <body>
-//                 {html_in}
-//             </body>
-//             </html>
-//             "##
-//         );
-//         let ao3_html = html_in;
-//         let css = css_in;
-//         let ao3_css = css_var_remove(&css);
-//         // let (ao3_html, ao3_css) =
-//         //     ao3_html_css_compressor::compress_html_css_for_ao3(ao3_html, ao3_css);
-//         Self {
-//             html,
-//             css,
-//             ao3_html,
-//             ao3_css,
-//         }
-//     }
-// }
 
 impl Config {
     const FILE_EXPLORER_ID: u64 = 1;
@@ -203,8 +168,6 @@ impl Config {
     const QUICK_LAUNCH_SUPPORTED_APPS: &[u64] =
         &[Self::FILE_EXPLORER_ID, Self::INTERNET_EXPLORER_ID];
     const INITIAL_TIME: (u32, u32) = (06, 34);
-    // const NOTEPAD_ID: u64 = 2;
-    // const NOTEPAD_FONT_ID: u64 = 3;
     pub fn build(mut self, opt: BuildOptions) -> BuildResult {
         self.app_apps_to_desktop();
 
@@ -225,7 +188,7 @@ impl Config {
                         html,
                         &mut css,
                         &self,
-                        |html, css| {
+                        |html, _css| {
                             html.push_str(&format!(
                                 r##"<div class="content-inner">
                                     <p>{}</p>
@@ -268,7 +231,6 @@ impl Config {
         }
         // NOTE: this must be last
         self.emit_actions_for_real(&mut html, &mut css);
-        // BuildResult::from_html_css(html, css)
         BuildResult { html, css }
     }
     fn add_dialog(&self, dialog: Dialog) {
@@ -485,19 +447,10 @@ impl Config {
                 emit_div(html, "tb-right-button border-style-light-2", |html| {
                     html.push_str(r##"<img src="@icon:taskbar-right-combined" />"##);
                     emit_div(html, "date-time-opener", |html| {
-                        emit_div(html, "time-hour", |html| {
-                            // for i in 0..24 {
-                            //     emit_p(html, &format!("time-hour-{}", i), &format!("{:2}", i));
-                            // }
-                        });
+                        emit_div(html, "time-hour", |_| {});
                         emit_p(html, "", ":");
-                        emit_div(html, "time-minute", |html| {
-                            // for i in 0..60 {
-                            //     emit_p(html, &format!("time-minute-{}", i), &format!("{:2}", i));
-                            // }
-                        });
+                        emit_div(html, "time-minute", |_| {});
                     });
-                    // emit_p(html, "date-time-opener", "10:12");
                 });
                 self.emit_action(
                     css,
@@ -505,7 +458,6 @@ impl Config {
                     ".date-time-opener:active",
                 );
             });
-            //
         });
     }
     fn emit_fe_window(&self, html: &mut String, css: &mut String) {
@@ -660,11 +612,6 @@ impl Config {
                                             }
                                         }
                                     });
-                                    // css.push_str(&format!(r##"
-                                    // .fe-svv-child-{}::before {{
-                                    //     height: {}px;
-                                    // }}
-                                    // "##, folder_hash, 14 * sub_folder_count - 3));
                                     dbg!(folder.children.len(), path);
                                 }
                                 emit_folder(html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"), self);
@@ -872,12 +819,8 @@ impl Config {
                             })
                             .build(html, css, self);
                     });
-                    //
                     emit_div(html, "window-main window-main-nopadtop", |html| {
                         emit_div(html, "np-main", |html| {
-                            // emit_div(html, "fe-view-anchor", |html| {
-                            //     fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
-                            //         let folder_hash = path.hashed();
                             emit_div(html, &format!("np-view border-style-dark-1"), |html| {
                                 let path = Path::new("./res").join(&file.link);
                                 let content = fs::read_to_string(&path).expect(&format!(
@@ -891,19 +834,7 @@ impl Config {
                                     "##,
                                     content.replace("<", "&lt;").replace(">", "&gt;")
                                 ));
-                                // config.emit_file_view_content(html, css, &path, true);
                             });
-                            // for (name, entry) in &folder.children {
-                            //     if let FsEntry::Folder(sub_folder) = &entry {
-                            //         let mut sub_path = path.clone();
-                            //         sub_path.push(name);
-                            //         emit_folder(config, html, css, sub_folder, sub_path);
-                            //     }
-                            // }
-                            //         }
-                            //         emit_folder(self, html, css, &self.fs.root.as_folder().unwrap(), PathBuf::from("/"));
-                            //     });
-                            // });
                         })
                     });
                 });
@@ -925,12 +856,12 @@ impl Config {
                                 });
                                 emit_div(html, "npf-style npf-upper-sub", |html| {
                                     emit_p(html, "", "Font style:");
-                                    // NOTE: must change in notepad-font.css as well
+                                    // NOTE: must change in notepad-font.css as well. (does this still apply?)
                                     emit_vertical_select(self, html, css, &styles, default_style);
                                 });
                                 emit_div(html, "npf-size npf-upper-sub", |html| {
                                     emit_p(html, "", "Size:");
-                                    // NOTE: must change in notepad-font.css as well
+                                    // NOTE: must change in notepad-font.css as well. (does this still apply?)
                                     emit_vertical_select(self, html, css, &sizes, default_size);
                                 });
                                 emit_div(html, "npf-confirm", |html| {
@@ -958,7 +889,6 @@ impl Config {
                                         },
                                     );
                                 });
-                                // emit_div(html, "npf-script", |html| {});
                             });
                         });
                     });
@@ -976,16 +906,6 @@ impl Config {
                 .icon("https://win98icons.alexmeub.com/icons/png/magnifying_glass-0.png")
                 .build(html, css, self, |html, css| {
                     emit_div(html, "window-header", |html| {
-                        // let word_wrap_toggle_id = 8336941761795208;
-                        // css.push_str(&format!(
-                        //     r##"
-                        //     .window-{}:has(.mb-submenu-item-{}[open]) .np-view {{
-                        //         white-space: pre-wrap;
-                        //         word-break: break-all;
-                        //     }}
-                        // "##,
-                        //     id, word_wrap_toggle_id
-                        // ));
                         MenubarBuilder::new()
                             .short(true)
                             .item("File", |item| {
@@ -1014,14 +934,9 @@ impl Config {
                             })
                             .build(html, css, self);
                     });
-                    //
                     emit_div(html, "window-main window-main-nopadtop", |html| {
                         emit_div(html, "qv-main", |html| {
-                            // emit_div(html, "fe-view-anchor", |html| {
-                            //     fn emit_folder(config: &Config, html: &mut String, css: &mut String, folder: &Folder, path: PathBuf) {
-                            //         let folder_hash = path.hashed();
                             emit_div(html, &format!("qv-view border-style-dark-1"), |html| {
-                                // let path = Path::new("./res").join(&file.link);
                                 let res_name = file.link.strip_prefix("img/").unwrap();
                                 // let _ = path
                                 //     .metadata()
@@ -1042,7 +957,6 @@ impl Config {
     fn emit_ie_window(&self, html: &mut String, css: &mut String) {
         let home_domain = "foo.bar";
         let sites = read_sites();
-        // let home_page = &sites[home_domain].pages[""];
         let mut history_items = Vec::new();
         for (_, site) in &sites {
             for (path, _page) in &site.pages {
@@ -1068,12 +982,6 @@ impl Config {
                 });
             }
         }
-        // for i in 0..25 {
-        //     history_items.push(HistoryItem {
-        //         id: i + 1,
-        //         rule: format!(""),
-        //     });
-        // }
         let default_id = format!("{}-{}", home_domain, "").hashed();
         let history = History::new(history_items, default_id);
         history.emit_stack(html, css, self);
@@ -1255,9 +1163,9 @@ impl Config {
                                         });
                                         emit_div(html, "dt-calendar-body", |html| {
                                             let mut count = -2;
-                                            for row in 0..5 {
+                                            for _row in 0..5 {
                                                 emit_div(html, "dt-calendar-row", |html| {
-                                                    for col in 0..7 {
+                                                    for _col in 0..7 {
                                                         if count > 0 && count <= 30 {
                                                             emit_p(html, "", &format!("{count}"));
                                                         } else {
@@ -1268,7 +1176,6 @@ impl Config {
                                                 });
                                             }
                                         });
-                                        //
                                     });
                                 });
                                 emit_div(html, "dt-time border-style-light-1", |html| {
@@ -1276,7 +1183,6 @@ impl Config {
                                         emit_div(html, "dt-second-hand", |_| {});
                                         emit_div(html, "dt-minute-hand", |_| {});
                                         emit_div(html, "dt-hour-hand", |_| {});
-                                        //
                                     });
                                     emit_div(html, "dt-time-display border-style-dark-1", |html| {
                                         emit_div(html, "time-hour", |_| {});
@@ -1292,9 +1198,6 @@ impl Config {
                                     "(GMT+01:00) Amsterdam, Berlin, Bern, Rome, Stockholm, Vienna",
                                 );
                                 emit_div(html, "dt-timezone-bottom", |html| {
-                                    // emit_div(html, "checkbox border-style-dark-1", |html| {
-                                    //     //
-                                    // });
                                     html.push_str(r##"<details class="checkbox border-style-dark-1 dt-timezone-checkbox"><summary></summary></details>"##);
                                     emit_p(
                                         html,
@@ -1335,21 +1238,14 @@ impl Config {
         &self,
         html: &mut String,
         css: &mut String,
-        // id: u64,
-        // folder: &Folder,
         path: &path::Path,
         is_in_explorer: bool,
-        // mut cb: impl FnMut(&mut String, &mut String),
     ) {
-        // dbg!(path);
         let folder = self.fs_entry(path).unwrap().as_folder().unwrap();
         for (i, (name, entry)) in folder.children.iter().enumerate() {
-            // dbg!(name);
             let mut entry_path = path.to_owned();
             entry_path.push(name);
             let unique_hash: u64 = rand::rng().random();
-            // let unique_hash =
-            //     format!("{}___{}", entry_path.to_str().unwrap(), some_random_numer).hashed();
             let mut offset = entry.offset().unwrap_or_default();
             if is_in_explorer {
                 let cols = 5;
@@ -1450,26 +1346,9 @@ impl Config {
             }
             _ => (),
         }
-        // css.push_str(&format!(
-        //     r##"
-        //     .main:has({0}) .action-trigger-{1} {{
-        //         transition: 0s;
-        //         width: 100vw;
-        //     }}
-        //     "##,
-        //     condition,
-        //     action.hashed(),
-        // ));
     }
-    fn emit_actions_for_real(&self, html: &mut String, css: &mut String) {
+    fn emit_actions_for_real(&self, _html: &mut String, css: &mut String) {
         for (action, conditions) in self.state.borrow().actions_to_be_added.iter() {
-            // let hash = action.hashed();
-            // emit_div(
-            //     html,
-            //     &format!("action-trigger action-trigger-{0}", hash),
-            //     |_| (),
-            // );
-            // let condition = format!("action-trigger-{0}:hover", hash);
             let condition = {
                 let mut condition = String::new();
                 for c in conditions {
@@ -1583,8 +1462,6 @@ impl Config {
                     ));
                 }
                 Action::OpenFileExplorer(id) => {
-                    // TODO: for now we don't do this, as to not preemtively complicate design.
-                    // self.emit_action(css, Action::Open(Self::FILE_EXPLORER_ID), condition);
                     css.push_str(&format!(
                         r##"
                         .main:has({0}) .fe-view-{1} {{
@@ -1611,7 +1488,8 @@ impl Config {
                         condition, id
                     ));
                 }
-                Action::OpenNotepad(id) => {
+                // TODO: remove this?
+                Action::OpenNotepad(_id) => {
                     // self.emit_action(css, Action::Open(Self::NOTEPAD_ID), condition);
                     todo!();
                 }
@@ -1672,7 +1550,7 @@ impl Config {
             FsEntry::Folder(folder) => self.icon_of_folder(folder),
         }
     }
-    fn icon_of_folder(&self, file: &Folder) -> String {
+    fn icon_of_folder(&self, _file: &Folder) -> String {
         // TODO: what if this resource disappears?
         "https://win98icons.alexmeub.com/icons/png/directory_closed-4.png".to_owned()
     }

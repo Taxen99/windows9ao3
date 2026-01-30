@@ -1,6 +1,4 @@
-use rand::Rng;
-
-use crate::config::{Action, Config, emit_div};
+use crate::config::{Config, emit_div};
 
 pub struct StartmenuContent {
     groups: Vec<StartmenuGroup>,
@@ -19,21 +17,11 @@ impl StartmenuContent {
         self
     }
 
-    pub fn build(&self, html: &mut String, css: &mut String, config: &Config) {
+    pub fn build(&self, html: &mut String, _css: &mut String, _config: &Config) {
         emit_div(html, "smc", |html| {
             for groupp in &self.groups {
                 emit_div(html, "smc-group", |html| {
                     for item in groupp.items.iter() {
-                        // let mut classlist = String::from("mb-submenu-item");
-                        // if sub_item.disabled {
-                        //     classlist.push_str(" mb-disabled");
-                        // }
-                        // if let Some(id) = sub_item.id {
-                        //     classlist.push_str(&format!(" mb-submenu-item-{}", id));
-                        // }
-                        // let id = sub_item.id.unwrap_or_else(|| rand::rng().random());
-                        // let id_class = format!("mb-submenu-item-{}", id);
-                        // classlist.push_str(&format!(" {id_class}"));
                         match item {
                             StartmenuItem::Normal(item) => {
                                 emit_div(html, "smc-item-outer", |html| {
@@ -46,12 +34,10 @@ impl StartmenuContent {
                                             item.icon, item.name
                                         ));
                                     });
-                                    // emit_div(html, "smc-item smc-single-click", |_| {});
                                 });
-                            }
-                            StartmenuItem::Html(item) => {
-                                html.push_str(&item.html);
-                            }
+                            } // StartmenuItem::Html(item) => {
+                              //     html.push_str(&item.html);
+                              // }
                         }
                     }
                 });
@@ -72,17 +58,17 @@ impl StartmenuGroup {
         self.items.push(StartmenuItem::new(name, icon, class));
         self
     }
-    pub fn item_html(&mut self, mut func: impl FnMut(&mut String)) -> &mut Self {
-        let mut html = String::new();
-        func(&mut html);
-        self.items.push(StartmenuItem::new_html(html));
-        self
-    }
+    // pub fn item_html(&mut self, mut func: impl FnMut(&mut String)) -> &mut Self {
+    //     let mut html = String::new();
+    //     func(&mut html);
+    //     self.items.push(StartmenuItem::new_html(html));
+    //     self
+    // }
 }
 
 pub enum StartmenuItem {
     Normal(StartmenuItemNormal),
-    Html(StartmenuItemHtml),
+    // Html(StartmenuItemHtml),
 }
 
 pub struct StartmenuItemNormal {
@@ -90,9 +76,9 @@ pub struct StartmenuItemNormal {
     class: String,
     icon: String,
 }
-pub struct StartmenuItemHtml {
-    html: String,
-}
+// pub struct StartmenuItemHtml {
+//     html: String,
+// }
 
 impl StartmenuItem {
     fn new(name: &str, icon: &str, class: &str) -> Self {
@@ -102,7 +88,7 @@ impl StartmenuItem {
             class: class.into(),
         })
     }
-    fn new_html(html: String) -> Self {
-        Self::Html(StartmenuItemHtml { html: html })
-    }
+    // fn new_html(html: String) -> Self {
+    //     Self::Html(StartmenuItemHtml { html: html })
+    // }
 }

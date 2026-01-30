@@ -1,14 +1,9 @@
-use std::{
-    collections::HashMap,
-    env::{self, args},
-    fs,
-    path::Path,
-};
+use std::{collections::HashMap, env, fs};
 
 use arcthing::{
     config::{BuildOptions, Config},
     deploy,
-    resource_resolver::{self, ResouceKind, get_resource_path},
+    resource_resolver::{self, get_resource_path},
 };
 
 // struct Arg {

@@ -1,17 +1,11 @@
 use crate::config::{Config, emit_div, emit_p};
 
-pub struct VerticalSelectorItem {
-    // css_sel: String,
-    apply_css_rules: Vec<String>,
-}
-
 pub fn emit_vertical_select(
-    config: &Config,
+    _config: &Config,
     html: &mut String,
-    css: &mut String,
+    _css: &mut String,
     opts: &[&str],
     default: &str,
-    // lookup: impl Fn(usize, &str) -> VerticalSelectorItem,
 ) {
     assert!(opts.contains(&default));
     emit_div(html, "vertical-select", |html| {

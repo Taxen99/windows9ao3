@@ -6,8 +6,6 @@
 	border-top: none !important;
 }
 
-/* .fe-address-bar p:nth-child(1) {} */
-
 .fe-addrb-anchor {
 	background-color: white;
 	flex-grow: 1;
@@ -26,7 +24,6 @@
 	position: absolute;
 	width: 100%;
 	background-color: white;
-	/* justify-content: flex-end; */
 
 	white-space: nowrap;
 	overflow: scroll;
@@ -39,7 +36,6 @@
 	display: block;
 	width: 16px;
 	height: 16px;
-	/* background-size: cover; */
 	margin-right: 5px;
 }
 
@@ -52,11 +48,9 @@
 .fe-view-anchor {
 	position: relative;
 	flex-grow: 1;
-	/* display: flex; */
 }
 
 .fe-view {
-	/* TODO: remove if favor of transforms? */
 	position: absolute;
 	width: 100%;
 	height: 100%;
@@ -90,7 +84,6 @@
 	position: relative;
 	min-width: 100px;
 	max-width: 80%;
-	/* height: 100%; */
 }
 
 .fe-sideview-resizer-parent {
@@ -148,7 +141,6 @@
 	background-color: white;
 	flex-grow: 1;
 	z-index: 0;
-	/* padding-left: 20px; */
 }
 
 .fe-sideview-view > .fe-svv-child {
@@ -156,7 +148,6 @@
 }
 
 .fe-svv-child {
-	/* border-left: 1px dotted black; */
 	padding-left: 0px;
 	position: relative;
 	left: 16px;
@@ -204,16 +195,13 @@
 	background-size: cover;
 	width: 14px;
 	height: 14px;
-	/* z-index: 1; */
 	margin-right: 5px;
 	display: block;
-	/* opacity: 0.2; */
 }
 
 .fe-svvi-group {
 	display: flex;
 	align-items: center;
-	/* z-index: 0; */
 }
 
 .fe-svv-expandable .fe-svvi-expander {
@@ -230,11 +218,8 @@
 	height: 9px;
 	border: 1px solid rgb(170, 170, 170);
 	background-color: white;
-	/* background-color: white; */
 	position: absolute;
 	transform: translate(-4px, -5px);
-	/* z-index: 0; */
-	/* left: -5px; */
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -271,9 +256,6 @@
 	height: 10px;
 	border-top: 1px dotted rgb(170, 170, 170);
 	transform: translate(-1px, 4px);
-	/* transform: translate(-1px, -4px); */
-	/* z-index: -10000; */
-	/* left: -5px; */
 }
 
 .fe-sideview-view {
@@ -292,12 +274,10 @@
 	background: #C0C0C0;
 }
 
-/* Handle */
 .fe-sideview-view::-webkit-scrollbar-thumb {
 	background: #888;
 }
 
-/* Handle on hover */
 .fe-sideview-view::-webkit-scrollbar-thumb:hover {
 	background: #555;
 }

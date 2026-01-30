@@ -64,7 +64,6 @@
 	width: 1000px;
 	height: 1000px;
 	background: teal;
-	/* display: none; */
 }
 
 .mover-hand-S {
@@ -91,58 +90,46 @@
 .mover-hand-Q,
 .mover-hand-W,
 .mover-hand-E {
-	/* bottom: 66%; */
 	bottom: 150%;
 }
 
 .mover-hand-A,
 .mover-hand-D {
-	/* bottom: 33%; */
 	top: -50%;
 }
 
 .mover-hand-Z,
 .mover-hand-X,
 .mover-hand-C {
-	/* top: 66%; */
 	top: 150%;
 }
 
 .mover-hand-Q,
 .mover-hand-A,
 .mover-hand-Z {
-	/* right: 66%; */
 	right: 150%;
 }
 
 .mover-hand-W,
 .mover-hand-X {
-	/* right: 33%; */
 	left: -50%;
 }
 
 .mover-hand-E,
 .mover-hand-D,
 .mover-hand-C {
-	/* left: 66%; */
 	left: 150%;
 }
 
 .mover {
 	--width: 16px;
-	/* --width3: calc(var(--width) / 3); */
 
 	width: var(--width);
 	height: var(--width);
-	/* border: 1px solid blue; */
 	position: absolute;
 	margin: 1px;
 	display: none;
 	z-index: 10000;
-	/* display: flex;
-	flex-wrap: wrap;
-	align-content: flex-start; */
-	/* border-right: 1px solid black; */
 }
 
 .mover-anchors {
@@ -219,10 +206,8 @@
 	display: flex;
 	column-gap: 3px;
 	align-items: center;
-	/* idk man css is weird*/
 	min-height: 18px;
 	height: 18px;
-	/* */
 	position: relative;
 	z-index: 999;
 }
@@ -296,8 +281,6 @@
 	position: absolute;
 	display: flex;
 	flex-direction: column;
-	/* width: 500px;
-	height: 400px; */
 	left: 0;
 	top: 0;
 	right: -500px;

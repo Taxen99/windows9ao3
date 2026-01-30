@@ -1,11 +1,8 @@
 .menubar {
 	padding: 1px;
-	/* padding-left: 10px; */
 	display: flex;
-	/* column-gap: 10px; */
 	height: 24px;
 	align-items: center;
-	/* position: relative; */
 }
 
 .menubar.menubar-short {
@@ -19,7 +16,6 @@
 .menubar-item {
 	border: 1px inset transparent;
 	position: relative;
-	/* overflow: hidden; */
 }
 
 .menubar-item:hover {
@@ -31,7 +27,7 @@
 	display: block;
 }
 
-/* this comma is fine for ao3 bs*/
+/* this comma is fine for ao3 bs */
 .mb-submenu:has(.mb-submenu-item:not(.mb-disabled, details):active) {
 	display: none;
 }
@@ -43,10 +39,8 @@
 	height: 110%;
 	/* background-color: #00007B; */
 	left: 0px;
-	/* top: 0px; */
 	top: -2000px;
 	transition: top 10s linear 2147483640s;
-	/* transition-behavior: allow-discrete; */
 }
 
 .menubar:has(.menubar-item:active) .menubar-item-state {
@@ -79,12 +73,6 @@
 	min-width: 120px;
 	transform: translate(-8px, 2px);
 	padding: 1px;
-}
-
-.mb-submenu-item {
-
-	/* display: flex;
-	align-items: center; */
 }
 
 .mb-submenu-item p {
@@ -127,7 +115,6 @@
 	display: block;
 	background-image: url("@icon:check");
 	background-size: cover;
-	/* margin-right: 8px; */
 	position: absolute;
 	transform: translate(5px, 3px);
 }

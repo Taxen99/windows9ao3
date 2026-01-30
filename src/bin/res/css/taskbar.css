@@ -23,16 +23,10 @@
 	display: flex;
 	align-items: center;
 	justify-content: center;
-	/* margin-bottom: 3px; */
 	font-size: 12px;
 	font-weight: bold;
-	/* z-index: 2147483647; */
-	/* transition-behavior: allow-discrete; */
 }
 
-.tb-start-button.tb-start-button-unactive {
-	/* z-index: 0; */
-}
 .tb-start-button.tb-start-button-active {
 	position: relative;
 	transition: top 10s linear 2147483640s;
@@ -104,7 +98,6 @@
 	/* background-color: red; */
 	flex-grow: 1;
 	font-weight: 100;
-	/* padding: 2px; */
 }
 
 .tb-item {
@@ -200,8 +193,6 @@
 }
 
 .tb-apps {
-	/**/
-	/* flex-grow: 1; */
 	flex: 1;
 	min-width: 0;
 }

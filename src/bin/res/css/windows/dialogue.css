@@ -1,8 +1,6 @@
-/* i am not british but i do think that 'dialogue' looks cooler than 'dialog'. at least when writing css???? */
+/* don't ask me why I spell it 'dialogue' instead of 'dialog' here... */
 
 .dialogue .window-inner {
-	/* right: -296px; */
-	/* bottom: -118px; */
 	right: unset;
 	bottom: unset;
 	min-width: 296px;
@@ -19,7 +17,6 @@
 .dialogue-upper {
 	margin-bottom: 17px;
 	display: flex;
-	/* justify-content: center; */
 	align-items: center;
 }
 .dialogue-symbol {
@@ -70,7 +67,7 @@
 	opacity: 0;
 }
 
-/* NOTE: this is hot, webkit-specific, garbage! but since we're not supporting firefox or god forbid safari anyways, it doesn't matter! */
+/* NOTE: this is hot, webkit(probably chromium)-specific, garbage! but since we're not supporting firefox or god forbid safari anyways, it doesn't matter! */
 .dialogue-ding audio::-webkit-media-controls-play-button {
 	transform: scale(1000000) !important;
 	z-index: 1000 !important;

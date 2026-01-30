@@ -1,9 +1,6 @@
 .npf-main {
 	display: flex;
 	flex-grow: 1;
-	/* height: 0px; */
-	/* ??????? */
-	/* column-gap: 2px; */
 	position: relative;
 	padding: 8px;
 	flex-direction: column;
@@ -47,8 +44,6 @@
 	background-size: cover;
 	width: 12px;
 	height: 12px;
-	/* position: absolute; */
-	/* transform: translate(-16px, 0px); */
 }
 
 .npf-font {
@@ -112,7 +107,3 @@
 	font-weight: 101;
 	font-size: 12.01px;
 }
-
-/* .asdjsaoa {
-	font-family:'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-} */

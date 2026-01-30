@@ -17,8 +17,6 @@
 	user-select: none;
 	font: medium sans-serif;
 	--window-background: #C0C0C0;
-	/* font-family: Arial, Helvetica, sans-serif; */
-	/* filter: url("filter.svg#vignette"); */
 }
 
 .border-style-light-1 {
@@ -48,7 +46,6 @@
 .border-style-dark-2 {
 	border: 2px;
 	--border-c1_bb: rgb(238, 238, 238);
-	/* --border-c2_bb: rgb(170, 170, 170); */
 	--border-c2_bb: rgb(97, 97, 97);
 	border-color: var(--border-c1_bb) var(--border-c2_bb) var(--border-c2_bb) var(--border-c1_bb);
 	border-style: ridge groove groove ridge;
