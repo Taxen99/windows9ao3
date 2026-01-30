@@ -946,7 +946,7 @@ impl Config {
                                         <img src="{}" />
                                     "##,
                                     // TODO: fix!
-                                    &format!("img:{}", res_name),
+                                    &format!("@img:{}", res_name),
                                 ));
                             });
                         })

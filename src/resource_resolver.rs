@@ -8,6 +8,7 @@ use crate::config::BuildResult;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum ResouceKind {
+    // having icon and img be seperate is kinda shitty, but idk...
     Icon,
     Img,
     Audio,
@@ -38,6 +39,7 @@ pub fn parse_resouce(res: &str) -> (ResouceKind, &str) {
     let kind = match kind {
         "icon" => ResouceKind::Icon,
         "audio" => ResouceKind::Audio,
+        "img" => ResouceKind::Img,
         _ => panic!("invalid resource type '{kind}'"),
     };
     (kind, name)
