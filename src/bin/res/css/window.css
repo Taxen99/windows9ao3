@@ -296,8 +296,8 @@
 	--minwi: 2000px;
 	--maxwi: -2000px;
 	--twi: 2s;
-	min-width: 100px;
-	min-height: 100px;
+	min-width: 325px;
+	min-height: 200px;
 }
 
 .wra {

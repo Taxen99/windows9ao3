@@ -4,6 +4,7 @@
 	right: unset;
 	bottom: unset;
 	min-width: 296px;
+	min-height: unset;
 	/* this is to help center it when opened */
 	transform: translate(-50%, -50%);
 }

@@ -16,8 +16,12 @@ desktop!!!
 	align-items: center;
 	flex-direction: column;
 	padding: 2px;
-	position: absolute;
+	position: relative;
 	overflow: hidden;
+}
+
+.desktop .desktop-item {
+	position: absolute;
 }
 
 /* .desktop-item:active .desktop-icon-name {

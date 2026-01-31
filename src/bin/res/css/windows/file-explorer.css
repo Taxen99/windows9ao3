@@ -58,6 +58,9 @@
 	left: -20000px;
 	top: 0px;
 	transition: left 10s linear 2147483640s;
+	overflow: hidden;
+	display: flex;
+	flex-direction: column;
 }
 
 .fe-view > h1 {
@@ -66,7 +69,16 @@
 }
 
 .fe-view-content {
-	position: relative;
+	/* position: relative; */
+	/* overflow: auto; */
+	/* overflow: none; */
+	display: flex;
+	flex-wrap: wrap;
+	flex-grow: 1;
+	align-content: flex-start;
+}
+.fe-view-content .desktop-item {
+	flex-shrink: 0;
 }
 
 .fe-view p {
@@ -258,27 +270,27 @@
 	transform: translate(-1px, 4px);
 }
 
-.fe-sideview-view {
+:is(.fe-sideview-view, .fe-view-content) {
 	overflow: auto;
 }
 
-.fe-sideview-view::-webkit-scrollbar {
+:is(.fe-sideview-view, .fe-view-content)::-webkit-scrollbar {
 	height: 10px;
 }
 
-.fe-sideview-view::-webkit-scrollbar:vertical {
+:is(.fe-sideview-view, .fe-view-content)::-webkit-scrollbar:vertical {
 	width: 10px;
 }
 
-.fe-sideview-view::-webkit-scrollbar-track {
+:is(.fe-sideview-view, .fe-view-content)::-webkit-scrollbar-track {
 	background: #C0C0C0;
 }
 
-.fe-sideview-view::-webkit-scrollbar-thumb {
+:is(.fe-sideview-view, .fe-view-content)::-webkit-scrollbar-thumb {
 	background: #888;
 }
 
-.fe-sideview-view::-webkit-scrollbar-thumb:hover {
+:is(.fe-sideview-view, .fe-view-content)::-webkit-scrollbar-thumb:hover {
 	background: #555;
 }
 

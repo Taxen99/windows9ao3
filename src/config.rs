@@ -1287,10 +1287,10 @@ impl Config {
             entry_path.push(name);
             let unique_hash: u64 = rand::rng().random();
             let mut offset = entry.offset().unwrap_or_default();
-            if is_in_explorer {
-                let cols = 5;
-                offset = (i as u32 % cols, i as u32 / cols);
-            }
+            // if is_in_explorer {
+            //     let cols = 5;
+            //     offset = (i as u32 % cols, i as u32 / cols);
+            // }
             html.push_str(&format!(
                 r##"
                 <div class="desktop-item desktop-item-{}">
@@ -1307,19 +1307,26 @@ impl Config {
             css.push_str(&format!(
                 r##"
                 .desktop-item-{0} .desktop-icon {{
-                            background: url("{1}");
-                            background-size: cover;
-                        }}
-                        .desktop-item-{0} {{
-                            left: {2}px;
-                            top: {3}px;
-                        }}
+                        background: url("{1}");
+                        background-size: cover;
+                    }}
                 "##,
                 unique_hash,
                 self.icon_of(entry),
-                offset.0 * 54,
-                offset.1 * 64,
             ));
+            if !is_in_explorer {
+                css.push_str(&format!(
+                    r##"
+                    .desktop-item-{0} {{
+                        left: {1}px;
+                        top: {2}px;
+                    }}
+                    "##,
+                    unique_hash,
+                    offset.0 * 54,
+                    offset.1 * 64,
+                ));
+            }
             self.emit_fe_interaction(css, entry, &entry_path, unique_hash, is_in_explorer);
         }
     }
