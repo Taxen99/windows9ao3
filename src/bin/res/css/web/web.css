@@ -1,0 +1,9 @@
+.ie-page a {
+	transition: color 10s linear 2147483640s;
+	color: #0000EE;
+}
+
+.ie-page a:active {
+	transition: 0s;
+	color: #551A8B;
+}
