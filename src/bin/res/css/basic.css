@@ -44,6 +44,9 @@
 	border-color: var(--border-c1_b) var(--border-c1_b) var(--border-c1_b) var(--border-c1_b);
 	border-style: groove groove groove groove;
 }
+/* .border-style-light-1-bottom {
+	border-bottom: 2px groove rgb(238, 238, 238);
+} */
 
 .border-style-light-2 {
 	border: 1px;

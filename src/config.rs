@@ -974,6 +974,10 @@ impl Config {
         });
     }
     fn emit_ie_window(&self, html: &mut String, css: &mut String) {
+        assert!(
+            Self::INTERNET_EXPLORER_ID == 69,
+            "internet-explorer.css depends on this"
+        );
         self.add_dialog(Dialog::new("print-ie".hashed(), "Printing Error", DialogueSymbol::Warning, DialogueKind::Ok, "Before you can print, you need to install a printer.<br />To do this, click Start, point to Settings, click Printers, and then double-click Add Printer.")
             .trigger(".ie-tb-print:active")
             .long(true)
@@ -1179,9 +1183,9 @@ impl Config {
                         })
                         .group(|group| {
                             group
-                                .item("Search", "@icon:search", "ie-tb-search")
-                                .item("Favorites", "@icon:favorites", "ie-tb-favorites")
-                                .item("History", "@icon:history", "ie-tb-history")
+                                .item_toggle_group("Search", "@icon:search", "ie-tb-search", "ie-1")
+                                .item_toggle_group("Favorites", "@icon:favorites", "ie-tb-favorites", "ie-1")
+                                .item_toggle_group("History", "@icon:history", "ie-tb-history", "ie-1")
                         })
                         .group(|group| {
                             group.item("Mail", "@icon:mail", "ie-tb-mail").item(
@@ -1216,6 +1220,30 @@ impl Config {
                 //
                 emit_div(html, "window-main", |html| {
                     emit_div(html, "ie-main", |html| {
+                        emit_div(html, "ie-sideview-anchor", |html| {
+                            let emit_sideview = |html: &mut String, css: &mut String, name: &str, class: &str, inner: &dyn Fn(&mut String, &mut String)| {
+                                emit_div(html, &format!("ie-sideview {class}"), |html| {
+                                    emit_div(html, "ie-sideview-inner border-style-light-1", |html| {
+                                        emit_div(html, "ie-sideview-header", |html| {
+                                            emit_p(html, "", name);
+                                            emit_div(html, "ie-sideview-exiter", |html| {
+                                                emit_img(html, "", "@icon:exit");
+                                            });
+                                        });
+                                        emit_div(html, "ie-sideview-main", |html| inner(html, css));
+                                    });
+                                });
+                            };
+                            emit_sideview(html, css, "Search", "ie-sideview-search", &|html, css| {
+                                emit_p(html, "ie-failed-to-load", "Internet Explorer 6 Search Companion could not connect. <br /><br /> (For a better web experience, upgrade to the latest version of Internet Explorer.)");
+                            });
+                            emit_sideview(html, css, "Favorites", "ie-sideview-fav", &|html, css| {
+                                //
+                            });
+                            emit_sideview(html, css, "History", "ie-sideview-hist", &|html, css| {
+                                emit_p(html, "ie-failed-to-load", "Failed to load history, try again later.");
+                            });
+                        });
                         emit_div(html, "ie-view border-style-dark-1", |html| {
                             for (domain, site) in &sites {
                                 css.push_str(&site.global_css);

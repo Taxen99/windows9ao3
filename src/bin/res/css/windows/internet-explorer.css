@@ -1,3 +1,7 @@
+.window-69 .window-content, .window-69 .window-main {
+	min-height: 0;
+}
+
 .ie-address-bar {
 	padding: 0 2px;
 	display: flex;
@@ -61,6 +65,128 @@
 .ie-main {
 	display: flex;
 	flex-grow: 1;
+	min-height: 0;
+}
+
+.ie-sideview-anchor {
+	/* transition: z-index 10s linear 2147483640s;
+	transition-behavior: allow-discrete; */
+	transition: max-width 10s linear 2147483640s;
+	overflow-x: clip;
+	max-width: 0px;
+	/* padding-right: 3px; */
+	display: flex;
+}
+.ie-sideview {
+	transition: max-width 10s linear 2147483640s;
+	max-width: 0px;
+	height: 100%;
+	display: flex;
+	overflow: hidden;
+	width: 150px;
+}
+
+.ie-sideview-anchor:has(.ie-sideview-exiter:active) {
+	transition: 0s;
+	max-width: 0.001px;
+}
+.window-69:has(.ie-sideview-exiter:active) .toolbar-toggle-group-ie-1 .toolbar-item-enabled {
+	transition: 0s;
+	z-index: -2;
+}
+.window-69:has(.toolbar-toggle-group-ie-1 .toolbar-item-enabled:active) .ie-sideview-anchor {
+	transition: 0s;
+	max-width: 0.001px;
+}
+.window-69:has(.toolbar-toggle-group-ie-1 .toolbar-item:not(.toolbar-item-enabled):active) .ie-sideview-anchor {
+	transition: 0s;
+	max-width: 2000px;
+}
+.window-69:has(.toolbar-toggle-group-ie-1 .toolbar-item:not(.toolbar-item-enabled):active) .ie-sideview {
+	transition: 0s;
+	max-width: 0.001px;
+}
+.window-69:has(.ie-tb-favorites:active) .ie-sideview-fav {
+	transition: 0s;
+	max-width: 200px !important;
+}
+.window-69:has(.ie-tb-search:active) .ie-sideview-search {
+	transition: 0s;
+	max-width: 200px !important;
+}
+.window-69:has(.ie-tb-history:active) .ie-sideview-hist {
+	transition: 0s;
+	max-width: 200px !important;
+}
+
+.ie-sideview-fav {
+	/* width: 200px; */
+	/* background-color: aqua; */
+}
+.ie-sideview-inner {
+	flex-grow: 1;
+	margin-right: 3px;
+	display: flex;
+	flex-direction: column;
+}
+
+.ie-sideview-header {
+	height: 22px;
+	border-bottom: 2px groove rgb(238, 238, 238);
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	padding: 0px 7px;
+	padding-right: 1px;
+}
+
+.ie-sideview-header img {
+	width: 9px;
+	height: 9px;
+}
+
+.ie-sideview-exiter {
+	/* border: 1px solid transparent; */
+	width: 20px;
+	height: 17px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	margin-left: 4px;
+}
+.ie-sideview-exiter:hover {
+	border: 1px outset rgb(238, 238, 238);
+}
+
+.ie-sideview-main {
+	background-color: white;
+	padding: 1px 2px;
+	height: 100%;
+	overflow-y: auto;
+}
+
+.window-69 ::-webkit-scrollbar {
+	height: 10px;
+}
+
+.window-69 ::-webkit-scrollbar:vertical {
+	width: 10px;
+}
+
+.window-69 ::-webkit-scrollbar-track {
+	background: #C0C0C0;
+}
+
+.window-69 ::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+.window-69 ::-webkit-scrollbar-thumb:hover {
+	background: #555;
+}
+
+.ie-failed-to-load {
+	margin: 10px;
 }
 
 .ie-view {

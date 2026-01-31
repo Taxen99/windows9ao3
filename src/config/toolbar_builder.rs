@@ -1,3 +1,5 @@
+use enum_as_inner::EnumAsInner;
+
 use crate::config::{Config, emit_div, emit_img};
 
 pub struct ToolbarBuilder {
@@ -14,8 +16,8 @@ impl ToolbarBuilder {
         self
     }
 
-    pub fn build(&self, html: &mut String, _css: &mut String, _config: &Config) {
-        let emit_item = |html: &mut String, item: &ToolbarItem| {
+    pub fn build(&self, html: &mut String, css: &mut String, _config: &Config) {
+        let emit_item = |html: &mut String, css: &mut String, item: &ToolbarItem| {
             match item {
                 ToolbarItem::Normal(item) => {
                     emit_div(html, "toolbar-item-outer", |html| {
@@ -34,6 +36,50 @@ impl ToolbarBuilder {
                 ToolbarItem::Html(item) => {
                     html.push_str(&item.html);
                 }
+                ToolbarItem::ToggleGroup(item) => {
+                    assert!(!item.class.contains(' '), "this would fuck us over");
+                    css.push_str(&format!(
+                        r##"
+                    .toolbar-anchor:has(.{0}:first-child:active) .toolbar-item-enabled.{0} {{
+                        transition: 0s;
+                        z-index: 2;
+                    }}
+                    "##,
+                        item.class
+                    ));
+                    emit_div(
+                        html,
+                        &format!(
+                            "toolbar-item-outer toolbar-toggle-group toolbar-toggle-group-{}",
+                            item.toggle_group
+                        ),
+                        |html| {
+                            emit_div(html, &format!("toolbar-item {}", item.class), |html| {
+                                html.push_str(&format!(
+                                    r##"
+                                        <img src="{}" />
+                                        <p>{}</p>
+                                    "##,
+                                    item.icon, item.name
+                                ));
+                            });
+                            emit_div(
+                                html,
+                                &format!("toolbar-item toolbar-item-enabled {}", item.class),
+                                |html| {
+                                    html.push_str(&format!(
+                                        r##"
+                                        <img src="{}" />
+                                        <p>{}</p>
+                                    "##,
+                                        item.icon, item.name
+                                    ));
+                                },
+                            );
+                            emit_div(html, "toolbar-item toolbar-single-click", |_| {});
+                        },
+                    );
+                }
             };
         };
         emit_div(html, "toolbar-anchor", |html| {
@@ -43,7 +89,7 @@ impl ToolbarBuilder {
                         emit_div(html, "toolbar-sep", |_| {});
                     }
                     for item in groupp.items.iter() {
-                        emit_item(html, item);
+                        emit_item(html, css, item);
                     }
                 }
                 emit_div(html, "toolbar-overflow", |html| {
@@ -61,7 +107,9 @@ impl ToolbarBuilder {
                 });
                 for group in self.groups.iter() {
                     for item in group.items.iter() {
-                        emit_item(html, item);
+                        // we don't want to emit the same css twice!
+                        let mut garbage_css = String::new();
+                        emit_item(html, &mut garbage_css, item);
                     }
                 }
             });
@@ -75,7 +123,11 @@ pub struct ToolbarGroup {
 
 impl ToolbarGroup {
     fn new() -> Self {
-        Self { items: Vec::new() }
+        Self {
+            items: Vec::new(),
+            // select: false,
+            // class: "".into(),
+        }
     }
     pub fn item(&mut self, name: &str, icon: &str, class: &str) -> &mut Self {
         self.items.push(ToolbarItem::new(name, icon, class));
@@ -87,20 +139,52 @@ impl ToolbarGroup {
         self.items.push(ToolbarItem::new_html(html));
         self
     }
+    pub fn item_toggle_group(
+        &mut self,
+        name: &str,
+        icon: &str,
+        class: &str,
+        toggle_group: &str,
+    ) -> &mut Self {
+        self.items.push(ToolbarItem::new_toggle_group(
+            name,
+            icon,
+            class,
+            toggle_group,
+        ));
+        self
+    }
+    // pub fn select(&mut self, select: bool) -> &mut Self {
+    //     self.select = select;
+    //     self
+    // }
+    // pub fn class(&mut self, class: &str) -> &mut Self {
+    //     self.class = class.into();
+    //     self
+    // }
 }
 
+#[derive(EnumAsInner)]
 pub enum ToolbarItem {
     Normal(ToolbarItemNormal),
     Html(ToolbarItemHtml),
+    ToggleGroup(ToolbarToggleGroup),
 }
 
 pub struct ToolbarItemNormal {
     name: String,
     class: String,
     icon: String,
+    // toggle_group: Option<String>,
 }
 pub struct ToolbarItemHtml {
     html: String,
+}
+pub struct ToolbarToggleGroup {
+    name: String,
+    class: String,
+    icon: String,
+    toggle_group: String,
 }
 
 impl ToolbarItem {
@@ -113,5 +197,13 @@ impl ToolbarItem {
     }
     fn new_html(html: String) -> Self {
         Self::Html(ToolbarItemHtml { html: html })
+    }
+    fn new_toggle_group(name: &str, icon: &str, class: &str, toggle_group: &str) -> Self {
+        Self::ToggleGroup(ToolbarToggleGroup {
+            name: name.into(),
+            icon: icon.into(),
+            class: class.into(),
+            toggle_group: toggle_group.into(),
+        })
     }
 }
