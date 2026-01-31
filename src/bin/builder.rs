@@ -58,7 +58,7 @@ pub fn main() {
     for (arg, value) in parsed {
         //
         match arg.as_str() {
-            "initial-window" => {
+            "init" => {
                 build_opt.initial_window = Some(value.parse::<u64>().expect("invalid window id"))
             }
             "deploy" => {

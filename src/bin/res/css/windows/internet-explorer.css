@@ -6,7 +6,41 @@
 	border-top: none !important;
 }
 
-.ie-address-bar p:nth-child(2) {
+.ie-addrb-anchor {
+	background-color: white;
+	flex-grow: 1;
+	display: flex;
+	padding: 1px;
+	position: relative;
+	height: 22px;
+	z-index: 0;
+}
+
+.ie-addrb-path {
+	flex-grow: 1;
+	display: flex;
+	transition: z-index 214748s linear;
+	transition-behavior: allow-discrete;
+	z-index: -100;
+	position: absolute;
+	width: 100%;
+	background-color: white;
+
+	white-space: nowrap;
+	overflow: scroll;
+	scrollbar-width: none;
+	user-select: text;
+}
+
+.ie-addrb-path::before {
+	content: "";
+	display: block;
+	width: 16px;
+	height: 16px;
+	margin-right: 5px;
+}
+
+/* .ie-address-bar p:nth-child(2) {
 	background-color: white;
 	flex-grow: 1;
 	display: flex;
@@ -21,7 +55,7 @@
 	background: url("https://win98icons.alexmeub.com/icons/png/html-5.png");
 	background-size: cover;
 	margin-right: 5px;
-}
+} */
 
 .ie-main {
 	display: flex;

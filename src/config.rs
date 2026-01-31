@@ -979,9 +979,11 @@ impl Config {
         for (_, site) in &sites {
             for (path, _page) in &site.pages {
                 dbg!(format!("{}-{}", site.domain, path),);
+                let id = format!("{}-{}", site.domain, path).hashed();
                 history_items.push(HistoryItem {
-                    id: dbg!(format!("{}-{}", site.domain, path).hashed()),
+                    id: dbg!(id),
                     rules: vec![
+                        // TODO: just compact this into one? (of course unify classes first)
                         format!(
                             r##".ie-site-{} {{
                                 transition: 0s;
@@ -996,6 +998,13 @@ impl Config {
                             }}"##,
                             path.hashed()
                         ),
+                        format!(
+                            r##".ie-addrb-{} {{
+                                transition: 0s;
+                                z-index: 2147483640;
+                            }}"##,
+                            id
+                        ),
                     ],
                 });
             }
@@ -1009,8 +1018,8 @@ impl Config {
                 // TODO: window resizing and shit
                 css.push_str(&format!(
                     r##".window.window-{} .window-inner {{
-                        right: -600px;
-                        bottom: -600px;
+                        right: -500px;
+                        bottom: -400px;
                     }}"##,
                     Self::INTERNET_EXPLORER_ID
                 ));
@@ -1117,12 +1126,25 @@ impl Config {
                         })
                         .build(html, css, self);
                     emit_div(html, "ie-address-bar border-style-light-1", |html| {
-                        html.push_str(&format!(
-                            r##"
-                            <p>Address</p>
-                            <p class="border-style-dark-1">My Computer</p>
-                        "##
-                        ));
+                        // html.push_str(&format!(
+                        //     r##"
+                        //     <p>Address</p>
+                        //     <p class="border-style-dark-1">My Computer</p>
+                        // "##
+                        // ));
+                        emit_p(html, "", "Address");
+                            emit_div(html, "ie-addrb-anchor border-style-dark-1", |html| {
+                                // emit_div(html, "ie-addrb-blocker", |_| ());
+                                for (_, site) in &sites {
+                                    for (path, page) in &site.pages {
+                                        let title = &page.title;
+                                        let icon = self.icon_of(&self.fs.root);
+                                        let id = format!("{}-{}", &site.domain, &path).hashed();
+                                        emit_p(html, &format!("ie-addrb-path ie-addrb-{}", id), title);
+                                        css.push_str(&format!(r##".ie-addrb-{}::before {{ background: url("{}"); background-size: cover; }}"##, id, icon));
+                                    }
+                                }
+                            });
                     });
                 });
                 //

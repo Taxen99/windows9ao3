@@ -39,9 +39,10 @@ fn read_site(path: &Path) -> Site {
             if page_path == "index" {
                 page_path = "";
             }
+            let page_path = page_path.replace("+", "/");
             let html = fs::read_to_string(entry.path()).unwrap();
-            let page = read_page(&domain, html);
-            pages.insert(page_path.to_owned(), page);
+            let page = read_page(&domain, html, &page_path);
+            pages.insert(page_path, page);
         }
     }
     Site {
@@ -51,7 +52,7 @@ fn read_site(path: &Path) -> Site {
     }
 }
 
-fn read_page(domain: &str, html: String) -> Page {
+fn read_page(domain: &str, html: String, path: &str) -> Page {
     let doc = nipper::Document::from(&html);
     for mut anchor in doc.select("a").iter() {
         let href = anchor.attr("href").expect("a without href!");
@@ -61,12 +62,18 @@ fn read_page(domain: &str, html: String) -> Page {
             href.split_once("/").unwrap()
         };
         anchor.remove_attr("href");
+        // anchor.set_attr("href", &format!("#{}", loc.hashed()));
+        anchor.set_attr("href", "#");
         dbg!(
             format!("{}-{}", loc.0, loc.1),
             format!("{}-{}", loc.0, loc.1).hashed()
         );
         let id = dbg!(format!("{}-{}", loc.0, loc.1).hashed());
         anchor.add_class(&format!("history-trigger-{} history-trigger", id));
+    }
+    let mut title = doc.select("title").text().trim().to_owned();
+    if title.is_empty() {
+        title = Path::new(domain).join(path).to_str().unwrap().into();
     }
     Page {
         // TODO: shit!
@@ -76,6 +83,6 @@ fn read_page(domain: &str, html: String) -> Page {
             .strip_suffix("</body>")
             .unwrap()
             .into()),
-        title: "Test Title".into(),
+        title: title,
     }
 }
