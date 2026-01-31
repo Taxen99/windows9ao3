@@ -295,7 +295,7 @@
 	border-style: groove ridge ridge groove;
 	--minwi: 2000px;
 	--maxwi: -2000px;
-	--twi: 1s;
+	--twi: 2s;
 	min-width: 100px;
 	min-height: 100px;
 }

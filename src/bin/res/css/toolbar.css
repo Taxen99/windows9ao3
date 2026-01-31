@@ -1,21 +1,93 @@
-.toolbar {
-	display: flex;
-	border-top: none !important;
-}
-
-.toolbar-group {
-	display: flex;
-	padding: 0 4px 0 2px;
+.toolbar-anchor {
 	position: relative;
 }
 
-.toolbar-group:not(:last-child)::after {
-	content: "";
-	display: block;
+.toolbar {
+	display: flex;
+	border-top: none !important;
+	overflow: clip;
+	flex-wrap: wrap;
+	height: 42px;
+	padding-left: 2px;
+	padding-right: 12px;
+}
+
+.toolbar-overflow {
+	width: 100%;
+	height: 126px;
+	/* background-color: #ff000033; */
+	position: relative;
+	bottom: 500%;
+}
+
+.tbo-arrow, .tbo-enabled-arrow {
+	width: 12px;
+	height: 40px;
 	position: absolute;
-	right: 0;
-	top: 2px;
-	bottom: 2px;
+	right: -12px;
+	bottom: -34px;
+	border: 1px solid transparent;
+	/* background-color: red; */
+}
+.tbo-arrow:hover {
+	border: 1px outset rgb(238, 238, 238);
+}
+.tbo-arrow img, .tbo-enabled-arrow img {
+	width: 8px;
+	height: 5px;
+	position: absolute;
+	top: 5px;
+	left: 1px;
+}
+.tbo-arrow:nth-child(2) {
+	bottom: 6px;
+}
+.toolbar-anchor:has(.tbo-arrow:active) .tbo-menu {
+	z-index: 100;
+	transition: 0s;
+}
+.window:active .tbo-menu {
+	z-index: -2;
+	transition: 0s;
+}
+
+.tbo-enabled-arrow.tbo-enabled-arrow {
+	position: absolute;
+	right: 0px;
+	top: -44px;
+	border: 1px inset rgb(238, 238, 238);
+	/* background-color: red; */
+}
+
+.tbo-menu {
+	position: absolute;
+	top: 42px;
+	right: 0px;
+	/* width: 100px; */
+	/* height: 100px; */
+	background-color: var(--window-background);
+	z-index: 100;
+	padding: 1px;
+	transition: z-index 10s linear 2147483640s;
+	z-index: -1;
+}
+
+.tbo-menu .toolbar-item {
+	width: 105px;
+	height: 26px;
+	display: flex;
+	flex-direction: row;
+	justify-content: left;
+	padding: 2px;
+	border: 1px solid transparent;
+}
+.tbo-menu img {
+	margin-right: 7px;
+}
+
+.toolbar-sep {
+	display: block;
+	margin: 2px 2px;
 	border-left: 2px groove rgb(238, 238, 238);
 }
 

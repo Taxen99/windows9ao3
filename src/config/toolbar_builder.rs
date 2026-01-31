@@ -1,4 +1,4 @@
-use crate::config::{Config, emit_div};
+use crate::config::{Config, emit_div, emit_img};
 
 pub struct ToolbarBuilder {
     groups: Vec<ToolbarGroup>,
@@ -15,36 +15,56 @@ impl ToolbarBuilder {
     }
 
     pub fn build(&self, html: &mut String, _css: &mut String, _config: &Config) {
-        emit_div(html, "toolbar border-style-light-1", |html| {
-            for groupp in &self.groups {
-                emit_div(html, "toolbar-group", |html| {
-                    for item in groupp.items.iter() {
-                        match item {
-                            ToolbarItem::Normal(item) => {
-                                emit_div(html, "toolbar-item-outer", |html| {
-                                    emit_div(
-                                        html,
-                                        &format!("toolbar-item {}", item.class),
-                                        |html| {
-                                            html.push_str(&format!(
-                                                r##"
-                                                <img src="{}" />
-                                                <p>{}</p>
-                                            "##,
-                                                item.icon, item.name
-                                            ));
-                                        },
-                                    );
-                                    emit_div(html, "toolbar-item toolbar-single-click", |_| {});
-                                });
-                            }
-                            ToolbarItem::Html(item) => {
-                                html.push_str(&item.html);
-                            }
-                        }
+        let emit_item = |html: &mut String, item: &ToolbarItem| {
+            match item {
+                ToolbarItem::Normal(item) => {
+                    emit_div(html, "toolbar-item-outer", |html| {
+                        emit_div(html, &format!("toolbar-item {}", item.class), |html| {
+                            html.push_str(&format!(
+                                r##"
+                                        <img src="{}" />
+                                        <p>{}</p>
+                                    "##,
+                                item.icon, item.name
+                            ));
+                        });
+                        emit_div(html, "toolbar-item toolbar-single-click", |_| {});
+                    });
+                }
+                ToolbarItem::Html(item) => {
+                    html.push_str(&item.html);
+                }
+            };
+        };
+        emit_div(html, "toolbar-anchor", |html| {
+            emit_div(html, "toolbar border-style-light-1", |html| {
+                for (i, groupp) in self.groups.iter().enumerate() {
+                    if i != 0 {
+                        emit_div(html, "toolbar-sep", |_| {});
                     }
+                    for item in groupp.items.iter() {
+                        emit_item(html, item);
+                    }
+                }
+                emit_div(html, "toolbar-overflow", |html| {
+                    emit_div(html, "tbo-arrow", |html| {
+                        emit_img(html, "", "@icon:arrow2");
+                    });
+                    emit_div(html, "tbo-arrow", |html| {
+                        emit_img(html, "", "@icon:arrow2");
+                    });
                 });
-            }
+            });
+            emit_div(html, "tbo-menu border-style-dark-3", |html| {
+                emit_div(html, "tbo-enabled-arrow", |html| {
+                    emit_img(html, "", "@icon:arrow2");
+                });
+                for group in self.groups.iter() {
+                    for item in group.items.iter() {
+                        emit_item(html, item);
+                    }
+                }
+            });
         });
     }
 }

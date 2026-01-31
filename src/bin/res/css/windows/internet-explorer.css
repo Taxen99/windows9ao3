@@ -14,6 +14,7 @@
 	position: relative;
 	height: 22px;
 	z-index: 0;
+	overflow: hidden;
 }
 
 .ie-addrb-path {
