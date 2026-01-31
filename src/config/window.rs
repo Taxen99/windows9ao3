@@ -157,12 +157,14 @@ pub struct Dialog {
     pub kind: DialogueKind,
     pub content: String,
     pub trigger: Option<String>,
+    pub long: bool,
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum DialogueSymbol {
     #[default]
     Error,
+    Warning,
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum DialogueKind {
@@ -187,6 +189,7 @@ impl Dialog {
             kind,
             content: content.into(),
             trigger: None,
+            long: false,
         }
     }
     pub fn icon(mut self, icon: &str) -> Self {
@@ -197,12 +200,17 @@ impl Dialog {
         self.trigger = Some(trigger.into());
         self
     }
+    pub fn long(mut self, long: bool) -> Self {
+        self.long = long;
+        self
+    }
     pub fn build(self, html: &mut String, css: &mut String, config: &Config) {
         let mut w = Window::new(self.id, &self.name);
         w.icon = self.icon.clone();
         w = w.exitable(false);
         w = w.should_appear_in_taskbar(false);
-        w = w.extra_classes("dialogue");
+        let size_class = self.long.then_some("dialogue-long").unwrap_or("");
+        w = w.extra_classes(&format!("dialogue {size_class}"));
         w = w.resizable(false);
         w = w.inject_outside(&format!(
             r##"
@@ -220,6 +228,7 @@ impl Dialog {
                     emit_div(html, "dialogue-upper", |html| {
                         let symbol_src = match self.symbol {
                             DialogueSymbol::Error => "@icon:dialogue-err",
+                            DialogueSymbol::Warning => "@icon:dialogue-warn",
                         };
                         emit_img(html, "dialogue-symbol", symbol_src);
                         emit_div(html, "dialogue-view", |html| {

@@ -356,7 +356,8 @@ impl Config {
                     });
                     emit_div(html, "tb-start-menu border-style-dark-3", |html| {
                         emit_div(html, "tb-sm-banner", |html| {
-                            html.push_str(r##"<img src="@icon:windows98-start" />"##);
+                            // we wrap this in a <p> to emulate ao3's stupid bullshit.
+                            emit_p(html, "", r##"<img src="@icon:windows98-start" />"##);
                         });
                         emit_div(html, "tb-sm-content", |html| {
                             StartmenuContent::new()
@@ -973,6 +974,10 @@ impl Config {
         });
     }
     fn emit_ie_window(&self, html: &mut String, css: &mut String) {
+        self.add_dialog(Dialog::new("print-ie".hashed(), "Printing Error", DialogueSymbol::Warning, DialogueKind::Ok, "Before you can print, you need to install a printer.<br />To do this, click Start, point to Settings, click Printers, and then double-click Add Printer.")
+            .trigger(".ie-tb-print:active")
+            .long(true)
+        );
         let home_domain = "foo.bar";
         let sites = read_sites();
         let mut history_items = Vec::new();
@@ -1026,30 +1031,91 @@ impl Config {
                 emit_div(html, "window-header", |html| {
                     MenubarBuilder::new()
                         .item("File", |item| {
-                            item.group(|group| {
-                                group.sub("Exit", |i| {
-                                    i.action(Action::Close(Self::INTERNET_EXPLORER_ID))
-                                })
-                            })
+                            item
+                                .group(|group| group
+                                    .sub_disabled("New")
+                                    .sub_disabled("Open...")
+                                    .sub_disabled("Edit")
+                                    .sub_disabled("Save")
+                                    .sub_disabled("Save As...")
+                                )
+                                .group(|group| group
+                                    .sub("Print Setup...", |item| item.action(Action::OpenDialog("print-ie".hashed())))
+                                    .sub("Print...", |item| item.action(Action::OpenDialog("print-ie".hashed())))
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Send")
+                                    .sub_disabled("Import and Export...")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Properties")
+                                    .sub("Work Offline", |item| item.html_toggle())
+                                    .sub("Exit", |i| i.action(Action::Close(Self::INTERNET_EXPLORER_ID)))
+                                )
                         })
-                        // .item("View", |item| {
-                        //     item.group(|group| {
-                        //         group
-                        //             .sub_disabled("Toolbar")
-                        //             .sub_disabled("Status Bar")
-                        //             .sub_disabled("Page View")
-                        //             .sub_disabled("Replace Window")
-                        //     })
-                        //     .group(|group| {
-                        //         group.sub_disabled("Landscape").sub_disabled("Rotate")
-                        //     })
-                        //     .group(|group| group.sub_disabled("Font..."))
-                        // })
+                        .item("Edit", |item| {
+                            item
+                                .group(|group| {
+                                    group.sub_disabled("Undo")
+                                })
+                                .group(|group| group
+                                    .sub_disabled("Cut")
+                                    .sub_disabled("Copy")
+                                    .sub_disabled("Paste")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Select All")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Find (on This Page)...")
+                                )
+                        })
+                        .item("View", |item| {
+                            item
+                                .group(|group| group
+                                    .sub_disabled("Toolbars")
+                                    .sub_disabled("Status Bar")
+                                    .sub_disabled("Explorer Bar")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Go To")
+                                    .sub("Stop", |item| item.dummy())
+                                    .sub("Refresh", |item| item.dummy())
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Text Size")
+                                    .sub_disabled("Encoding")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Source")
+                                    .sub_disabled("Fullscreen")
+                                )
+                        })
+                        .item("Favorites", |item| {
+                            item
+                                .group(|group| {
+                                    group
+                                        .sub_disabled("Add to Favorites")
+                                        .sub_disabled("Organize Favorites")
+                                })
+                        })
+                        .item("Tools", |item| {
+                            item
+                                .group(|group| group
+                                    .sub_disabled("Mail and News...")
+                                    .sub_disabled("Synchronize...")
+                                    .sub_disabled("Windows Update")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Show Related Links")
+                                )
+                                .group(|group| group
+                                    .sub_disabled("Internet Options...")
+                                )
+                        })
                         .item("Help", |item| {
                             item.group(|group| group.sub_disabled("Help Topics"))
-                                .group(|group| {
-                                    group.sub("About", |i| i.dummy().id("about".hashed()))
-                                })
+                                .group(|group| group.sub("About", |i| i.dummy().id("about".hashed())))
                         })
                         .build(html, css, self);
                     ToolbarBuilder::new()

@@ -89,10 +89,12 @@
 	display: flex;
 	flex-direction: column;
 }
+.tb-sm-banner p {
+	margin-top: auto;
+}
 .tb-sm-banner img {
 	width: 21px;
 	height: 105px;
-	margin-top: auto;
 }
 .tb-sm-content {
 	/* background-color: red; */

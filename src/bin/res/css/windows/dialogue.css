@@ -8,6 +8,9 @@
 	/* this is to help center it when opened */
 	transform: translate(-50%, -50%);
 }
+.dialogue.dialogue-long .window-inner {
+	min-width: 420px;
+}
 
 .dialogue-main {
 	display: flex;
