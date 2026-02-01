@@ -203,7 +203,7 @@
 
 .fe-svvi-name::before {
 	content: "";
-	background: url("https://win98icons.alexmeub.com/icons/png/directory_closed-4.png");
+	background: url("@icon:directory-closed-small");
 	background-size: cover;
 	width: 14px;
 	height: 14px;

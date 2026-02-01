@@ -114,9 +114,30 @@ pub struct BuildOptions {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct FavFolder {
+    pub children: BTreeMap<String, FavEntry>,
+}
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Favorite {
+    pub url: String,
+}
+
+#[derive(Debug, Serialize, Deserialize, EnumAsInner)]
+pub enum FavEntry {
+    Favorite(Favorite),
+    FavFolder(FavFolder),
+}
+
+#[derive(Debug, Serialize, Deserialize)]
+pub struct Favorites {
+    root: FavEntry,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub apps: Vec<App>,
     pub fs: FileSystem,
+    pub favorites: Favorites,
     // NOTE: building *should* be deterministic, but recalculating shit is boring and beta cuck behaviour. be the sigma. have the skibidi rizz.
     #[serde(skip)]
     pub state: RefCell<ConfigState>,
@@ -361,22 +382,24 @@ impl Config {
                         });
                         emit_div(html, "tb-sm-content", |html| {
                             StartmenuContent::new()
-                                .group(|group| group
-                                    .item("Windows Update", "https://win98icons.alexmeub.com/icons/png/windows_update_small-2.png", "")
-                                )
-                                .group(|group| group
-                                    .item("Programs", "@icon:programs", "")
-                                    .item("Favorites", "https://win98icons.alexmeub.com/icons/png/directory_favorites_small-4.png", "")
-                                    .item("Documents", "https://win98icons.alexmeub.com/icons/png/directory_open_file_mydocs_cool-3.png", "")
-                                    .item("Settings", "https://win98icons.alexmeub.com/icons/png/settings_gear-4.png", "")
-                                    .item("Find", "https://win98icons.alexmeub.com/icons/png/search_file_2-4.png", "sm-find")
-                                    .item("Help", "https://win98icons.alexmeub.com/icons/png/help_book_small-2.png", "sm-help")
-                                    .item("Run", "https://win98icons.alexmeub.com/icons/png/application_hourglass_small-2.png", "sm-run")
-                                )
-                                .group(|group| group
-                                    .item("Log Off Kurtson...", "https://win98icons.alexmeub.com/icons/png/key_win-2.png", "")
-                                    .item("Shut Down", "https://win98icons.alexmeub.com/icons/png/shut_down_normal-2.png", "")
-                                )
+                                .group(|group| {
+                                    group.item("Windows Update", "@icon:windows-update-medium", "")
+                                })
+                                .group(|group| {
+                                    group
+                                        .item("Programs", "@icon:programs-medium", "")
+                                        .item("Favorites", "@icon:directory-favorites-medium", "")
+                                        .item("Documents", "@icon:documents-medium", "")
+                                        .item("Settings", "@icon:settings-medium", "")
+                                        .item("Find", "@icon:search-file-medium", "sm-find")
+                                        .item("Help", "@icon:help-medium", "sm-help")
+                                        .item("Run", "@icon:run-medium", "sm-run")
+                                })
+                                .group(|group| {
+                                    group
+                                        .item("Log Off Kurtson...", "@icon:key-win-medium", "")
+                                        .item("Shut Down", "@icon:shut-down-medium", "")
+                                })
                                 .build(html, css, self);
                             self.add_dialog(
                                 Dialog::new(
@@ -401,12 +424,8 @@ impl Config {
                 ) {
                     assert!(Config::QUICK_LAUNCH_SUPPORTED_APPS.contains(&app_id));
                     let icon = match app_id {
-                        Config::FILE_EXPLORER_ID => {
-                            "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png"
-                        }
-                        Config::INTERNET_EXPLORER_ID => {
-                            "https://win98icons.alexmeub.com/icons/png/msie1-2.png"
-                        }
+                        Config::FILE_EXPLORER_ID => "@icon:computer-small",
+                        Config::INTERNET_EXPLORER_ID => "@icon:msie-small",
                         _ => panic!(),
                     };
                     emit_div(html, "tb-ql-item-container", |html| {
@@ -480,10 +499,9 @@ impl Config {
         });
     }
     fn emit_fe_window(&self, html: &mut String, css: &mut String) {
-        Window::new(
-            Self::FILE_EXPLORER_ID,
-            "File Explorer",).icon(
-            "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png").build(html, css,self,
+        Window::new(Self::FILE_EXPLORER_ID, "File Explorer")
+            .icon("@icon:computer-small")
+            .build(html, css,self,
             |html, css| {
                 emit_div(html, "window-header", |html| {
                     MenubarBuilder::new()
@@ -777,7 +795,7 @@ impl Config {
             let font_id = id + 1;
             let filename = path.file_name().unwrap().to_str().unwrap();
             Window::new(id, &format!("{} - Notepad", filename))
-                .icon("https://win98icons.alexmeub.com/icons/png/notepad-5.png")
+                .icon("@icon:notepad-small")
                 .extra_classes("window-kind-notepad")
                 .build(html, css, self, |html, css| {
                     emit_div(html, "window-header", |html| {
@@ -858,7 +876,9 @@ impl Config {
                     });
                 });
             Window::new(font_id, "Font")
-                .icon("https://win98icons.alexmeub.com/icons/png/font_tt-0.png")
+                // TODO: this should behave almost like a popup, but that would require rewriting some stuff, so let's just have it be a regular window!
+                .icon("@icon:font-tt-small")
+                // .should_appear_in_taskbar(false)
                 .build(html, css, self, |html, css| {
                     emit_div(html, "window-main", |html| {
                         emit_div(html, "npf-main", |html| {
@@ -922,7 +942,7 @@ impl Config {
             let id = path.hashed();
             let filename = path.file_name().unwrap().to_str().unwrap();
             Window::new(id, &format!("{} - Quick View", filename))
-                .icon("https://win98icons.alexmeub.com/icons/png/magnifying_glass-0.png")
+                .icon("@icon:magnifying-glass-small")
                 .build(html, css, self, |html, css| {
                     emit_div(html, "window-header", |html| {
                         MenubarBuilder::new()
@@ -1022,7 +1042,7 @@ impl Config {
         let history = History::new(history_items, default_id);
         history.emit_stack(html, css, self);
         Window::new(Self::INTERNET_EXPLORER_ID, "Internet Explorer")
-            .icon("https://win98icons.alexmeub.com/icons/png/html-5.png")
+            .icon("@icon:html-small")
             .build(html, css, self, |html, css| {
                 // TODO: window resizing and shit
                 css.push_str(&format!(
@@ -1237,8 +1257,30 @@ impl Config {
                             emit_sideview(html, css, "Search", "ie-sideview-search", &|html, css| {
                                 emit_p(html, "ie-failed-to-load", "Internet Explorer 6 Search Companion could not connect. <br /><br /> (For a better web experience, upgrade to the latest version of Internet Explorer.)");
                             });
-                            emit_sideview(html, css, "Favorites", "ie-sideview-fav", &|html, css| {
-                                //
+                            emit_sideview(html, css, "Favorites", "ie-sideview-fav fav-cont", &|html, css| {
+                                fn emit_fav_folder(html: &mut String, css: &mut String, config: &Config, fav: &FavFolder) {
+                                    for (name, item) in fav.children.iter() {
+                                        match item {
+                                            FavEntry::Favorite(favorite) => {
+                                                emit_div(html, "fav-item", |html| {
+                                                    emit_p(html, "fav-link", name);
+                                                });
+                                            },
+                                            FavEntry::FavFolder(child_folder) => {
+                                                emit_div(html, "fav-item", |html| {
+                                                    emit_p(html, "fav-folder", name);
+                                                    emit_div(html, "fav-folder-active-con", |html| {
+                                                        emit_p(html, "fav-folder-active", name);
+                                                    });
+                                                    emit_div(html, "fav-folder-content fav-cont", |html| {
+                                                        emit_fav_folder(html, css, config, child_folder);
+                                                    });
+                                                });
+                                            },
+                                        }
+                                    }
+                                }
+                                emit_fav_folder(html, css, self, self.favorites.root.as_fav_folder().unwrap());
                             });
                             emit_sideview(html, css, "History", "ie-sideview-hist", &|html, css| {
                                 emit_p(html, "ie-failed-to-load", "Failed to load history, try again later.");
@@ -1693,24 +1735,17 @@ impl Config {
         }
     }
     fn icon_of_folder(&self, _file: &Folder) -> String {
-        // TODO: what if this resource disappears?
-        "https://win98icons.alexmeub.com/icons/png/directory_closed-4.png".to_owned()
+        "@icon:directory-closed-medium".to_owned()
     }
     fn icon_of_file(&self, file: &File) -> String {
         match file.kind {
             FileKind::App => self.app(&file.link).icon.clone(),
             FileKind::Shortcut => self.icon_of(self.fs_entry(Path::new(&file.link)).unwrap()),
-            FileKind::Text => {
-                "https://win98icons.alexmeub.com/icons/png/notepad_file-2.png".to_owned()
-            }
-            FileKind::Image => {
-                "https://win98icons.alexmeub.com/icons/png/paint_file-5.png".to_owned()
-            }
+            FileKind::Text => "@icon:notepad-file-medium".to_owned(),
+            FileKind::Image => "@icon:paint-file-medium".to_owned(),
             FileKind::NativeApp => {
                 match file.link.parse::<u64>().expect("native app id must be u64") {
-                    Self::INTERNET_EXPLORER_ID => {
-                        "https://win98icons.alexmeub.com/icons/png/msie1-2.png".to_owned()
-                    }
+                    Self::INTERNET_EXPLORER_ID => "@icon:msie-medium".to_owned(),
                     _ => panic!("invalid native app id"),
                 }
             }

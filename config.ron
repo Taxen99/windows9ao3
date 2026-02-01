@@ -94,4 +94,15 @@ Config (
             },
         )),
     ),
+    favorites: (
+        root: FavFolder (( children: {
+            "Important Filieaaaaaaa": FavFolder (( children: {
+                "Taxes": Favorite (( url: "foo.bar/special-3" )),
+            })),
+            "Important Filies2": FavFolder (( children: {
+                "Taxes2": Favorite (( url: "foo.bar/special-3" )),
+            })),
+            "home": Favorite (( url: "foo.bar" )),
+        })),
+    )
 )
