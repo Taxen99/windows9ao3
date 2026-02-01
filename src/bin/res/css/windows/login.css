@@ -1,0 +1,64 @@
+.main:has(.onload:hover) .login {
+	top: 100px !important;
+	left: 100px !important;
+	transition: 0s !important;
+}
+
+.login .window-inner {
+	width: 460px;
+	height: 142px;
+}
+
+.login-main {
+	display: flex;
+	flex-grow: 1;
+	padding-top: 12px;
+	padding-left: 22px;
+	padding-right: 10px;
+}
+
+/* .login-left {
+
+} */
+.login-icon {
+	width: 48px;
+	height: 48px;
+}
+
+.login-center {
+	display: flex;
+	flex-direction: column;
+	flex-grow: 1;
+	margin-left: 24px;
+	margin-right: 18px;
+}
+.login-center-down {
+	margin-top: 20px;
+	display: flex;
+	flex-direction: column;
+}
+.login-field {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 7px;
+}
+.login-label {
+	margin-right: 19px;
+}
+.login-input {
+	width: 135px;
+	height: 23px;
+	display: flex;
+	align-items: center;
+	padding: 2px;
+	background-color: white;
+}
+
+.login-right {
+	display: flex;
+	flex-direction: column;
+}
+
+.login-right .dialogue-button:first-child {
+	margin-bottom: 7px;
+}

@@ -186,6 +186,7 @@ impl Config {
     const FILE_EXPLORER_ID: u64 = 1;
     const INTERNET_EXPLORER_ID: u64 = 69;
     const DATE_TIME_PROPERTIES_ID: u64 = 420;
+    const LOGIN_ID: u64 = 69420;
     const QUICK_LAUNCH_SUPPORTED_APPS: &[u64] =
         &[Self::FILE_EXPLORER_ID, Self::INTERNET_EXPLORER_ID];
     const INITIAL_TIME: (u32, u32) = (06, 34);
@@ -199,6 +200,7 @@ impl Config {
             emit_div(html, "crt-outerest", |html| {
                 html.push_str(r##"<img src="@img:crt.png" class="crt-image" />"##);
                 emit_div(html, "main", |html| {
+                    self.emit_boot_sequence(html, &mut css);
                     emit_div(html, "screen-tints", |html| {
                         emit_div(html, "screen-tint-A", |html| {});
                         emit_div(html, "screen-tint-B", |html| {});
@@ -206,6 +208,7 @@ impl Config {
                         emit_div(html, "screen-tint-D", |html| {});
                     });
                     emit_div(html, "onload", |_| ());
+                    // emit_div(html, "onload2", |_| ());
                     emit_div(html, "desktop", |html| {
                         if let Some(desktop) =
                             self.fs.root.as_folder().unwrap().children.get("desktop")
@@ -271,6 +274,164 @@ impl Config {
         // NOTE: this must be last
         self.emit_actions_for_real(&mut html, &mut css);
         BuildResult { html, css }
+    }
+    pub fn emit_boot_sequence(&self, html: &mut String, css: &mut String) {
+        emit_div(html, "boot", |html| {
+            emit_div(html, "boot-background", |html| {
+                //
+            });
+            emit_div(html, "boot-stage-vendor-short", |html| {
+                emit_div(html, "boot-console", |html| {
+                    emit_p(
+                        html,
+                        "",
+                        "Hypen Båleson (555) Video BIOS. Version 15.10.11o",
+                    );
+                    emit_p(html, "", "Copyright 1999 Sten Group");
+                    emit_img(html, "boot-blinker", "@img:blink.gif");
+                });
+            });
+            emit_div(html, "boot-stage-vendor-long", |html| {
+                emit_div(html, "boot-console boot-console-2", |html| {
+                    emit_p(
+                        html,
+                        "",
+                        "Bethson's Secure BIOS v.1121, provided with the help of LJ.",
+                    );
+                    emit_img(html, "boot-sten-logo", "@img:sten.png");
+                    emit_p(html, "", "Copyright (C) 1998 Sten Group");
+                    emit_p(html, "", "<br />AZPT07P");
+                    emit_p(html, "", "<br />Pentium III CPU (modified) at 800MHz");
+                    emit_p(html, "", "Memory Test :     67892 OK");
+                    emit_div(html, "boot-anim boot-vl-1", |html| {
+                        emit_p(html, "", "LJ XII's BIOS EXTENSION v99");
+                        emit_p(html, "", "Copyright (C) 1999 Sten Group (LJ XII)");
+                    });
+                    emit_div(html, "boot-anim boot-vl-2", |html| {
+                        emit_p(html, "", "       Detecting Primary [REDACTED]  ...");
+                    });
+                    emit_div(html, "boot-anim boot-vl-3", |html| {
+                        emit_p(html, "", "       Detecting Primary [REDACTED]  ...");
+                    });
+                    emit_div(html, "boot-anim boot-vl-4", |html| {
+                        emit_p(html, "", "       Detecting Secondary [REDACTED]...");
+                    });
+                    emit_div(html, "boot-anim boot-vl-5", |html| {
+                        emit_p(html, "", "       Detecting Secondary [REDACTED]...");
+                    });
+                    emit_img(html, "boot-blinker", "@img:blink.gif");
+                });
+            });
+            emit_div(html, "boot-stage-loading-splash", |html| {
+                emit_div(html, "boot-loading-splash-cont", |html| {
+                    emit_img(html, "boot-loading-splash", "@img:boot1.jpg");
+                });
+            });
+            emit_div(html, "boot-stage-console", |html| {
+                emit_div(html, "boot-console", |html| {
+                    emit_img(html, "boot-blinker boot-blinker-abs", "@img:blink.gif");
+                    emit_p(
+                        html,
+                        "",
+                        r#"HB BIOS: Hold the CTRL key down for Status Screen or to boot from floppy...<br />
+                        HB BIOS: Hold the YRTL key down for MOON Menu...<br />
+                        HB BIOS: Continuing startup...<br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        <br />
+                        C:\>SET BLASTER=A220 O3 B2 O3<br />
+                        <br /><br />
+                        C:\>C:\CFGLEG.EXE<br />
+                        <br /><br />
+                        UMRSS Audio Initialization for DOS, v53.18<br />
+                        <br /><br />
+                        <br />
+                           SB I/O:        220<br />
+                           SB IRW:         16<br />
+                           SB BMA:        108<br />
+                           SNLRGN:       4592<br />
+                        <br /><br />
+                        C:\>C:\DOSLEG.EXE<br />
+                        <br /><br />
+                        DOSLEG - UMRSS Audio Initialization for DOS, Version 53.18<br />
+                        Copyright (c) 1999                            All Rights Reserved.<br />
+                        <br /><br />
+                            DOSTLEG is successfully installed.<br />
+
+                        "#,
+                    );
+                });
+            });
+            emit_div(html, "boot-stage-splash", |html| {
+                //
+            }); //
+            emit_div(html, "boot-stage-login", |html| {
+                // emit_p(html, "", "login!!");
+                // TODO: remove?
+                self.emit_action(
+                    css,
+                    &Action::Focus(Self::LOGIN_ID),
+                    ".boot-stage-login:hover",
+                );
+                Window::new(Self::LOGIN_ID, "Welcome to Windows")
+                    .extra_classes("login")
+                    .exitable(false)
+                    .resizable(false)
+                    .should_appear_in_taskbar(false)
+                    .inject_outside(
+                        r##"
+            <div class="dialogue-ding">
+                <audio controls="controls" src="@audio:ding.wav">
+            </div>
+            "##,
+                    )
+                    .build(html, css, self, |html, css| {
+                        emit_div(html, "window-main", |html| {
+                            emit_div(html, "login-main", |html| {
+                                emit_div(html, "login-left", |html| {
+                                    emit_img(html, "login-icon", "@icon:key-large");
+                                });
+                                emit_div(html, "login-center", |html| {
+                                    emit_div(html, "login-center-up", |html| {
+                                        emit_p(html, "", "Type a user name and password to log on to Windows.");
+                                    });
+                                    emit_div(html, "login-center-down", |html| {
+                                        emit_div(html, "login-field", |html| {
+                                            emit_p(html, "login-label", "User name:");
+                                            emit_p(html, "login-input border-style-dark-1", "Kurtson");
+                                        });
+                                        emit_div(html, "login-field", |html| {
+                                            emit_p(html, "login-label", "Password:");
+                                            emit_p(html, "login-input border-style-dark-1", "****");
+                                        });
+                                    });
+                                });
+                                emit_div(html, "login-right", |html| {
+                                    emit_div(
+                                        html,
+                                        "dialogue-button dialogue-button-focus border-style-asymmetric-1",
+                                        |html| emit_p(html, "", "Ok"),
+                                    );
+                                    emit_div(
+                                        html,
+                                        "dialogue-button border-style-asymmetric-1",
+                                        |html| emit_p(html, "", "Cancel"),
+                                        );
+                                    });
+                            });
+                        });
+                    });
+            });
+        });
+        // short vendor
+        // vendor logo
+        // microsoft windows splash (long)
+        // more console
+        // windows splash other
+        // login prompt appears on top
     }
     fn add_dialog(&self, dialog: Dialog) {
         self.state.borrow_mut().dialogs_to_be_added.push(dialog);

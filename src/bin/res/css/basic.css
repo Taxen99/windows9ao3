@@ -98,7 +98,7 @@ details summary::marker {
 	content: ""
 }
 
-.onload {
+.onload, .onload2 {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -110,7 +110,7 @@ details summary::marker {
 	background-color: #ac2b2b22;
 }
 
-.onload:hover {
-	transition: z-index 0s linear;
+.onload:hover, .onload2:hover {
+	transition: z-index 0s linear 0.0s;
 	z-index: -1000000;
 }
