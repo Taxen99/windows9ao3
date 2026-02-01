@@ -10,7 +10,7 @@ use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 use crate::config::history::{History, HistoryItem};
-use crate::config::internet_explorer::read_sites;
+use crate::config::internet_explorer::{Url, read_sites};
 use crate::config::menubar_builder::MenubarBuilder;
 use crate::config::startmenu_content::StartmenuContent;
 use crate::config::toolbar_builder::ToolbarBuilder;
@@ -1020,8 +1020,8 @@ impl Config {
         let mut history_items = Vec::new();
         for (_, site) in &sites {
             for (path, _page) in &site.pages {
-                dbg!(format!("{}-{}", site.domain, path),);
-                let id = format!("{}-{}", site.domain, path).hashed();
+                // dbg!(format!("{}-{}", site.domain, path),);
+                let id = Url::from_parts(&site.domain, path).hashed();
                 history_items.push(HistoryItem {
                     id: dbg!(id),
                     rules: vec![
@@ -1051,7 +1051,7 @@ impl Config {
                 });
             }
         }
-        let default_id = format!("{}-{}", home_domain, "").hashed();
+        let default_id = Url::from_parts(home_domain, "").hashed();
         let history = History::new(history_items, default_id);
         history.emit_stack(html, css, self);
         Window::new(Self::INTERNET_EXPLORER_ID, "Internet Explorer")
@@ -1242,7 +1242,7 @@ impl Config {
                                     for (path, page) in &site.pages {
                                         let title = &page.title;
                                         let icon = self.icon_of(&self.fs.root);
-                                        let id = format!("{}-{}", &site.domain, &path).hashed();
+                                        let id = Url::from_parts(&site.domain, &path).hashed();
                                         emit_p(html, &format!("ie-addrb-path ie-addrb-{}", id), title);
                                         css.push_str(&format!(r##".ie-addrb-{}::before {{ background: url("{}"); background-size: cover; }}"##, id, icon));
                                     }
@@ -1276,7 +1276,7 @@ impl Config {
                                         match item {
                                             FavEntry::Favorite(favorite) => {
                                                 emit_div(html, "fav-item", |html| {
-                                                    emit_p(html, "fav-link", name);
+                                                    emit_p(html, &format!("fav-link history-trigger history-trigger-{}", Url::parse(&favorite.url).hashed()), name);
                                                 });
                                             },
                                             FavEntry::FavFolder(child_folder) => {

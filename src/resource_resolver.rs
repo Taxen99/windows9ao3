@@ -59,7 +59,8 @@ fn resolve_for(
                 // dbg!(&string[i..i + 100]);
                 let string_slice = &string[i..];
                 let end = string_slice.find("\"").expect("unclosed quote");
-                let resource = dbg!(parse_resouce(dbg!(&string_slice[..end])));
+                // let resource = dbg!(parse_resouce(dbg!(&string_slice[..end])));
+                let resource = parse_resouce(&string_slice[..end]);
                 //                      vvv -1 because of the @
                 string.replace_range((i - 1)..(i + end), &resolver(resource.0, resource.1));
                 i += end;
