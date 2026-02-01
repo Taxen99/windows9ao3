@@ -478,6 +478,19 @@ impl Config {
                             emit_p(html, "", &name);
                         });
                     });
+                    css.push_str(&format!(
+                        r##"
+                    .main:has(.window-{0}:active) .tb-app-{0} .tb-app-inner-active {{
+                        transition: 0s;
+                        z-index: 1;
+                    }}
+                    .main:has(.window-{0}:active) .tb-app:not(.tb-app-{0}) .tb-app-inner-active {{
+                        transition: 0s;
+                        z-index: -1;
+                    }}
+                    "##,
+                        id
+                    ));
                     self.emit_action(css, &Action::Focus(id), &format!(".tb-app-{}:active", id));
                 }
             });
