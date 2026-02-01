@@ -127,11 +127,13 @@ impl Window {
                 });
             },
         );
-        config.emit_action(
-            css,
-            &Action::Close(self.id),
-            &format!(".window-{0} .window-exiter:active", self.id),
-        );
+        if self.exitable {
+            config.emit_action(
+                css,
+                &Action::Close(self.id),
+                &format!(".window-{0} .window-exiter:active", self.id),
+            );
+        }
         if let Some(icon) = &self.icon {
             css.push_str(&format!(
                 r##"
