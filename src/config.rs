@@ -1225,9 +1225,10 @@ impl Config {
         for (_, site) in &sites {
             for (path, _page) in &site.pages {
                 // dbg!(format!("{}-{}", site.domain, path),);
-                let id = Url::from_parts(&site.domain, path).hashed();
+                let id = (Url::from_parts(&site.domain, path)).hashed();
+                // dbg!((&site.domain, path, id));
                 history_items.push(HistoryItem {
-                    id: dbg!(id),
+                    id: (id),
                     rules: vec![
                         // TODO: just compact this into one? (of course unify classes first)
                         format!(

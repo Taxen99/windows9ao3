@@ -276,17 +276,34 @@
 	transition-behavior: allow-discrete;
 	z-index: -1;
 	position: absolute;
-	min-width: 100%;
-	min-height: 100%;
+	width: 100%;
+	height: 100%;
 }
 .ie-page {
 	transition: z-index 214748s linear;
 	transition-behavior: allow-discrete;
 	z-index: -1;
 	position: absolute;
-	min-width: 100%;
-	min-height: 100%;
+	width: 100%;
+	height: 100%;
 	background-color: white;
+	overflow: auto;
+}
+
+.ie-site *::-webkit-scrollbar {
+	width: 10px;
+}
+
+.ie-site *::-webkit-scrollbar-track {
+	background: #C0C0C0;
+}
+
+.ie-site *::-webkit-scrollbar-thumb {
+	background: #888;
+}
+
+.ie-site *::-webkit-scrollbar-thumb:hover {
+	background: #555;
 }
 
 .history-toolbar-container {

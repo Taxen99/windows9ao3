@@ -84,6 +84,7 @@ fn read_page(domain: &str, html: String, path: &str) -> Page {
     }
 }
 
+#[derive(Debug)]
 pub struct Url {
     domain: String,
     path: String,
@@ -110,7 +111,7 @@ impl Url {
             parsed.0 = domain.into();
         }
         Self {
-            domain: domain.into(),
+            domain: parsed.0,
             path: parsed.1,
         }
     }

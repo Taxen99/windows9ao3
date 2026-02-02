@@ -7,3 +7,13 @@
 	transition: 0s;
 	color: #551A8B;
 }
+
+.ie-page .body {
+	padding: 15px;
+	width: fit-content;
+}
+
+.ie-page .blacked {
+	color: white;
+	background-color: black;
+}
