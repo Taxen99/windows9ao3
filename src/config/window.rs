@@ -160,13 +160,15 @@ pub struct Dialog {
     pub content: String,
     pub trigger: Option<String>,
     pub long: bool,
+    pub extra_classes: String,
 }
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+#[derive(Debug, Clone, PartialEq, Eq, Default)]
 pub enum DialogueSymbol {
     #[default]
     Error,
     Warning,
+    Custom(String),
 }
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
 pub enum DialogueKind {
@@ -192,6 +194,7 @@ impl Dialog {
             content: content.into(),
             trigger: None,
             long: false,
+            extra_classes: String::new(),
         }
     }
     pub fn icon(mut self, icon: &str) -> Self {
@@ -206,13 +209,17 @@ impl Dialog {
         self.long = long;
         self
     }
+    pub fn extra_classes(mut self, extra_classes: &str) -> Self {
+        self.extra_classes = extra_classes.into();
+        self
+    }
     pub fn build(self, html: &mut String, css: &mut String, config: &Config) {
         let mut w = Window::new(self.id, &self.name);
         w.icon = self.icon.clone();
         w = w.exitable(false);
         w = w.should_appear_in_taskbar(false);
         let size_class = self.long.then_some("dialogue-long").unwrap_or("");
-        w = w.extra_classes(&format!("dialogue {size_class}"));
+        w = w.extra_classes(&format!("dialogue {size_class} {}", self.extra_classes));
         w = w.resizable(false);
         w = w.inject_outside(&format!(
             r##"
@@ -228,9 +235,10 @@ impl Dialog {
             emit_div(html, "window-main", |html| {
                 emit_div(html, "dialogue-main", |html| {
                     emit_div(html, "dialogue-upper", |html| {
-                        let symbol_src = match self.symbol {
+                        let symbol_src = match &self.symbol {
                             DialogueSymbol::Error => "@icon:dialogue-err",
                             DialogueSymbol::Warning => "@icon:dialogue-warn",
+                            DialogueSymbol::Custom(x) => x
                         };
                         emit_img(html, "dialogue-symbol", symbol_src);
                         emit_div(html, "dialogue-view", |html| {

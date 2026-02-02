@@ -209,7 +209,10 @@ impl Config {
                         emit_div(html, "screen-tint-D", |html| {});
                     });
                     emit_div(html, "onload", |_| ());
-                    // emit_div(html, "onload2", |_| ());
+                    emit_div(html, "onload-once", |_| ());
+                    emit_div(html, "shutdowner", |html| {
+                        emit_div(html, "shutdowner-anim", |_| ());
+                    });
                     emit_div(html, "desktop", |html| {
                         if let Some(desktop) =
                             self.fs.root.as_folder().unwrap().children.get("desktop")
@@ -280,7 +283,7 @@ impl Config {
         if opt.bypass_boot {
             css.push_str(
                 r##"
-            .main:has(.onload:hover) .boot {
+            .main:has(.onload-once:hover) .boot {
                 transition: 0s;
                 z-index: -100;
             }
@@ -568,8 +571,12 @@ impl Config {
                                 })
                                 .group(|group| {
                                     group
-                                        .item("Log Off Kurtson...", "@icon:key-win-medium", "")
-                                        .item("Shut Down", "@icon:shut-down-medium", "")
+                                        .item(
+                                            "Log Off Kurtson...",
+                                            "@icon:key-win-medium",
+                                            "sm-logoff",
+                                        )
+                                        .item("Shut Down", "@icon:shut-down-medium", "sm-shutdown")
                                 })
                                 .build(html, css, self);
                             self.add_dialog(
@@ -586,6 +593,17 @@ impl Config {
                     });
                 });
             });
+            self.add_dialog(
+                Dialog::new(
+                    "shutdown-dialog".hashed(),
+                    "Shut Down Windows",
+                    DialogueSymbol::Custom("@icon:shut-down-full-medium".into()),
+                    DialogueKind::YesNo,
+                    "Are you sure you want to shut down?",
+                )
+                .extra_classes("shutdown-dialog")
+                .trigger(".sm-shutdown:active"),
+            );
             emit_div(html, "tb-item tb-quick-launch", |html| {
                 fn emit_quick_launch_item(
                     html: &mut String,

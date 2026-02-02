@@ -1,0 +1,38 @@
+.shutdowner {
+	z-index: -1000;
+	transition: z-index 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background-color: black;
+}
+.shutdowner-anim {
+	transition: opacity 0.1s linear 1s;
+	opacity: 0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: radial-gradient(#008080, #006060 90%);
+}
+
+.main:has(.shutdown-dialog .dialogue-yes:active) .shutdowner {
+	transition: 0s;
+	z-index: 10000;
+}
+.main:has(.shutdown-dialog .dialogue-yes:active) .shutdowner-anim {
+	transition: 0s;
+	opacity: 1;
+}
+.main:has(.shutdowner:active) .boot {
+	transition: 0s;
+	z-index: 70;
+}
+.main:has(.shutdowner:active) .onload {
+	transition: 0s;
+	z-index: 1000000;
+}
+.shutdowner:active {
+	z-index: -1069;
+	transition: 0s;
+}

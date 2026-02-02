@@ -98,7 +98,7 @@ details summary::marker {
 	content: ""
 }
 
-.onload, .onload2 {
+.onload-once {
 	position: absolute;
 	top: 0;
 	bottom: 0;
@@ -110,7 +110,19 @@ details summary::marker {
 	background-color: #ac2b2b22;
 }
 
-.onload:hover, .onload2:hover {
+.onload, .onload2 {
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	z-index: 2147483646;
+	transition: z-index 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+	background-color: #ac2b2b22;
+}
+
+.onload:hover, .onload2:hover, .onload-once:hover {
 	transition: z-index 0s linear 0.0s;
 	z-index: -1000000;
 }
