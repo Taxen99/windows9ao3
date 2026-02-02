@@ -370,12 +370,11 @@ impl Config {
             }); //
             emit_div(html, "boot-stage-login", |html| {
                 // emit_p(html, "", "login!!");
-                // TODO: remove?
-                self.emit_action(
-                    css,
-                    &Action::Focus(Self::LOGIN_ID),
-                    ".boot-stage-login:hover",
-                );
+                // self.emit_action(
+                //     css,
+                //     &Action::Focus(Self::LOGIN_ID),
+                //     ".boot-stage-login:hover",
+                // );
                 Window::new(Self::LOGIN_ID, "Welcome to Windows")
                     .extra_classes("login")
                     .exitable(false)
@@ -412,7 +411,7 @@ impl Config {
                                 emit_div(html, "login-right", |html| {
                                     emit_div(
                                         html,
-                                        "dialogue-button dialogue-button-focus border-style-asymmetric-1",
+                                        "dialogue-button dialogue-button-focus border-style-asymmetric-1 boot-login-ok",
                                         |html| emit_p(html, "", "Ok"),
                                     );
                                     emit_div(

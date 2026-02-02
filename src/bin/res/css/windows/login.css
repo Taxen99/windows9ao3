@@ -62,3 +62,6 @@
 .login-right .dialogue-button:first-child {
 	margin-bottom: 7px;
 }
+.login-right :nth-child(2) {
+	color: #87888E;
+}
