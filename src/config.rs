@@ -111,6 +111,7 @@ pub struct File {
 #[derive(Debug, Default)]
 pub struct BuildOptions {
     pub initial_window: Option<u64>,
+    pub bypass_boot: bool,
 }
 
 #[derive(Debug, Serialize, Deserialize)]
@@ -200,7 +201,7 @@ impl Config {
             emit_div(html, "crt-outerest", |html| {
                 html.push_str(r##"<img src="@img:crt.png" class="crt-image" />"##);
                 emit_div(html, "main", |html| {
-                    self.emit_boot_sequence(html, &mut css);
+                    self.emit_boot_sequence(html, &mut css, &opt);
                     emit_div(html, "screen-tints", |html| {
                         emit_div(html, "screen-tint-A", |html| {});
                         emit_div(html, "screen-tint-B", |html| {});
@@ -268,14 +269,24 @@ impl Config {
             &Action::OpenFileExplorer(Path::new("/").hashed()),
             ".onload:hover",
         );
-        if let Some(initial_window_id) = opt.initial_window {
+        if let Some(&initial_window_id) = opt.initial_window.as_ref() {
             self.emit_action(&mut css, &Action::Open(initial_window_id), ".onload:hover");
         }
         // NOTE: this must be last
         self.emit_actions_for_real(&mut html, &mut css);
         BuildResult { html, css }
     }
-    pub fn emit_boot_sequence(&self, html: &mut String, css: &mut String) {
+    pub fn emit_boot_sequence(&self, html: &mut String, css: &mut String, opt: &BuildOptions) {
+        if opt.bypass_boot {
+            css.push_str(
+                r##"
+            .main:has(.onload:hover) .boot {
+                transition: 0s;
+                z-index: -100;
+            }
+            "##,
+            );
+        }
         emit_div(html, "boot", |html| {
             emit_div(html, "boot-background", |html| {
                 //

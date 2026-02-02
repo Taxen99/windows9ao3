@@ -64,6 +64,9 @@ pub fn main() {
             "deploy" => {
                 deploy = true;
             }
+            "noboot" => {
+                build_opt.bypass_boot = true;
+            }
             _ => (),
         }
     }
