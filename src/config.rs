@@ -213,6 +213,10 @@ impl Config {
                     emit_div(html, "shutdowner", |html| {
                         emit_div(html, "shutdowner-anim", |_| ());
                     });
+                    emit_div(html, "logoffer", |html| {
+                        emit_div(html, "logoffer-back", |_| ());
+                        emit_div(html, "logoffer-anim", |_| ());
+                    });
                     emit_div(html, "desktop", |html| {
                         if let Some(desktop) =
                             self.fs.root.as_folder().unwrap().children.get("desktop")
@@ -603,6 +607,17 @@ impl Config {
                 )
                 .extra_classes("shutdown-dialog")
                 .trigger(".sm-shutdown:active"),
+            );
+            self.add_dialog(
+                Dialog::new(
+                    "logoff-dialog".hashed(),
+                    "Log Off Windows",
+                    DialogueSymbol::Custom("@icon:key-win-medium".into()),
+                    DialogueKind::YesNo,
+                    "Are you sure you want to log off?",
+                )
+                .extra_classes("logoff-dialog")
+                .trigger(".sm-logoff:active"),
             );
             emit_div(html, "tb-item tb-quick-launch", |html| {
                 fn emit_quick_launch_item(

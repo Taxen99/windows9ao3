@@ -1,4 +1,4 @@
-.shutdowner {
+.shutdowner, .logoffer {
 	z-index: -1000;
 	transition: z-index 10s linear 2147483640s;
 	transition-behavior: allow-discrete;
@@ -15,6 +15,20 @@
 	height: 100%;
 	background: radial-gradient(#008080, #006060 90%);
 }
+.logoffer-anim {
+	transition: max-width 0.1s linear 1s;
+	max-width: 0;
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	background: radial-gradient(#008080, #006060 90%);
+}
+.logoffer-back {
+	position: absolute;
+	width: 100%;
+	height: 100%;
+	z-index: -1;
+}
 
 .main:has(.shutdown-dialog .dialogue-yes:active) .shutdowner {
 	transition: 0s;
@@ -24,6 +38,23 @@
 	transition: 0s;
 	opacity: 1;
 }
+.main:has(.logoff-dialog .dialogue-yes:active) .logoffer {
+	transition: 0s;
+	z-index: 10000;
+}
+.main:has(.logoff-dialog .dialogue-yes:active) .logoffer-anim {
+	transition: 0s;
+	max-width: 10000px;
+}
+.main:has(.logoffer-back:hover) :is(.boot, .boot-stage-login) {
+	transition: 0s;
+	z-index: 70;
+}
+.logoffer:has(.logoffer-back:hover) {
+	transition: 0s;
+	z-index: -1067;
+}
+
 .main:has(.shutdowner:active) .boot {
 	transition: 0s;
 	z-index: 70;
