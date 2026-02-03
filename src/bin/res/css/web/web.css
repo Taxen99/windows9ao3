@@ -11,9 +11,21 @@
 .ie-page .body {
 	padding: 15px;
 	width: fit-content;
+	transition: opacity 0s linear 0.2s;
+	opacity: 1;
+}
+.ie-page {
+	user-select: text;
 }
 
 .ie-page .blacked {
 	color: white;
 	background-color: black;
+}
+
+.window-69:has(.ie-tb-refresh:active) .body {
+	max-height: 0px !important;
+	overflow: clip;
+	opacity: 0 !important;
+	transition: 0s;
 }

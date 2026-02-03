@@ -4,6 +4,7 @@ use std::{collections::HashMap, fs, path::Path};
 pub struct Page {
     pub html: String,
     pub title: String,
+    pub url: Url,
 }
 pub struct Site {
     pub domain: String,
@@ -81,6 +82,7 @@ fn read_page(domain: &str, html: String, path: &str) -> Page {
             .unwrap()
             .into()),
         title: title,
+        url: Url::from_parts(domain, path),
     }
 }
 
@@ -123,6 +125,9 @@ impl Url {
     }
     pub fn path(&self) -> &str {
         &self.path
+    }
+    pub fn to_string(&self) -> String {
+        format!("{}/{}", self.domain, self.path)
     }
 }
 

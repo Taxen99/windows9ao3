@@ -7,6 +7,7 @@ pub struct Window {
     pub exitable: bool,
     pub resizable: bool,
     pub inject_outside: Option<String>,
+    pub custom_title: Option<String>,
 }
 
 impl Window {
@@ -20,6 +21,7 @@ impl Window {
             exitable: true,
             resizable: true,
             inject_outside: None,
+            custom_title: None,
         }
     }
     pub fn icon(mut self, icon: &str) -> Self {
@@ -44,6 +46,12 @@ impl Window {
     }
     pub fn inject_outside(mut self, inject_outside: &str) -> Self {
         self.inject_outside = Some(inject_outside.into());
+        self
+    }
+    pub fn custom_title(mut self, mut func: impl FnMut(&mut String)) -> Self {
+        let mut html = String::new();
+        func(&mut html);
+        self.custom_title = Some(html);
         self
     }
     pub fn build(
@@ -115,7 +123,11 @@ impl Window {
                             emit_div(html, "window-icon", |_| {});
                         }
                         emit_div(html, "window-name", |html| {
-                            emit_p(html, "", &self.name);
+                            if let Some(title) = &self.custom_title {
+                                html.push_str(title);
+                            } else {
+                                emit_p(html, "", &self.name);
+                            }
                         });
                         if self.exitable {
                             emit_div(html, "window-exiter", |_| {});

@@ -1213,7 +1213,7 @@ impl Config {
     fn emit_ie_window(&self, html: &mut String, css: &mut String) {
         assert!(
             Self::INTERNET_EXPLORER_ID == 69,
-            "internet-explorer.css depends on this"
+            "internet-explorer.css and web.css depends on this"
         );
         self.add_dialog(Dialog::new("print-ie".hashed(), "Printing Error", DialogueSymbol::Warning, DialogueKind::Ok, "Before you can print, you need to install a printer.<br />To do this, click Start, point to Settings, click Printers, and then double-click Add Printer.")
             .trigger(".ie-tb-print:active")
@@ -1261,6 +1261,18 @@ impl Config {
         history.emit_stack(html, css, self);
         Window::new(Self::INTERNET_EXPLORER_ID, "Internet Explorer")
             .icon("@icon:html-small")
+            .custom_title(|html| {
+                emit_div(html, "ie-title-anchor", |html| {
+                    for (_, site) in &sites {
+                        for (path, page) in &site.pages {
+                            let title = format!("{} - Internet Explorer", &page.title);
+                            let id = Url::from_parts(&site.domain, &path).hashed();
+                            //                              vvvvvvvvvvv we reuse this class because its convenient
+                            emit_p(html, &format!("ie-title ie-addrb-{}", id), &title);
+                        }
+                    }
+                });
+            })
             .build(html, css, self, |html, css| {
                 // TODO: window resizing and shit
                 css.push_str(&format!(
@@ -1445,11 +1457,12 @@ impl Config {
                                 // emit_div(html, "ie-addrb-blocker", |_| ());
                                 for (_, site) in &sites {
                                     for (path, page) in &site.pages {
-                                        let title = &page.title;
-                                        let icon = self.icon_of(&self.fs.root);
+                                        let title = &page.url.to_string();
+                                        let icon = "@icon:html-small";
+                                        // let icon = self.icon_of(&self.fs.root);
                                         let id = Url::from_parts(&site.domain, &path).hashed();
                                         emit_p(html, &format!("ie-addrb-path ie-addrb-{}", id), title);
-                                        css.push_str(&format!(r##".ie-addrb-{}::before {{ background: url("{}"); background-size: cover; }}"##, id, icon));
+                                        css.push_str(&format!(r##".ie-addrb-path.ie-addrb-{}::before {{ background: url("{}"); background-size: cover; }}"##, id, icon));
                                     }
                                 }
                             });

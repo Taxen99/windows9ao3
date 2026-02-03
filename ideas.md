@@ -5,6 +5,11 @@
 - fanfactions.net
 - random personal websites
 
+### stupid commnts
+- let f(x) be a function that proves i'm right. QED.
+- "Everyone dies at some finite time." IMPLIES "There exists a small universal number N such that everyone dies before N days." ALWAYS!
+- That’s not math - that’s category confusion.
+
 ### random events
 - ad banner on common webpage(s) with virus download
 - get a stream of messages from some dude, probably trying to sell you something?

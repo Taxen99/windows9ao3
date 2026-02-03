@@ -10,6 +10,35 @@
 	border-top: none !important;
 }
 
+.ie-title-anchor {
+	padding: 1px;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	/* overflow: hidden; */
+	z-index: 0;
+	/* width: max-content; */
+}
+.ie-title {
+	padding: 2px;
+	background: linear-gradient(to right, #00007B, #3B79B8);
+	padding-left: 23px;
+	transition: z-index 214748s linear;
+	transition-behavior: allow-discrete;
+	z-index: -100;
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	padding-right: 25px;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+
 .ie-addrb-anchor {
 	background-color: white;
 	flex-grow: 1;

@@ -4,3 +4,6 @@
 .moon-img:not(:first-of-type) {
 	width: 95%;
 }
+.ljxii-padleft {
+	padding-left: 20px;
+}
