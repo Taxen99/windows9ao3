@@ -14,6 +14,9 @@
 .ie-page .padside15 {
 	padding: 0 15px;
 }
+.ie-page .red {
+	color: red;
+}
 .ie-page .warning {
 	color: red;
 	border: 3px double orange;
@@ -62,4 +65,15 @@
 	overflow: clip;
 	opacity: 0 !important;
 	transition: 0s;
+}
+
+.ie-page .rightfloat {
+	float: right;
+	margin: 0 0 1em 1em;
+	max-width: 200px;
+}
+.ie-page .leftfloat {
+	float: left;
+	margin: 0 1em 1em 0;
+	max-width: 200px;
 }

@@ -1,0 +1,9 @@
+.joinus {
+	font-family: 'Courier New', Courier, monospace;
+	line-height: 32px;
+}
+
+.joinuserror.joinuserror {
+	margin-top: 30px;
+	line-height: normal;
+}
