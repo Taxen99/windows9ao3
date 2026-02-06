@@ -1,3 +1,5 @@
+use rand::seq::IndexedRandom;
+
 use crate::config::HashedExt;
 use std::{collections::HashMap, fs, path::Path};
 
@@ -12,12 +14,48 @@ pub struct Site {
     pub global_css: String,
 }
 
+#[derive(Debug)]
+pub struct Advert {
+    src: String,
+}
+
+#[derive(Debug)]
+pub struct Adverts {
+    boxes: Vec<Advert>,
+    banners: Vec<Advert>,
+}
+
+pub fn read_adverts() -> Adverts {
+    let mut boxes: Vec<Advert> = Vec::new();
+    let mut banners: Vec<Advert> = Vec::new();
+    for entry in Path::new("res/ads/banner").read_dir().unwrap() {
+        let entry = entry.unwrap();
+        if entry.path().is_file() {
+            let name: String = entry.path().file_name().unwrap().to_str().unwrap().into();
+            banners.push(Advert {
+                src: format!("banner/{name}"),
+            });
+        }
+    }
+    for entry in Path::new("res/ads/box").read_dir().unwrap() {
+        let entry = entry.unwrap();
+        if entry.path().is_file() {
+            let name: String = entry.path().file_name().unwrap().to_str().unwrap().into();
+            boxes.push(Advert {
+                src: format!("box/{name}"),
+            });
+        }
+    }
+    Adverts { boxes, banners }
+}
+
 pub fn read_sites() -> HashMap<String, Site> {
+    let ads = read_adverts();
     let mut sites = HashMap::new();
     for entry in Path::new("res/sites").read_dir().unwrap() {
         let entry = entry.unwrap();
         if entry.path().is_dir() {
-            let site = read_site(&entry.path());
+            let site = read_site(&entry.path(), &ads);
             let domain = site.domain.clone();
             if let Some(_) = sites.insert(domain.clone(), site) {
                 panic!("duplicate site domain {}", domain);
@@ -27,9 +65,9 @@ pub fn read_sites() -> HashMap<String, Site> {
     sites
 }
 
-fn read_site(path: &Path) -> Site {
+fn read_site(path: &Path, ads: &Adverts) -> Site {
     let domain = path.file_name().unwrap().to_str().unwrap().to_owned();
-    let global_css = fs::read_to_string(path.join("style.css")).unwrap();
+    let global_css = fs::read_to_string(path.join("style.css")).unwrap_or_default();
     let mut pages = HashMap::new();
     for entry in path.read_dir().unwrap() {
         let entry = entry.unwrap();
@@ -42,7 +80,7 @@ fn read_site(path: &Path) -> Site {
             }
             let page_path = page_path.replace("+", "/");
             let html = fs::read_to_string(entry.path()).unwrap();
-            let page = read_page(&domain, html, &page_path);
+            let page = read_page(&domain, html, &page_path, ads);
             pages.insert(page_path, page);
         }
     }
@@ -53,8 +91,52 @@ fn read_site(path: &Path) -> Site {
     }
 }
 
-fn read_page(domain: &str, html: String, path: &str) -> Page {
+fn read_page(domain: &str, html: String, path: &str, ads: &Adverts) -> Page {
     let doc = nipper::Document::from(&html);
+    for mut ad in doc.select("advert").iter() {
+        dbg!(
+            Into::<String>::into(doc.select("body").html())
+                .strip_prefix("<body>")
+                .unwrap()
+                .strip_suffix("</body>")
+                .unwrap(),
+        );
+        dbg!(ad.length());
+        let kind = ad.attr("type").expect("advert without type").to_string();
+        let pool = match kind.as_ref() {
+            "banner" => &ads.banners,
+            "box" => &ads.boxes,
+            _ => panic!("invalid ad type"),
+        };
+        let selected_ad = pool.choose(&mut rand::rng()).unwrap();
+        ad.replace_with_html(format!(
+            r##"
+            <div class="advert advert-{}">
+            <img src="@ad:{}" />
+            </div>
+            "##,
+            kind, selected_ad.src
+        ));
+        dbg!("FOO, ", kind);
+        dbg!(
+            Into::<String>::into(doc.select("body").html())
+                .strip_prefix("<body>")
+                .unwrap()
+                .strip_suffix("</body>")
+                .unwrap(),
+        );
+    }
+    if domain == "epicdinner.com" {
+        dbg!(doc.select("advert").length());
+        dbg!(
+            Into::<String>::into(doc.select("body").html())
+                .strip_prefix("<body>")
+                .unwrap()
+                .strip_suffix("</body>")
+                .unwrap(),
+        );
+    }
+
     for mut anchor in doc.select("a").iter() {
         let href = anchor.attr("href").expect("a without href!");
         // let loc = if href.starts_with("/") {

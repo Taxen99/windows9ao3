@@ -12,6 +12,7 @@ pub enum ResouceKind {
     Icon,
     Img,
     Audio,
+    Advert,
 }
 impl ResouceKind {
     // pub fn folder_name(self) -> &'static str {
@@ -28,6 +29,7 @@ pub fn get_resource_path(kind: ResouceKind, name: &str) -> PathBuf {
         ResouceKind::Icon => ("icons", format!("{name}-9.png")),
         ResouceKind::Img => ("img", format!("{name}")),
         ResouceKind::Audio => ("audio", format!("{name}")),
+        ResouceKind::Advert => ("ads", format!("{name}")),
     };
     Path::new(&format!("res/{folder}/{file_name}")).into()
 }
@@ -40,6 +42,7 @@ pub fn parse_resouce(res: &str) -> (ResouceKind, &str) {
         "icon" => ResouceKind::Icon,
         "audio" => ResouceKind::Audio,
         "img" => ResouceKind::Img,
+        "ad" => ResouceKind::Advert,
         _ => panic!("invalid resource type '{kind}'"),
     };
     (kind, name)

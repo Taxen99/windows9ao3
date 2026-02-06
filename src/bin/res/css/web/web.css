@@ -8,14 +8,48 @@
 	color: #551A8B;
 }
 
-.ie-page .body {
+.ie-page .pad15 {
 	padding: 15px;
-	width: fit-content;
+}
+.ie-page .padside15 {
+	padding: 0 15px;
+}
+.ie-page .warning {
+	color: red;
+	border: 3px double orange;
+	border-radius: 1px;
+}
+
+.ie-page .body {
+	/* width: fit-content; */
 	transition: opacity 0s linear 0.2s;
 	opacity: 1;
 }
 .ie-page {
 	user-select: text;
+}
+.ie-page ol {
+	padding-left: 25px;
+}
+.ie-page .advert-banner {
+	height: 50px;
+	width: 100%;
+	display: flex;
+	justify-content: center;
+	border-bottom: 4px double black;
+	background-color: #0000EE;
+}
+.ie-page .advert-banner img {
+	height: 100%;
+	margin-left: 40px;
+}
+.ie-page .advert-box {
+	display: inline-block;
+	height: 130px;
+	border: 4px double black;
+}
+.ie-page .advert-box img {
+	height: 100%;
 }
 
 .ie-page .blacked {
