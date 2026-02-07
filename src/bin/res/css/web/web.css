@@ -77,3 +77,92 @@
 	margin: 0 1em 1em 0;
 	max-width: 200px;
 }
+
+
+
+
+
+/**/
+
+/* .marquee1 {
+  width: 10px;
+  height: 5000px;
+  position: absolute;
+  top: 0px;
+  left: 100px;
+  transform: skew(3600deg, 0);
+  transition: 500s linear;
+}
+
+.marquee2 {
+  width: 75px;
+  height: 50px;
+  position: relative;
+  top: 2px;
+  left: 30px;
+  transform: skew(-3600deg, 0);
+  transition: 500s linear;
+}
+
+.marquee1:nth-child(2), .marquee1:nth-child(2) .marquee2 {
+  transition-delay: 5s;
+}
+.marquee1:nth-child(3), .marquee1:nth-child(3) .marquee2 {
+  transition-delay: 10s;
+}
+.marquee1:nth-child(4), .marquee1:nth-child(4) .marquee2 {
+  transition-delay: 15s;
+}
+.marquee1:nth-child(5), .marquee1:nth-child(5) .marquee2 {
+  transition-delay: 20s;
+}
+
+body:has(.minute-advancer:hover) .marquee1 {
+  transition: 0s;
+  transform: skew(-30deg, 0);
+}
+body:has(.minute-advancer:hover) .marquee2 {
+  transition: 0s;
+  transform: skew(30deg, 0);
+}
+
+.marquee {
+  width: 100%;
+  border: thin solid black;
+  overflow: hidden;
+  height: 40px;
+  position: relative;
+  background-color: blue;
+} */
+
+.marquee {
+	/* background-color: red; */
+	overflow: hidden;
+	display: flex;
+	flex-wrap: nowrap;
+}
+.marquee-repeat {
+	overflow: hidden;
+}
+
+.main:has(.minute-advancer:hover) :is(.marquee1, .marquee-img) {
+	transform: translateX(0.1px);
+	transition: 0s;
+}
+
+.marquee1 {
+	/* background-color: #0000EE99; */
+	min-width: 600px;
+	white-space: nowrap;
+	transition: transform 60s linear;
+	transform: translateX(-2000px);
+}
+
+.marquee-img {
+	height: 50px;
+	width: 12000px;
+	background-repeat: repeat-x;
+	background-size: auto 50px;
+	transition: transform 60s linear;
+	transform: translateX(-6000px);
+}

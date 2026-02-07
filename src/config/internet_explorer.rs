@@ -67,7 +67,7 @@ pub fn read_sites() -> HashMap<String, Site> {
 
 fn read_site(path: &Path, ads: &Adverts) -> Site {
     let domain = path.file_name().unwrap().to_str().unwrap().to_owned();
-    let global_css = fs::read_to_string(path.join("style.css")).unwrap_or_default();
+    let mut global_css = fs::read_to_string(path.join("style.css")).unwrap_or_default();
     let mut pages = HashMap::new();
     for entry in path.read_dir().unwrap() {
         let entry = entry.unwrap();
@@ -80,7 +80,7 @@ fn read_site(path: &Path, ads: &Adverts) -> Site {
             }
             let page_path = page_path.replace("+", "/");
             let html = fs::read_to_string(entry.path()).unwrap();
-            let page = read_page(&domain, html, &page_path, ads);
+            let page = read_page(&domain, html, &page_path, ads, &mut global_css);
             pages.insert(page_path, page);
         }
     }
@@ -91,50 +91,104 @@ fn read_site(path: &Path, ads: &Adverts) -> Site {
     }
 }
 
-fn read_page(domain: &str, html: String, path: &str, ads: &Adverts) -> Page {
+trait SelectionExt {
+    fn inner_html(&self) -> String;
+    fn outer_html(&self) -> String;
+}
+impl SelectionExt for nipper::Selection<'_> {
+    fn inner_html(&self) -> String {
+        let mut inner_html = String::new();
+        for child in self.children().iter() {
+            inner_html.push_str(&child.outer_html());
+        }
+        inner_html
+    }
+
+    fn outer_html(&self) -> String {
+        self.html().to_string()
+    }
+}
+
+fn read_page(domain: &str, html: String, path: &str, ads: &Adverts, css: &mut String) -> Page {
     let doc = nipper::Document::from(&html);
     for mut ad in doc.select("advert").iter() {
-        dbg!(
-            Into::<String>::into(doc.select("body").html())
-                .strip_prefix("<body>")
-                .unwrap()
-                .strip_suffix("</body>")
-                .unwrap(),
-        );
-        dbg!(ad.length());
         let kind = ad.attr("type").expect("advert without type").to_string();
+        let marquee = ad.attr("marquee").unwrap_or_default().to_string();
         let pool = match kind.as_ref() {
             "banner" => &ads.banners,
             "box" => &ads.boxes,
             _ => panic!("invalid ad type"),
         };
         let selected_ad = pool.choose(&mut rand::rng()).unwrap();
-        ad.replace_with_html(format!(
-            r##"
-            <div class="advert advert-{}">
-            <img src="@ad:{}" />
-            </div>
-            "##,
-            kind, selected_ad.src
-        ));
-        dbg!("FOO, ", kind);
-        dbg!(
-            Into::<String>::into(doc.select("body").html())
-                .strip_prefix("<body>")
-                .unwrap()
-                .strip_suffix("</body>")
-                .unwrap(),
-        );
+        match marquee.as_ref() {
+            "true" => {
+                ad.replace_with_html(format!(
+                    r##"
+                    <marquee type="imgrepeat">
+                    <img src="@ad:{}" />
+                    </marquee>
+                    "##,
+                    selected_ad.src
+                ));
+            }
+            _ => {
+                ad.replace_with_html(format!(
+                    r##"
+                    <div class="advert advert-{}">
+                    <img src="@ad:{}" />
+                    </div>
+                    "##,
+                    kind, selected_ad.src
+                ));
+            }
+        }
     }
-    if domain == "epicdinner.com" {
-        dbg!(doc.select("advert").length());
-        dbg!(
-            Into::<String>::into(doc.select("body").html())
-                .strip_prefix("<body>")
-                .unwrap()
-                .strip_suffix("</body>")
-                .unwrap(),
-        );
+    for mut marquee in doc.select("marquee").iter() {
+        let kind = marquee.attr("type").expect("marquee without type!");
+        let replacement_html = match kind.as_ref() {
+            "imgrepeat" => {
+                let imgelm = marquee.select("img").first();
+                let src = imgelm.attr("src").unwrap().to_string();
+                let replacement_html = format!(
+                    r##"
+                    <div class="marquee-repeat">
+                        <div class="marquee-img marquee-img-{}"></div>
+                    </div>
+                "##,
+                    src.hashed()
+                );
+                css.push_str(&format!(
+                    r##"
+                    .marquee-img-{} {{
+                        background-image: url("{}")
+                    }}
+                "##,
+                    src.hashed(),
+                    src
+                ));
+                replacement_html
+            }
+            _ => {
+                let replacement_html = format!(
+                    r##"
+        <div class="marquee">
+            <div class="marquee1">{0}</div>
+            <div class="marquee1">{0}</div>
+            <div class="marquee1">{0}</div>
+            <div class="marquee1">{0}</div>
+            <div class="marquee1">{0}</div>
+            <div class="marquee1">{0}</div>
+            <div class="marquee1">{0}</div>
+            <div class="marquee1">{0}</div>
+        </div>
+        "##,
+                    dbg!(marquee.inner_html())
+                );
+                replacement_html
+            }
+        };
+
+        marquee.replace_with_html(replacement_html);
     }
 
     for mut anchor in doc.select("a").iter() {
