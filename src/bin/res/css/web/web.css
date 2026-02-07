@@ -31,8 +31,11 @@
 .ie-page {
 	user-select: text;
 }
-.ie-page ol {
-	padding-left: 25px;
+.ie-page :is(ol, ul) {
+	padding-left: 30px;
+}
+.ie-page :is(h1) {
+	margin: 10px 0;
 }
 .ie-page .advert-banner {
 	height: 50px;

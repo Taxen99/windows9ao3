@@ -1,0 +1,21 @@
+.bluetooth-special {
+	font-family: cursive;
+	font-weight: bolder;
+	background-color: black;
+	color: white;
+	text-decoration: underline;
+}
+
+.bluetooth-middle {
+	background: linear-gradient(blue, cyan);
+	/* height: 400px; */
+	color: whitesmoke;
+}
+
+.bluetooth-big {
+	font-size: 30px;
+}
+
+.bluetooth-product {
+	margin: 15px 10px;
+}

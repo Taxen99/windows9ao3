@@ -191,8 +191,35 @@ fn read_page(domain: &str, html: String, path: &str, ads: &Adverts, css: &mut St
         marquee.replace_with_html(replacement_html);
     }
 
+    for mut four04 in doc.select("e404").iter() {
+        // taken&modified from https://deltarune.com/december/
+        let replacement = format!(
+            r##"
+            <title>HTTP 404 Not Found</title>
+<div class="e404">
+<h1><img src="@icon:ieerror" alt="Info"> The page cannot be found</h1>
+<p>The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+<hr>
+<p>Please try the following:</p>
+<ul>
+<li>If you typed the page address in the Address bar, make sure that it is spelled correctly.</li>
+<li>Open the <a href="{0}">http://{0}</a> home page, and then look for links to the information you want.</li>
+<li>Click the <a href="#" class="history-back"><img src="@icon:back" alt="Back"> Back</a> button to try another link.</li>
+<li>Click <a href="#"><img src="@icon:search" alt="Search"> Search</a> to look for information on the Internet.</li>
+</ul>
+<p>HTTP 404 - File not found<br>Internet Explorer</p>
+</div>
+        "##,
+            domain
+        );
+        four04.replace_with_html(replacement);
+    }
+
     for mut anchor in doc.select("a").iter() {
         let href = anchor.attr("href").expect("a without href!");
+        if href.as_ref() == "#" {
+            continue;
+        }
         // let loc = if href.starts_with("/") {
         //     (domain, href.strip_prefix("/").unwrap())
         // } else {

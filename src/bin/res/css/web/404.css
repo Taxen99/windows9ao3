@@ -1,0 +1,33 @@
+.e404 {
+	font-family: "Verdana", Verdana, Arial, sans-serif;
+	max-width: 400px;
+	padding: 1rem 2rem;
+	font-size: 12px;
+}
+
+.e404 h1 {
+	font-weight: 500;
+	font-size: 18px;
+}
+
+.e404 h1 img {
+	vertical-align: middle;
+	margin-right: 0.4rem;
+	width: 32px;
+	filter: none;
+}
+
+.e404 hr {
+	color: #DDDDDD;
+	margin-top: 1rem;
+	margin-bottom: 1.25rem;
+}
+
+.e404 a {
+	text-decoration: underline;
+	color: #ff0000;
+}
+.e404 img {
+	width: 16px;
+	filter: grayscale(100%);
+}
