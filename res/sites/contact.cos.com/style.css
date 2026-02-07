@@ -1,0 +1,13 @@
+.cos-fancy {
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.cos-middle {
+	background-color: aquamarine;
+	color: brown;
+}
+
+.cos-ads {
+	transform: scale(0.5);
+	transform-origin: left;
+}

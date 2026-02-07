@@ -81,7 +81,11 @@
 	max-width: 200px;
 }
 
-
+.ie-page .flex {
+	display: flex;
+	/* flex-wrap: wrap;
+	max-width: fit-content; */
+}
 
 
 
