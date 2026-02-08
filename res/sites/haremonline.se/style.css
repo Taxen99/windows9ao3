@@ -70,6 +70,14 @@
 	z-index: 1;
 	transition: 0s;
 }
+@onpageload@ .harem-question {
+	transition: 0s;
+	z-index: -101;
+}
+@onpageload@ .harem-question.harem-question-0 {
+	transition: 0s;
+	z-index: 1;
+}
 
 .harem-quiz:has(.harem-qadv-bad:active) .harem-question.harem-question {
 	z-index: -101;

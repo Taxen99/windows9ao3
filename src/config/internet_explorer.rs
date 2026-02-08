@@ -68,6 +68,10 @@ pub fn read_sites() -> HashMap<String, Site> {
 fn read_site(path: &Path, ads: &Adverts) -> Site {
     let domain = path.file_name().unwrap().to_str().unwrap().to_owned();
     let mut global_css = fs::read_to_string(path.join("style.css")).unwrap_or_default();
+    global_css = global_css.replace(
+        "@onpageload@",
+        ".main:has(:is(.history-item:hover, .ie-tb-refresh:active))",
+    );
     let mut pages = HashMap::new();
     for entry in path.read_dir().unwrap() {
         let entry = entry.unwrap();
