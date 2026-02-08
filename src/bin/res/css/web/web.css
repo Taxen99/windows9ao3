@@ -81,6 +81,9 @@
 	max-width: 200px;
 }
 
+.ie-page hr {
+	margin: 15px 0;
+}
 .ie-page .flex {
 	display: flex;
 	/* flex-wrap: wrap;

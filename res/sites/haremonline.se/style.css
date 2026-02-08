@@ -1,0 +1,93 @@
+.harem-body1 {
+	background: linear-gradient(orange, red);
+	color: whitesmoke;
+}
+.harem-body2 {
+	background: linear-gradient(red, pink);
+	color: black;
+}
+
+.harem-imgs {
+	border: 5px dotted rgb(255, 91, 157);
+	padding: 10px;
+	display: flex;
+	flex-wrap: nowrap;
+	margin: 0 15px;
+	justify-content: space-around;
+}
+
+.harem-imgs img {
+	width: 90%;
+}
+.harem-imgs div {
+	width: 25%;
+	border: 2px solid black;
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+}
+.harem-imgs p {
+	font-family: 'Courier New', Courier, monospace;
+	background: linear-gradient(red, blue, green);
+	color: aqua;
+	font-weight: bold;
+	text-decoration: dotted underline;
+}
+.harem-imgs a {
+	color: yellow;
+}
+.harem-body3 {
+	background-color: black;
+	color: white;
+}
+
+.harem-quiz {
+	background-color: pink;
+	height: 200px;
+	position: relative;
+	font-family: cursive;
+}
+
+.harem-question {
+	position: absolute;
+	/* z-index: 2147483647; */
+	transition: z-index 10s linear 2147483640s;
+	transition-behavior: allow-discrete;
+	z-index: -100;
+}
+.harem-question.harem-question-0 {
+	z-index: 0;
+}
+.harem-qadv {
+	cursor: pointer;
+	text-decoration: wavy underline;
+}
+.harem-question:has(.harem-qadv:active) {
+	transition: 0s;
+	z-index: -101;
+}
+.harem-question:has(.harem-qadv:active) + .harem-question {
+	z-index: 1;
+	transition: 0s;
+}
+
+.harem-quiz:has(.harem-qadv-bad:active) .harem-question.harem-question {
+	z-index: -101;
+	transition: 0s;
+}
+.harem-question:has(.harem-qadv-bad:active) ~ .harem-question-bad.harem-question-bad.harem-question-bad {
+	z-index: 10;
+	transition: 0s;
+}
+
+.harem-qinput {
+	padding: 2px;
+	margin: 2px;
+	font-family: 'Courier New', Courier, monospace;
+	border: 1px solid black;
+	background-color: white;
+	color: lightgray;
+}
+.harem-qadv-final {
+	color: gray;
+}
