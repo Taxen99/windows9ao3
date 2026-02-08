@@ -1,6 +1,6 @@
 use rand::seq::IndexedRandom;
 
-use crate::config::HashedExt;
+use crate::config::{FsEntry, HashedExt};
 use std::{collections::HashMap, fs, path::Path};
 
 pub struct Page {
@@ -65,6 +65,23 @@ pub fn read_sites() -> HashMap<String, Site> {
     sites
 }
 
+trait PathExt {
+    fn read_dir_recurse(&self, cb: &mut dyn FnMut(&Path));
+}
+impl PathExt for Path {
+    fn read_dir_recurse(&self, cb: &mut dyn FnMut(&Path)) {
+        for entry in self.read_dir().unwrap() {
+            let entry = entry.unwrap();
+            if entry.file_type().unwrap().is_dir() {
+                entry.path().read_dir_recurse(cb);
+            } else {
+                assert!(entry.file_type().unwrap().is_file());
+                cb(&entry.path());
+            }
+        }
+    }
+}
+
 fn read_site(path: &Path, ads: &Adverts) -> Site {
     let domain = path.file_name().unwrap().to_str().unwrap().to_owned();
     let mut global_css = fs::read_to_string(path.join("style.css")).unwrap_or_default();
@@ -73,20 +90,24 @@ fn read_site(path: &Path, ads: &Adverts) -> Site {
         ".main:has(:is(.history-item:hover, .ie-tb-refresh:active))",
     );
     let mut pages = HashMap::new();
-    for entry in path.read_dir().unwrap() {
-        let entry = entry.unwrap();
-        if entry.path().is_file() && entry.path().extension().unwrap().to_str().unwrap() == "html" {
-            let mut page_path = entry.path();
+    path.read_dir_recurse(&mut |filepath| {
+        let mut page_path = filepath.strip_prefix(path).unwrap().to_owned();
+        if page_path.extension().unwrap().to_str().unwrap() == "html" {
             page_path.set_extension("");
-            let mut page_path = page_path.file_name().unwrap().to_str().unwrap();
+            let mut page_path = page_path.to_str().unwrap();
+            dbg!(page_path);
             if page_path == "index" {
                 page_path = "";
             }
             let page_path = page_path.replace("+", "/");
-            let html = fs::read_to_string(entry.path()).unwrap();
+            let html = fs::read_to_string(filepath).unwrap();
             let page = read_page(&domain, html, &page_path, ads, &mut global_css);
             pages.insert(page_path, page);
         }
+        //todo!()
+    });
+    for entry in path.read_dir().unwrap() {
+        let entry = entry.unwrap();
     }
     Site {
         domain,
