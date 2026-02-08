@@ -63,7 +63,7 @@
 	background-color: black;
 }
 
-.window-69:has(.ie-tb-refresh:active) .body {
+/*@onpageload@*/ .main:has(:is(.history-item:hover, .ie-tb-refresh:active)) .body {
 	max-height: 0px !important;
 	overflow: clip;
 	opacity: 0 !important;

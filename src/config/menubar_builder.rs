@@ -48,7 +48,7 @@ impl MenubarBuilder {
                                 }
                                 let id = sub_item.id.unwrap_or_else(|| rand::rng().random());
                                 let id_class = format!("mb-submenu-item-{}", id);
-                                classlist.push_str(&format!(" {id_class}"));
+                                classlist.push_str(&format!(" {id_class} {}", sub_item.class));
                                 match &sub_item.kind {
                                     SubItemKind::Dummy => {
                                         html.push_str(&format!(
@@ -138,6 +138,7 @@ pub struct SubItem {
     kind: SubItemKind,
     id: Option<u64>,
     disabled: bool,
+    class: String,
 }
 
 impl SubItem {
@@ -147,6 +148,7 @@ impl SubItem {
             kind: SubItemKind::Dummy,
             id: None,
             disabled,
+            class: String::new(),
         }
     }
     pub fn dummy(&mut self) -> &mut Self {
@@ -163,6 +165,10 @@ impl SubItem {
     }
     pub fn id(&mut self, id: u64) -> &mut Self {
         self.id = Some(id);
+        self
+    }
+    pub fn class(&mut self, class: &str) -> &mut Self {
+        self.class = class.into();
         self
     }
 }

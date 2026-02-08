@@ -1334,7 +1334,7 @@ impl Config {
                                 .group(|group| group
                                     .sub_disabled("Go To")
                                     .sub("Stop", |item| item.dummy())
-                                    .sub("Refresh", |item| item.dummy())
+                                    .sub("Refresh", |item| item.dummy().class("ie-tb-refresh"))
                                 )
                                 .group(|group| group
                                     .sub_disabled("Text Size")
