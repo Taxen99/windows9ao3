@@ -1,0 +1,51 @@
+.pweb-fancy {
+	font-family: Impact, Haettenschweiler, 'Arial Narrow Bold', sans-serif;
+}
+
+.pweb-back {
+	width: 100%;
+	background: url("@img:pweb/back1.png");
+	background-size: cover;
+	padding: 15px;
+	color: whitesmoke;
+}
+
+.pweb-back :is(h1, h2, h3) {
+	text-align: center;
+}
+
+.pweb-products {
+	display: flex;
+	flex-wrap: wrap;
+}
+.pweb-product {
+	width: 200px;
+	height: 250px;
+	margin: 8px;
+	padding: 8px;
+	border: 1px solid gold;
+	border-radius: 10px;
+	display: flex;
+	flex-direction: column;
+}
+.pweb-product:nth-child(1) {
+	background: linear-gradient(rgb(35, 35, 44), rgb(87, 63, 63));
+}
+.pweb-product:nth-child(2) {
+	background: linear-gradient(rgb(44, 44, 35), rgb(87, 63, 63));
+}
+.pweb-product:nth-child(3) {
+	background: linear-gradient(rgb(44, 35, 41), rgb(87, 78, 63));
+}
+
+.pweb-product-p {
+	flex-grow: 1;
+	display: flex;
+	align-items: center;
+}
+
+.pweb-then {
+	background-color: black;
+	padding: 5px;
+	color: gold;
+}
