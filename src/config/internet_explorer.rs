@@ -1,7 +1,9 @@
 use rand::seq::IndexedRandom;
 
-use crate::config::{FsEntry, HashedExt};
+use crate::config::{FsEntry, HashedExt, internet_explorer::fanfactions::generate_fanfactions_net};
 use std::{collections::HashMap, fs, path::Path};
+
+mod fanfactions;
 
 pub struct Page {
     pub html: String,
@@ -55,7 +57,14 @@ pub fn read_sites() -> HashMap<String, Site> {
     for entry in Path::new("res/sites").read_dir().unwrap() {
         let entry = entry.unwrap();
         if entry.path().is_dir() {
-            let site = read_site(&entry.path(), &ads);
+            let mut site = match entry.path().file_name().unwrap().to_str().unwrap() {
+                "fanfactions.net" => generate_fanfactions_net(&entry.path(), &ads),
+                _ => read_site(&entry.path(), &ads),
+            };
+            site.global_css = site.global_css.replace(
+                "@onpageload@",
+                ".main:has(:is(.history-item:hover, .ie-tb-refresh:active))",
+            );
             let domain = site.domain.clone();
             if let Some(_) = sites.insert(domain.clone(), site) {
                 panic!("duplicate site domain {}", domain);
@@ -85,11 +94,8 @@ impl PathExt for Path {
 fn read_site(path: &Path, ads: &Adverts) -> Site {
     let domain = path.file_name().unwrap().to_str().unwrap().to_owned();
     let mut global_css = fs::read_to_string(path.join("style.css")).unwrap_or_default();
-    global_css = global_css.replace(
-        "@onpageload@",
-        ".main:has(:is(.history-item:hover, .ie-tb-refresh:active))",
-    );
     let mut pages = HashMap::new();
+    // let template = fs::read_to_string(path.join("_template.html")).ok();
     path.read_dir_recurse(&mut |filepath| {
         let mut page_path = filepath.strip_prefix(path).unwrap().to_owned();
         if page_path.extension().unwrap().to_str().unwrap() == "html" {
@@ -106,9 +112,6 @@ fn read_site(path: &Path, ads: &Adverts) -> Site {
         }
         //todo!()
     });
-    for entry in path.read_dir().unwrap() {
-        let entry = entry.unwrap();
-    }
     Site {
         domain,
         pages,

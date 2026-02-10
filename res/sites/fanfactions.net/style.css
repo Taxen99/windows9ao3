@@ -1,0 +1,121 @@
+.ff-header {
+	display: flex;
+	background-color: darkcyan;
+	border-bottom: 1px solid black;
+}
+
+.ff-logo {
+	width: 60px;
+	height: 60px;
+}
+
+.ff-header-inner {
+	display: flex;
+	flex-direction: column;
+	color: white;
+	padding: 3px;
+	flex: 1;
+}
+
+.ff-header sup {
+	opacity: 0.3;
+}
+.ff-header hr {
+	margin: 0;
+}
+
+.ff-header-upper {
+	flex: 1;
+	display: flex;
+	justify-content: space-between;
+}
+.ff-header-title {
+	font-size: 130%;
+	font-family: 'Trebuchet MS', 'Lucida Sans Unicode', 'Lucida Grande', 'Lucida Sans', Arial, sans-serif;
+}
+
+.ff-header-lower {
+	flex: 1;
+	display: flex;
+}
+
+.ff-header-account {
+	display: flex;
+}
+
+.ff-header-account > p {
+	margin: auto 5px;
+}
+
+.ff-button {
+	padding: 1px;
+	background: linear-gradient(white, rgb(235, 235, 235));
+	border: 1px inset darkslategrey;
+	border-radius: 3px;
+	color: black;
+	height: min-content;
+	user-select: none;
+}
+
+.ff-button:hover {
+	background: aliceblue;
+	color: darkcyan;
+}
+
+.ff-header-drop {
+	margin: auto 10px;
+	border: 1px solid rgb(206, 188, 97);
+	padding: 1px 2px;
+	position: relative;
+}
+
+.ff-header-drop-content {
+	display: none;
+	position: absolute;
+	top: 110%;
+	left: 0;
+	border: 1px solid black;
+	display: none;
+	flex-direction: column;
+	padding: 10px;
+	column-gap: 5px;
+	background-color: lightblue;
+	width: max-content;
+}
+.ff-header-drop > p > a, .ff-header-title > a {
+	color: white;
+	text-decoration: none;
+	transition: 0s;
+}
+
+.ff-header-drop:hover > .ff-header-drop-content, .ff-header-drop-content:hover {
+	display: flex;
+}
+
+.ff-body {
+	display: flex;
+	flex-direction: column;
+	height: 100%;
+}
+
+.ff-main {
+	background-color: rgb(230, 212, 210);
+	flex: 1;
+	padding: 10px;
+	color: rgb(14, 92, 92);
+}
+
+.ff-main-index {
+	line-height: 200%;
+}
+
+.ff-index-thingy {
+	border: 3px inset gold;
+	padding: 3px;
+	margin: 10px 0;
+}
+
+.ff-item {
+	border: 2px ridge gold;
+	padding: 5px;
+}
