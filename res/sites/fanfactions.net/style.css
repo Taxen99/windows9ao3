@@ -119,3 +119,55 @@
 	border: 2px ridge gold;
 	padding: 5px;
 }
+
+
+.ff-blurb {
+	border: 2px ridge gold;
+	background-color: darkcyan;
+	color: white;
+	padding: 5px;
+}
+.ff-blurb-middle {
+	margin: 5px 0;
+}
+.ff-blurb-tags {
+	display: flex;
+	margin-bottom: 5px;
+	/* flex-wrap: wrap; */
+}
+.ff-blurb-tags > p:not(:last-child)::after {
+	content: ",\00a0";
+}
+.ff-blurb-tags > p {
+	text-decoration: dotted underline;
+}
+.ff-blurb-upper {
+	position: relative;
+}
+.ff-blurb-date {
+	position: absolute;
+	top: 0;
+	right: 0;
+}
+.ff-blurb-lower {
+	display: flex;
+	margin-left: auto;
+}
+.ff-blurb-lower > p {
+	margin: 0 5px;
+}
+.ff-blurb-sum {
+	font-style: italic;
+	border: 1px solid gold;
+	border-style: solid none;
+	padding: 5px 0;
+}
+.ff-blurb a {
+	color: gold;
+}
+.ff-blurb a:active {
+	color: goldenrod !important;
+}
+/* .ff-uline {
+	text-decoration: underline;
+} */
