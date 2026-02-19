@@ -81,6 +81,7 @@
 	column-gap: 5px;
 	background-color: lightblue;
 	width: max-content;
+	z-index: 5;
 }
 .ff-header-drop > p > a, .ff-header-title > a {
 	color: white;
@@ -171,3 +172,65 @@
 /* .ff-uline {
 	text-decoration: underline;
 } */
+
+.ff-fic-start, .ff-fic-end {
+	margin: 5px;
+	padding: 10px;
+	background-color: cadetblue;
+	border: 3px double white;
+	color: white;
+}
+.ff-fic-buts {
+	display: flex;
+}
+.ff-fic-comments {
+	margin: 4px;
+	margin-top: 10px;
+	background-color: cadetblue;
+	padding: 7px;
+	color: white;
+}
+.ff-fic-body {
+	margin: 3px;
+	line-height: 1.25em;
+}
+
+.ff-comment {
+	border: 2px ridge gold;
+	margin: 4px 0px;
+}
+.ff-comment-top {
+	display: flex;
+	border-bottom: 1px solid gold;
+	margin-bottom: 2px;
+	padding-bottom: 2px;
+}
+.ff-comment-logo {
+	width: 32px;
+	height: 32px;
+}
+.ff-comment-name {
+	margin-left: 20px;
+	text-decoration: underline;
+}
+.ff-comment-text {
+	padding: 5px;
+}
+
+.ff-profile-info {
+	margin-bottom: 5px;
+	padding: 10px;
+	background-color: cadetblue;
+	border: 3px double white;
+	color: white;
+	display: flex;
+}
+.ff-profile-logo {
+	width: 50px;
+	height: 50px;
+	background-color: white;
+}
+.ff-profile-name {
+	font-size: x-large;
+	margin-left: 10px;
+}

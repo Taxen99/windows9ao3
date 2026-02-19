@@ -1,43 +1,108 @@
-use std::{collections::HashMap, fs::read_to_string, path::Path};
+use std::{cell::RefCell, collections::HashMap, fs::read_to_string, path::Path};
+
+use serde::Deserialize;
 
 use crate::config::{
-    emit_div, emit_p,
+    HashedExt, emit_div, emit_img, emit_p,
     internet_explorer::{Adverts, PathExt, Site, read_page},
 };
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize)]
+struct User {
+    name: String,
+    pic: String,
+    id: u64,
+}
+impl User {
+    fn path(&self) -> String {
+        format!("users/{}", self.name.hashed())
+    }
+}
+
+#[derive(Debug, Clone, Deserialize)]
+struct Comment {
+    user: u64,
+    text: String,
+}
+
+#[derive(Debug, Clone, Deserialize)]
 struct Chapter {
     start_notes: Option<String>,
     end_notes: Option<String>,
     text: String,
+    comments: Vec<Comment>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Deserialize, enum_as_inner::EnumAsInner)]
+enum Category {
+    Book,
+    Movie,
+    Comic,
+    Other,
+}
+
+#[derive(Debug, Clone, Deserialize)]
 struct Fic {
     title: String,
-    author: String,
+    authorid: u64,
     date: String,
     fandom: String,
     tags: Vec<String>,
     summary: String,
     language: String,
-    word_count: u32,
+    #[serde(skip_serializing)]
+    word_count: RefCell<Option<u32>>,
     chapters: Vec<Chapter>,
     views: u32,
+    category: Category,
+}
+impl Fic {
+    fn word_count(&self) -> u32 {
+        let mut word_count = self.word_count.borrow_mut();
+        if word_count.is_some() {
+            return word_count.unwrap();
+        }
+        *word_count = Some(
+            self.chapters
+                .iter()
+                .map(|x| x.text.split_whitespace().count() as u32)
+                .sum(),
+        );
+        word_count.unwrap()
+    }
+    fn chapter_path(&self, chapter_idx: usize) -> String {
+        format!("fics/{}-{}", self.title.hashed(), chapter_idx)
+    }
 }
 
-fn emit_fic_blurb(fic: &Fic, html: &mut String, css: &mut String) {
+#[derive(Debug, Clone, Deserialize)]
+struct FfData {
+    users: Vec<User>,
+    fics: Vec<Fic>,
+}
+impl FfData {
+    fn user(&self, id: u64) -> &User {
+        self.users.iter().find(|x| x.id == id).unwrap()
+    }
+}
+
+fn emit_fic_blurb(fic: &Fic, html: &mut String, css: &mut String, data: &FfData) {
     emit_div(html, "ff-blurb", |html| {
         html.push_str(&format!(
             r##"
             <div class="ff-blurb-upper">
                 <div class="ff-blurb-title">
-                    <p><a href="#">{}</a> by <a href="#">{}</a></p>
+                    <p><a href="/{}">{}</a> by <a href="/{}">{}</a></p>
                     <p class="ff-uline">{}</p>
                 </div>
                 <div class="ff-blurb-date"><p><sup>{}</sup></p></div>
             </div>"##,
-            fic.title, fic.author, fic.fandom, fic.date
+            fic.chapter_path(0),
+            fic.title,
+            data.user(fic.authorid).path(),
+            data.user(fic.authorid).name,
+            fic.fandom,
+            fic.date
         ));
         emit_div(html, "ff-blurb-middle", |html| {
             emit_div(html, "ff-blurb-tags", |html| {
@@ -60,14 +125,107 @@ fn emit_fic_blurb(fic: &Fic, html: &mut String, css: &mut String) {
                 <p>Views: {}</p>
             </div>"##,
             fic.language,
-            fic.word_count,
+            fic.word_count(),
             fic.chapters.len(),
             fic.views
         ));
     });
 }
 
+fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut String, data: &FfData) {
+    let chapter = &fic.chapters[chapter_idx];
+    emit_div(html, "body ff-fic", |html| {
+        emit_fic_blurb(fic, html, css, data);
+        if let Some(sn) = &chapter.start_notes {
+            emit_div(html, "ff-fic-start", |html| {
+                html.push_str(&format!("<h2>Author's Note</h2><p><i>{}</i></p>", sn));
+            });
+        }
+        emit_div(html, "ff-fic-body", |html| {
+            html.push_str(&format!("<h1>{}</h1>", fic.title,));
+            if fic.chapters.len() > 1 {
+                html.push_str(&format!(
+                    "<h2>Chapter {} - {}</h2>",
+                    chapter_idx + 1,
+                    chapter.text
+                ));
+            }
+            html.push_str(&chapter.text);
+        });
+        if let Some(en) = &chapter.end_notes {
+            emit_div(html, "ff-fic-start", |html| {
+                html.push_str(&format!("<h2>End Note</h2><p><i>{}</i></p>", en));
+            });
+        }
+        emit_div(html, "ff-fic-buts", |html| {
+            if fic.chapters.len() > chapter_idx + 1 {
+                emit_p(
+                    html,
+                    "ff-button",
+                    &format!(
+                        r##"<a href="{}">Next Chapter</a>"##,
+                        fic.chapter_path(chapter_idx + 1)
+                    ),
+                );
+            }
+            if 0 < chapter_idx {
+                emit_p(
+                    html,
+                    "ff-button",
+                    &format!(
+                        r##"<a href="{}">Previous Chapter</a>"##,
+                        fic.chapter_path(chapter_idx - 1)
+                    ),
+                );
+            }
+        });
+        emit_div(html, "ff-fic-comments", |html| {
+            html.push_str(&format!("<h2>Comments ({})</h2>", chapter.comments.len()));
+            emit_p(html, "warning", "YOU ARE BANNED FROM POSTING COMMENTS");
+            for comment in &chapter.comments {
+                let user = data.user(comment.user);
+                emit_div(html, "ff-comment", |html| {
+                    let pic = &user.pic;
+                    emit_div(html, "ff-comment-top", |html| {
+                        if pic.len() > 0 {
+                            emit_img(html, "ff-comment-logo", pic);
+                        }
+                        emit_p(
+                            html,
+                            "ff-comment-name",
+                            &format!(r##"<a href="/{}">{}</a>"##, user.path(), user.name),
+                        );
+                    });
+                    emit_div(html, "ff-comment-text", |html| {
+                        emit_p(html, "", &comment.text);
+                    });
+                });
+            }
+        });
+    });
+}
+
+fn emit_profile(user: &User, html: &mut String, css: &mut String, data: &FfData) {
+    emit_div(html, "body ff-profile", |html| {
+        emit_div(html, "ff-profile-info", |html| {
+            if user.pic.len() > 0 {
+                emit_img(html, "ff-profile-logo", &user.pic);
+            }
+            emit_p(html, "ff-profile-name", &user.name);
+        });
+        emit_div(html, "ff-profile-fics", |html| {
+            html.push_str(&format!("<h1>{}'s Works</h1>", user.name));
+            for fic in &data.fics {
+                if fic.authorid == user.id {
+                    emit_fic_blurb(&fic, html, css, &data);
+                }
+            }
+        });
+    });
+}
+
 pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
+    let data: FfData = toml::from_str(&read_to_string(path.join("data.toml")).unwrap()).unwrap();
     let mut global_css = read_to_string(path.join("style.css")).unwrap();
     let mut pages = HashMap::new();
     let domain: String = "fanfactions.net".into();
@@ -88,12 +246,68 @@ pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
                 page_path = "".into();
             }
             let html = read_to_string(filepath).unwrap();
-            let html = html.replace("@header@", &header_html);
+            let mut html = html.replace("@header@", &header_html);
+            {
+                if html.contains("@@books@@") {
+                    let mut books = String::new();
+                    for fic in &data.fics {
+                        if fic.category.is_book() {
+                            emit_fic_blurb(&fic, &mut books, &mut global_css, &data);
+                        }
+                    }
+                    html = html.replace("@@books@@", &books);
+                }
+                if html.contains("@@movies@@") {
+                    let mut books = String::new();
+                    for fic in &data.fics {
+                        if fic.category.is_comic() {
+                            emit_fic_blurb(&fic, &mut books, &mut global_css, &data);
+                        }
+                    }
+                    html = html.replace("@@movies@@", &books);
+                }
+                if html.contains("@@comics@@") {
+                    let mut books = String::new();
+                    for fic in &data.fics {
+                        if fic.category.is_movie() {
+                            emit_fic_blurb(&fic, &mut books, &mut global_css, &data);
+                        }
+                    }
+                    html = html.replace("@@comics@@", &books);
+                }
+                if html.contains("@@others@@") {
+                    let mut books = String::new();
+                    for fic in &data.fics {
+                        if fic.category.is_other() {
+                            emit_fic_blurb(&fic, &mut books, &mut global_css, &data);
+                        }
+                    }
+                    html = html.replace("@@others@@", &books);
+                }
+            }
             let page = read_page(&domain, html, &page_path, ads, &mut global_css);
             pages.insert(page_path, page);
         }
         //todo!()
     });
+    for fic in &data.fics {
+        let mut html = String::new();
+        for (i, _) in fic.chapters.iter().enumerate() {
+            emit_chapter(&fic, i, &mut html, &mut global_css, &data);
+        }
+        pages.insert(
+            fic.chapter_path(0),
+            read_page(&domain, html, &fic.chapter_path(0), ads, &mut global_css),
+        );
+    }
+    for user in &data.users {
+        let mut html = String::new();
+        emit_profile(user, &mut html, &mut global_css, &data);
+        pages.insert(
+            user.path(),
+            read_page(&domain, html, &user.path(), ads, &mut global_css),
+        );
+    }
     Site {
         domain,
         pages,

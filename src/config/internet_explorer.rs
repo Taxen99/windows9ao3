@@ -101,7 +101,7 @@ fn read_site(path: &Path, ads: &Adverts) -> Site {
         if page_path.extension().unwrap().to_str().unwrap() == "html" {
             page_path.set_extension("");
             let mut page_path = page_path.to_str().unwrap();
-            dbg!(page_path);
+            // dbg!(page_path);
             if page_path == "index" {
                 page_path = "";
             }
@@ -138,6 +138,7 @@ impl SelectionExt for nipper::Selection<'_> {
 }
 
 fn read_page(domain: &str, html: String, path: &str, ads: &Adverts, css: &mut String) -> Page {
+    println!("PATH: {} - {}", path, path.hashed());
     let doc = nipper::Document::from(&html);
     for mut ad in doc.select("advert").iter() {
         let kind = ad.attr("type").expect("advert without type").to_string();
