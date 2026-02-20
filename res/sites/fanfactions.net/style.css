@@ -134,6 +134,7 @@
 .ff-blurb-tags {
 	display: flex;
 	margin-bottom: 5px;
+	flex-wrap: wrap;
 	/* flex-wrap: wrap; */
 }
 .ff-blurb-tags > p:not(:last-child)::after {
