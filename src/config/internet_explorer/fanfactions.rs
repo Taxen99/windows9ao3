@@ -135,6 +135,7 @@ fn emit_fic_blurb(fic: &Fic, html: &mut String, css: &mut String, data: &FfData)
 fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut String, data: &FfData) {
     let chapter = &fic.chapters[chapter_idx];
     emit_div(html, "body ff-fic", |html| {
+        html.push_str("@header@");
         emit_fic_blurb(fic, html, css, data);
         if let Some(sn) = &chapter.start_notes {
             emit_div(html, "ff-fic-start", |html| {
@@ -207,6 +208,7 @@ fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut Stri
 
 fn emit_profile(user: &User, html: &mut String, css: &mut String, data: &FfData) {
     emit_div(html, "body ff-profile", |html| {
+        html.push_str("@header@");
         emit_div(html, "ff-profile-info", |html| {
             if user.pic.len() > 0 {
                 emit_img(html, "ff-profile-logo", &user.pic);
@@ -294,6 +296,7 @@ pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
         for (i, _) in fic.chapters.iter().enumerate() {
             let mut html = String::new();
             emit_chapter(&fic, i, &mut html, &mut global_css, &data);
+            let html = html.replace("@header@", &header_html);
             pages.insert(
                 fic.chapter_path(i),
                 read_page(&domain, html, &fic.chapter_path(i), ads, &mut global_css),
@@ -303,6 +306,7 @@ pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
     for user in &data.users {
         let mut html = String::new();
         emit_profile(user, &mut html, &mut global_css, &data);
+        let html = html.replace("@header@", &header_html);
         pages.insert(
             user.path(),
             read_page(&domain, html, &user.path(), ads, &mut global_css),
