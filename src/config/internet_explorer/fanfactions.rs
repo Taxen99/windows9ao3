@@ -145,9 +145,9 @@ fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut Stri
             html.push_str(&format!("<h1>{}</h1>", fic.title,));
             if fic.chapters.len() > 1 {
                 html.push_str(&format!(
-                    "<h2>Chapter {} - {}</h2>",
+                    "<h2>Chapter {}</h2>",
                     chapter_idx + 1,
-                    chapter.text
+                    // chapter.text
                 ));
             }
             html.push_str(&chapter.text);
@@ -163,7 +163,7 @@ fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut Stri
                     html,
                     "ff-button",
                     &format!(
-                        r##"<a href="{}">Next Chapter</a>"##,
+                        r##"<a href="/{}">Next Chapter</a>"##,
                         fic.chapter_path(chapter_idx + 1)
                     ),
                 );
@@ -173,7 +173,7 @@ fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut Stri
                     html,
                     "ff-button",
                     &format!(
-                        r##"<a href="{}">Previous Chapter</a>"##,
+                        r##"<a href="/{}">Previous Chapter</a>"##,
                         fic.chapter_path(chapter_idx - 1)
                     ),
                 );
@@ -291,14 +291,14 @@ pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
         //todo!()
     });
     for fic in &data.fics {
-        let mut html = String::new();
         for (i, _) in fic.chapters.iter().enumerate() {
+            let mut html = String::new();
             emit_chapter(&fic, i, &mut html, &mut global_css, &data);
+            pages.insert(
+                fic.chapter_path(i),
+                read_page(&domain, html, &fic.chapter_path(i), ads, &mut global_css),
+            );
         }
-        pages.insert(
-            fic.chapter_path(0),
-            read_page(&domain, html, &fic.chapter_path(0), ads, &mut global_css),
-        );
     }
     for user in &data.users {
         let mut html = String::new();
