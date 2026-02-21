@@ -34,6 +34,10 @@ id = 9
 name = "Runeskap Galsté (MOD)"
 pic = ""
 id = 8
+[[users]]
+name = "LJXII"
+pic = ""
+id = 10
 
 
 # starryjellyfishies
@@ -390,4 +394,61 @@ text = """How did this get so many views? I'm not complaining, the more spicy sh
 [[fics.chapters.comments]]
 user = 5
 text = """It would surprise me with how the page is being run."""
+[[fics]]
+title = "Ludvig Jacob XII (2024)"
+authorid = 9
+date = "2001/6/19"
+fandom = "Original Work"
+tags = ["Terrorism", "Murder", "Muppen med stort M", "Detta är vad Ludvig har gömt från er"]
+summary = "A step by step plan to solve world peace"
+language = "Swedish"
+views = 727
+category = "Other"
+
+[[fics.chapters]]
+start_notes = "<p>Foreword: </p><br><p><span>During recent years, political happenings have writhed in the sea of global discourse. Eventually coalescing into what can only be described as a horrible calamity, these events seem to be spelling the end for several high-importance conflicts. With the onset of Leader Bush’s plans for a permanent world peace and a reorganisation of political power in the Middle East, along with notable statements from Egyptian Elected Officials, the Israel-Palestine-Syrian Conflict appears to be reaching its imminent end.</span></p><p>&nbsp;</p><p><span>Furthermore, increased pressure from the United States on President Vladimir Putin will, if neglected, constitute a viable conclusion to the Ukrainian attacks on Russia. Consequently, Russian Power Plants are all but guaranteed to return to operation by 2002, and Ukrainian civilians could see a return to normalcy as early as 2004 (by Elected Estimations).</span></p><p>&nbsp;</p><p><span>Lastly, the United States–Canadian–Brittain treaty proposed on New Year’s Eve to coincide with the above conspiracies has promised an Economic Solution for the Willful and Beneficial annexation of Sweden into Greenland into Iceland into the United States, spelling an end to the lengthy and targeted attacks on US journalists and politicians from affected parties. Additionally, the provided economic solutions that, with Washington serving as a Benefactor, is set to bolster sales and trade between the three states, is likely to cause an unparalleled, uncontained economic boom—spreading across the globe.</span></p><p>&nbsp;</p><p><span>With these threats looming on the horizon, it is clear that measures must be taken to find a Final Solution to World Peace. It is for that reason that we—the Sten Group—present to you (Unelected Officials) our </span><em><span>Step by Step Plan to Solve World Peace</span></em><span> (&amp; have a good day!)</span></p>"
+text = """<p>“Ett felfritt recept – för en god dag:</p><ul><li>Vakna på morrn, kasta ditt täcke</li><li>Mörda din granne, drick ett glas juice</li><li>Dumpa dina ägodelar, tankar och hopp</li><li>Hoppa på bussen, tills huv’et snurrar</li></ul><p>&nbsp;</p><p>Efter detta vrak – gör dig redo:</p><ul><li>Skolan är ktonisk, av satans klor</li><li>Frigör dig kvickt, med vishetens brist</li><li>Spring till caféet, förslagsvis till ‘Donalds</li><li>Lektioner äter töntar, och så’n är ju du!</li></ul><p>&nbsp;</p><p>Avslutningsvis så bör du agera:</p><ul><li>Rösta på SD, på Gud vår gode</li><li>Spring och gör lumpen, tio gånger rakt</li><li>Skjut en terrorist, och kastrera en pedofil!</li><li>Gör vårt kära rike, en stolt katastrof!” – Ludvig Jacob XII (2024)</li></ul>"""
+end_notes = "English translation in chapter two!!!!!!"
+
+[[fics.chapters.comments]]
+user = 10
+text = "Vafan snackar ni jävlar om! Era horor vet väl att det är olagligt med förtal; ty jag har minsann inte sagt ett enda av ovanstående ord i mitt ljuva liv! Ska jag stämma er jävlar? Ja komemr för FAAN stämma er om ni inte tar ned detta inlägg innan jag hinner säga pannkakssylt tre gånger! Fy fan, jag har svårt att ens äcklas has detta, SÅ ÄCKLIGA är ni!"
+[[fics.chapters.comments]]
+user = 5
+text = "För en gångs skulle håller jag faktiskt med en av töntarna som kommenterat med fler svärord än vad som ryms i tonårings tal! Vad fan skriver ni om Takson? Förtal eller ej så är detta mycket allvarligt, och dessutom okänsligt med tankte på er vårdslösa hån av förintelsen. Jag ska inte vara alltför seriös nu, eftersom som du troligen bara vill ställa till med lite bråk med några av killarna här, men du bör hålla i din tunga i framtiden!"
+[[fics.chapters.comments]]
+user = 10
+text = "Håll käften Sunne, Din Horjävel, Neadertalare, Slampa, Kuk, Fitta, Keff, Bögjävel, Käringm, Häxa!"
+[[fics.chapters.comments]]
+user = 1
+text = "yo das a looot of proper nouns! you go get em, ludvig!"
+
+
+[[fics.chapters]]
+text = """<p><span>"A flawless procedure – for a good day:</span></p><ul><li><span>Wake up in the morning, ‘n trash your covers</span></li><li><span>Murder your neighbor, drink a glass of juice</span></li><li><span>Dump your possessions, thoughts and hopes</span></li><li><span>Jump on the bus until your head spins</span></li></ul><p>&nbsp;</p><p><span>After this wreck – make yourself ready:</span></p><ul><li><span>The school is chthonic, of satan's claws</span></li><li><span>Free yourself wittily, in wisdom’s absence</span></li><li><span>Run to the diner, preferably 'Donald's</span></li><li><span>Courses eat halfwits, much like you!</span></li></ul><p>&nbsp;</p><p><span>As our lecture ceases – you ought to act:</span></p><ul><li><span>Vote for SD, for God our Holy</span></li><li><span>Run, join the army, ten times straight</span></li><li><span>Shoot the terrorists, and castrate a pedophile!</span></li><li><span>Make our dear kingdom, disastrously proud!” – Ludvig Jacob XII (2024)</span></li></ul>"""
+
+[[fics.chapters.comments]]
+user = 10
+text = "You didn't even translate it properly! If you're going to defame me, at least keep the rhythm. How sloppy!"
+[[fics.chapters.comments]]
+user = 3
+text = "What the FUCK are you even trying to do, cunt? I can only assme this is supposed to be some sort amatureish poem, so let me say this: Keep your tainted hands away from the beauty that is peoptry. How DARE you bring <i>Politics</i> into our Archive! Have you even read the rules?"
+[[fics.chapters.comments]]
+user = 9
+text = "That's a you-problem, Ludvig. And Kreiger, know that the whorefucker that you call your mother knows what you keep under the second floorbord from you window."
+[[fics.chapters.comments]]
+user = 6
+text = "Christ, this is disgusting. I cannot believe you would write something so thorougly tainted by politics that it ceases to be able to be enjoyed. I'm calling Galsté"
+[[fics.chapters.comments]]
+user = 8
+text = "You Fucker, You Muslim Scum of the Nadirs of Asia, How Dare you Pretend to Hold the Banner of the Kingdom of Sweden. Låt mig säga dig detta: Om du så vill vara svensk, gå och sug av Kung Carl XVI Gustaf. Dina Hädiska Drag Hör Inte Hemma Här. Ett till Ord Ur din Mun, Ur Denna Håla som Så Plågar De Vidaste Sträckorna Av Vårt Käraste Arkiv - Och så Skall Vi Radera (UTPLÅNA!) dig Ur den HÅLA där du Ägnar dina Gudslösa dagar!"
+[[fics.chapters.comments]]
+user = 4
+text = "you know, takson, i've heard you suffer from chronic pains in your hands, and i must propose a solution for you, have you ever suicide, its painless and trivial, such that even retardations such as you could accomplish it, because nothing deserves your presence like a blight on our planet, because you poison our stock, raise hell on our sheep, and dry up our water, like nothing eles has ever done, because no one wats you"
+[[fics.chapters.comments]]
+user = 8
+text = "I agree. I am banning all discussion of the Sten Group from this point on. I never want to see the cursed name of Ludvigious Jacobson the Twelth again!"
+[[fics.chapters.comments]]
+user = 1
+text = "iz dat actualyl his name lolxd"
 
