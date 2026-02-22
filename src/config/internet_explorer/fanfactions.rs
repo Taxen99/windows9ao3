@@ -138,6 +138,18 @@ fn emit_fic_blurb(fic: &Fic, html: &mut String, css: &mut String, data: &FfData)
 
 fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut String, data: &FfData) {
     let chapter = &fic.chapters[chapter_idx];
+    if fic.chapters.len() > 1 {
+        html.push_str(&format!(
+            "<title>{} - Chapter {} - FanFactions - Where Factions Form</title>",
+            fic.title,
+            chapter_idx + 1
+        ));
+    } else {
+        html.push_str(&format!(
+            "<title>{} - FanFactions - Where Factions Form</title>",
+            fic.title,
+        ));
+    }
     emit_div(html, "body ff-fic", |html| {
         html.push_str("@header@");
         emit_fic_blurb(fic, html, css, data);
@@ -208,6 +220,10 @@ fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut Stri
 }
 
 fn emit_profile(user: &User, html: &mut String, css: &mut String, data: &FfData) {
+    html.push_str(&format!(
+        "<title>{}'s Profile - FanFactions - Where Factions Form</title>",
+        user.name
+    ));
     emit_div(html, "body ff-profile", |html| {
         html.push_str("@header@");
         emit_div(html, "ff-profile-info", |html| {
@@ -284,6 +300,15 @@ pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
                         }
                     }
                     html = html.replace("@@others@@", &books);
+                }
+                if html.contains("@@featured@@") {
+                    let mut featured = String::new();
+                    for fic in &data.fics {
+                        if fic.views > 1000 {
+                            emit_fic_blurb(&fic, &mut featured, &mut global_css, &data);
+                        }
+                    }
+                    html = html.replace("@@featured@@", &featured);
                 }
             }
             let page = read_page(&domain, html, &page_path, ads, &mut global_css);
