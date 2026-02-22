@@ -50,6 +50,15 @@ name = "Rarder&TheApacalypso(Internet)"
 pic = ""
 id = 101
 [[users]]
+name = "the-grand-king-oikawa"
+pic = ""
+id = 200
+[[users]]
+name = "AlienLuver4Ever"
+pic = ""
+id = 201
+####
+[[users]]
 name = "ChoceurReis"
 pic = ""
 id = 102
@@ -226,7 +235,7 @@ user = 7
 text = "will do fucka"
 [[fics]]
 title = "Cat in the Apocalypse"
-authorid = 100
+authorid = 200
 date = "2001/07/12"
 fandom = "Haikyu!!"
 tags = ["Fluff", "zombie apocalypse au"]
@@ -341,7 +350,7 @@ user = 6
 text = "Couldn't have said it better myself."
 [[fics]]
 title = "Beloved Clone"
-authorid = 101
+authorid = 201
 date = "2001/10/7"
 fandom = "Ben 10 Alien Force"
 tags = ["Christmas", "dubcon kissing", "the power of pepper spray", "girlboss Julie"]
