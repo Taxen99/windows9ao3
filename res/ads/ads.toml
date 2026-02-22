@@ -18,11 +18,11 @@ banners = [
 	{ src = "banner/24.gif", link = "epicdinner.com" },
 ]
 boxes = [
-	{ src = "banner/3.gif", link = "#" },
-	{ src = "banner/4.gif", link = "haremonline.se" },
-	{ src = "banner/9.gif", link = "overleafpatronsolutions.com" },
-	{ src = "banner/10.gif", link = "usmissilesussr.com" },
-	{ src = "banner/12.gif", link = "fanfactions.net/users/16504555033190034514" }, # TODO: update to a work
-	{ src = "banner/13.gif", link = "www.betterconnection.com/download" },
-	{ src = "banner/17.gif", link = "womensolvers.com/join" },
+	{ src = "box/3.gif", link = "#" },
+	{ src = "box/4.gif", link = "haremonline.se" },
+	{ src = "box/9.gif", link = "overleafpatronsolutions.com" },
+	{ src = "box/10.gif", link = "usmissilesussr.com" },
+	{ src = "box/12.gif", link = "fanfactions.net/fics/7399375007106807793-0" },
+	{ src = "box/13.gif", link = "www.betterconnection.com/download" },
+	{ src = "box/17.gif", link = "womensolvers.com/join" },
 ]

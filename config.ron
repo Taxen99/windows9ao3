@@ -96,13 +96,15 @@ Config (
     ),
     favorites: (
         root: FavFolder (( children: {
-            "Sten Group": FavFolder (( children: {
-                "Manifesto": Favorite (( url: "ljxii.com/manifesto" )),
+            "Investigations": FavFolder (( children: {
+                "Strange ads?": Favorite (( url: "contact.cos.com" )),
+                "Conspiracy (removed)": Favorite (( url: "usmissilesussr.com" )),
+                "Geometry (truth revealed, insane)": Favorite (( url: "geometryfactzz.net" )),
             })),
-            "Important Filies2": FavFolder (( children: {
-                "Taxes2": Favorite (( url: "foo.bar/special-3" )),
+            "Personal": FavFolder (( children: {
+                "FanFactions": Favorite (( url: "fanfactions.net" )),
             })),
-            "home": Favorite (( url: "foo.bar" )),
+            "Home": Favorite (( url: "kurtkurtson.ljxii.com" )),
         })),
     )
 )

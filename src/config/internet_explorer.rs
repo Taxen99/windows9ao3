@@ -158,7 +158,7 @@ fn read_page(domain: &str, html: String, path: &str, ads: &Adverts, css: &mut St
                     <img src="@ad:{}" />
                     </div>
                     "##,
-                    classlist, kind, selected_ad.src
+                    kind, classlist, selected_ad.src
                 ));
             }
         }
