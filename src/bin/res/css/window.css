@@ -1,6 +1,6 @@
 .window {
-	--anim-speed-to: 3.0s;
-	--anim-speed-away: 3.0s;
+	--anim-speed-to: 10.0s;
+	--anim-speed-away: 10.0s;
 	--anim-max: 4000px;
 	--anim-min: -4000px;
 }
@@ -295,7 +295,7 @@
 	border-style: groove ridge ridge groove;
 	--minwi: 2000px;
 	--maxwi: -2000px;
-	--twi: 2s;
+	--twi: 5s;
 	min-width: 325px;
 	min-height: 200px;
 }
