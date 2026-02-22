@@ -1,4 +1,3 @@
 add credits & check all
 beta
-update fs
-fix way to big size!!!!!
+actually fix window moving this time lol??

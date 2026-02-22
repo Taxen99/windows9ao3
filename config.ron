@@ -20,19 +20,19 @@ Config (
         //     // add_to_desktop: Some((0, 0)),
         //     content: "Internet Exploruvu!!!",
         // ),
-        App (
-            name: "Another Application",
-            icon: "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
-            add_to_desktop: Some((4, 2)),
-            content: "THIS <i>uwoepic</i> APP!!!",
-        ),
+        // App (
+        //     name: "Another Application",
+        //     icon: "https://win98icons.alexmeub.com/icons/png/computer_explorer-5.png",
+        //     add_to_desktop: Some((4, 2)),
+        //     content: "THIS <i>uwoepic</i> APP!!!",
+        // ),
     ],
     fs: (
         root: Folder ((
             children: {
                 "desktop": Folder ((
                     children: {
-                        "Internet ExplorerÖ": File ((
+                        "Internet Explorer": File ((
                             kind: NativeApp,
                             link: "69",
                             offset: Some((3, 3)),
@@ -46,50 +46,59 @@ Config (
                             link: "/",
                             offset: Some((0, 0)),
                         )),
-                        "Sussy document": File ((
-                            kind: Text,
-                            link: "Foobaz",
-                            offset: Some((2, 2)),
-                        )),
-                        "Sussy document": File ((
-                            kind: Text,
-                            link: "text/sussy.txt",
-                            offset: Some((2, 2)),
-                        )),
-                        "Ao3": File ((
-                            kind: Text,
-                            link: "text/ao3.html",
-                            offset: Some((3, 2)),
-                        )),
+                        // "Sussy document": File ((
+                        //     kind: Text,
+                        //     link: "Foobaz",
+                        //     offset: Some((2, 2)),
+                        // )),
+                        // "Sussy document": File ((
+                        //     kind: Text,
+                        //     link: "text/sussy.txt",
+                        //     offset: Some((2, 2)),
+                        // )),
+                        // "Ao3": File ((
+                        //     kind: Text,
+                        //     link: "text/ao3.html",
+                        //     offset: Some((3, 2)),
+                        // )),
                         "Gaffic.bmp": File ((
                             kind: Image,
-                            link: "img/gaffic.png",
+                            link: "img/fs/gaffic.png",
                             offset: Some((5, 2)),
                         )),
+                        "Moon Files": Folder ((
+                            offset: Some((10, 5)),
+                            children: {
+                                "The moon.bmp": File ((
+                                    kind: Image,
+                                    link: "img/fs/moonreal.png",
+                                )),
+                                "The moon?.bmp": File ((
+                                    kind: Image,
+                                    link: "img/fs/moon.png",
+                                )),
+                                "observations.txt": File ((
+                                    kind: Text,
+                                    link: "text/moon.txt",
+                                )),
+                                "itwatches.txt": File ((
+                                    kind: Text,
+                                    link: "text/itwatches.txt",
+                                )),
+                            }
+                        ))
                     },
                 )),
                 "My Documents": Folder (( children: {
-                    "my taxes.txt": File (( kind: Text, link: "text/my taxes.txt")),
-                    "my taxes2.txt": File (( kind: Text, link: "text/my taxes.txt"),),
-                    "my taxes3.txt": File (( kind: Text, link: "text/my taxes.txt"),),
-                    "my taxes4.txt": File (( kind: Text, link: "text/my taxes.txt"),),
+                    "ftax research.txt": File (( kind: Text, link: "text/my taxes.txt")),
                     "gaffic2.bmp": File (( kind: Image, link: "img/aoisdooa.png")),
                 })),
-                "Illegal Downloads": Folder (( children: {
-                    "Hidden Screcret foldere!!": Folder (( children: {
-                        "Secreterer(!!) folder!!": Folder (( children: {
-                            "FU YOU FOR looking in my Scrreterer folder!!!": File (( kind: Text, link: "text/my taxes.txt")),
+                "Private": Folder (( children: {
+                    "Private folder": Folder (( children: {
+                        "Untitled folder": Folder (( children: {
+                            "Untitled.txt": File (( kind: Text, link: "text/stenf.txt")),
                         })),
                     })),
-                    "Meth recipie": Folder (( children: {
-                        "1 ml natrium chloride + 20 ml hydrogen bromide -> 21.001ml meth": File (( kind: Text, link: "text/my taxes.txt")),
-                        "THE EPIC WORLD OF WONDER THAT EATS AT YOUR SOUL FOR IT IS NOT YOURS": Folder (( children: {
-                            "meth is god. god is meth.txt.exe.txt": File (( kind: Text, link: "text/my taxes.txt"))
-                        })),
-                    })),
-                    "my taxes but illegal!!!!!.txt": File (( kind: Text, link: "text/my taxes.txt")),
-                    "personal infomation on da president.txt": File (( kind: Text, link: "text/my taxes.txt")),
-                    "FOOK YO": File (( kind: Text, link: "text/my taxes.txt")),
                 })),
             },
         )),

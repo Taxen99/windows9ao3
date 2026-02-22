@@ -1,24 +1,66 @@
+Approval for F-tax
+As a rule, entrepreneurs who run business as sole traders are approved for F‑tax. An approval for F-tax is based on the fact that the sole trader himself or herself is responsible for paying taxes and social contributions on compensation for any work carried out. On this page, you can read about how to apply for F‑tax and what it means to be approved.
 
-So this is my epic taxes:
+If you are a sole trader and also receive income from employment, you need to be registered for both F-tax and A-tax. This is known as FA-tax status.
 
-Use our e-services (in Swedish)
-You can log in to our tax account e-service (Skattekonto) to view your current balance and all booked and upcoming transactions, and to check or register a bank account (requires Swedish e-identification)
-You can use our e-service "Räkna ut din skatt" to help you calculate your tax
-For payments via Swish: You need Swedish eID and the Swish app. Log in to “My pages” (“Mina sidor”) and follow the instructions (which are in Swedish).
-Skattekonto
+Use our e-services
+View and print your population registration certificate (an extract from the population register) on “My pages” (Mina sidor/Registerutdrag)
 
-
-
-
-
-Se aktuellt saldo på ditt skattekonto och anmäl bankkonto för skatteåterbetalning.
+Mina sidor
+Logga in för att lösa dina ärenden och se dina uppgifter.
 Logga in med e-legitimation
-till Skattekonto
+till Mina sidor
+Preliminär inkomstdeklaration
+Lämna in din preliminära inkomstdeklaration. Uppgifterna används för att ändra din debiterade preliminärskatt.
+Logga in med e-legitimation
+till Preliminär inkomstdeklaration
+How to apply for F-tax or FA-tax approval:
+Visit Verksamt.se.
+Verksamt.se
+Log in to “My pages” (“Mina sidor”) with your Swedish e-identification.
+Click on “Registrera företag eller förening” (“Register a company or association”).
+Select Skatteverket’s e-service and follow the instructions.
+Submit your application.
+If you have no Swedish e-identification, you can use a paper form instead:
 
+Company registration (“Företagsregistrering”, SKV 4620), in Swedish
+A non-Swedish business that want to be approved for F-tax
+You can apply to be approved for F-tax if you have business operations in Sweden.
 
+Register a non-Swedish business
+Approval for F-tax
+Approved for F-tax means that you are responsible for paying preliminary tax and self-employed contributions on your income from any work you carry out. If you are approved for F-tax, your clients should not deduct tax from your earnings or pay employer contributions on them.
 
+If a contractor is not approved for F-tax, anybody who pays them a fee for work must normally first deduct tax from the fee. This applies regardless of whether the contractor is a sole trader or runs a limited company. If the recipient is a natural person, the payer must also pay employer contributions.
 
+To avoid a client having to pay your taxes and employer contributions, you must be approved for F-tax by the time your fee is paid. If you are granted approval after your fee is paid, F-tax will not apply to this particular assignment; in other words, your client will then have to deduct tax and pay employer contributions as if you were an employee.
 
-Räkna ut din skatt
-Räkna ut om du som privatperson (med eller utan näringsinkomst) ska betala eller få tillbaka skatt, och hur mycket skatt du behöver betala per månad.
-Till tjänsten
+You should not deduct tax or pay employer contributions on income from goods you have sold. So if your business activity solely involves the sale of goods, F-tax approval will not affect the way you declare and pay tax.
+
+FA-tax – when you run a business as well as receiving income from employment
+If you run a business and also receive income from employment, you need to be registered for both F-tax and A-tax. This is known as FA-tax status.
+
+F-tax approval alone is not sufficient because it does not apply to employment. Instead, you can apply for F-tax approval while retaining your A-tax registration. This means that you will be approved for F-tax subject to conditions, which is known as FA-tax status. If you are approved for FA-tax, your employer must pay the Swedish Tax Agency preliminary tax and employer contributions on your salary. However, you are responsible for paying preliminary tax and self-employed contributions on income from the work you carry out within your own business. The first step is to submit a preliminary income tax return to the Swedish Tax Agency. We will then notify you of how much preliminary tax you should pay, and when each payment should be made.
+
+If you have FA-tax status, invoices you issue for work within your own business must state that your business is approved for F-tax.
+
+You can apply for FA-tax when you register with the Swedish Tax Agency as a sole trader. If you need to switch from F-tax to FA-tax or vice versa, you can also do so by logging into “My pages” (“Mina sidor”) on verksamt.se. If you cannot use the e-service, you can apply to switch by completing the form “Ändringsanmälan” (SKV 4639, in Swedish). Remember that you may also need to file a new preliminary income tax return if you switch between F-tax and FA-tax. This is because your deducted preliminary tax should be based on your total income – including income from both your own business and from employment – in order to avoid paying too much or too little preliminary tax. The easiest way to file a preliminary income tax return is via our e-service, “Preliminär inkomstdeklaration”.
+
+Legal entities such as limited companies and partnerships cannot be granted FA-tax status.
+
+If you don’t have Swedish e-identification, you can fill in a form instead.
+
+Preliminary income tax return 1 (SKV 4314) (in Swedish)
+How to show that you have been granted F-tax approval
+State that you are approved F-tax (“Godkänd för F-skatt”) on quotes and contracts.
+Write “Godkänd för F-skatt” on every invoice.
+Present the population registration certificate (extract from the population register) you received when you were granted F-tax approval.
+You will receive a population registration certificate (an extract from the population register) when you are registered for F-tax, VAT or as an employer by the Swedish Tax Agency. You can always log in to “My pages” (Mina sidor) to view and print out your population registration certificate.
+
+Mina sidor
+Logga in för att lösa dina ärenden och se dina uppgifter.
+Logga in med e-legitimation
+till Mina sidor
+If you have been granted FA-tax status, you must state this in writing (in your quotes and invoices, for example) for every assignment. If you fail to do so, A-tax applies, which means that your client is obliged to deduct tax from your fee and pay employer contributions. F-tax does not apply to work you do as an employee. Employers are obliged to notify the Swedish Tax Agency in writing if an employee refers to an F-tax approval in connection with an evident employment relationship.
+
+If your F-tax approval is withdrawn, remember to remove any statements relating to F-tax approval from your invoices and quotes.
