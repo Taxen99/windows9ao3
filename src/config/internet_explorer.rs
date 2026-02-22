@@ -1,7 +1,12 @@
 use rand::seq::IndexedRandom;
+use serde::Deserialize;
 
 use crate::config::{FsEntry, HashedExt, internet_explorer::fanfactions::generate_fanfactions_net};
-use std::{collections::HashMap, fs, path::Path};
+use std::{
+    collections::HashMap,
+    fs::{self, read_to_string},
+    path::Path,
+};
 
 mod fanfactions;
 
@@ -16,39 +21,20 @@ pub struct Site {
     pub global_css: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
 pub struct Advert {
     src: String,
+    link: String,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Deserialize)]
 pub struct Adverts {
     boxes: Vec<Advert>,
     banners: Vec<Advert>,
 }
 
 pub fn read_adverts() -> Adverts {
-    let mut boxes: Vec<Advert> = Vec::new();
-    let mut banners: Vec<Advert> = Vec::new();
-    for entry in Path::new("res/ads/banner").read_dir().unwrap() {
-        let entry = entry.unwrap();
-        if entry.path().is_file() {
-            let name: String = entry.path().file_name().unwrap().to_str().unwrap().into();
-            banners.push(Advert {
-                src: format!("banner/{name}"),
-            });
-        }
-    }
-    for entry in Path::new("res/ads/box").read_dir().unwrap() {
-        let entry = entry.unwrap();
-        if entry.path().is_file() {
-            let name: String = entry.path().file_name().unwrap().to_str().unwrap().into();
-            boxes.push(Advert {
-                src: format!("box/{name}"),
-            });
-        }
-    }
-    Adverts { boxes, banners }
+    toml::from_str(&read_to_string("res/ads/ads.toml").unwrap()).unwrap()
 }
 
 pub fn read_sites() -> HashMap<String, Site> {
@@ -149,25 +135,30 @@ fn read_page(domain: &str, html: String, path: &str, ads: &Adverts, css: &mut St
             _ => panic!("invalid ad type"),
         };
         let selected_ad = pool.choose(&mut rand::rng()).unwrap();
+
+        let classlist = &format!(
+            "history-trigger-{} history-trigger",
+            Url::parse(&selected_ad.link).hashed()
+        );
         match marquee.as_ref() {
             "true" => {
                 ad.replace_with_html(format!(
                     r##"
-                    <marquee type="imgrepeat">
+                    <marquee type="imgrepeat" class="{}">
                     <img src="@ad:{}" />
                     </marquee>
                     "##,
-                    selected_ad.src
+                    classlist, selected_ad.src
                 ));
             }
             _ => {
                 ad.replace_with_html(format!(
                     r##"
-                    <div class="advert advert-{}">
+                    <div class="advert advert-{} {}">
                     <img src="@ad:{}" />
                     </div>
                     "##,
-                    kind, selected_ad.src
+                    classlist, kind, selected_ad.src
                 ));
             }
         }
@@ -177,13 +168,15 @@ fn read_page(domain: &str, html: String, path: &str, ads: &Adverts, css: &mut St
         let replacement_html = match kind.as_ref() {
             "imgrepeat" => {
                 let imgelm = marquee.select("img").first();
+                let classlist = marquee.attr("class").unwrap_or_default().to_string();
                 let src = imgelm.attr("src").unwrap().to_string();
                 let replacement_html = format!(
                     r##"
-                    <div class="marquee-repeat">
-                        <div class="marquee-img marquee-img-{}"></div>
+                    <div class="marquee-repeat {0}">
+                        <div class="marquee-img marquee-img-{1}"></div>
                     </div>
                 "##,
+                    classlist,
                     src.hashed()
                 );
                 css.push_str(&format!(

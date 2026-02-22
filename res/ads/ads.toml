@@ -1,0 +1,38 @@
+banners = [
+	{ src = "banner/1.gif", link = "" },
+	{ src = "banner/2.gif", link = "" },
+	{ src = "banner/5.gif", link = "geometryfactzz.net/hyper" },
+	{ src = "banner/6.gif", link = "" },
+	{ src = "banner/7.gif", link = "" },
+	{ src = "banner/8.gif", link = "haremonline.se" }, # TODO: change?
+	{ src = "banner/11.gif", link = "haremonline.se" }, # TODO: change?
+	{ src = "banner/14.gif", link = "www.prowebb.com" },
+	{ src = "banner/15.gif", link = "geometryfactzz.net/brahmagupta" },
+	{ src = "banner/16.png", link = "joinus.mil.gov" },
+	{ src = "banner/18.gif", link = "haremonline.se" }, # TODO: change?
+	{ src = "banner/19.gif", link = "geometryfactzz.net/bretschneider" },
+	{ src = "banner/20.gif", link = "fanfactions.net" },
+	{ src = "banner/21.gif", link = "haremonline.se" },
+	{ src = "banner/22.gif", link = "blueadaptersshop.com" },
+	{ src = "banner/23.gif", link = "contact.cos.com" },
+	{ src = "banner/24.gif", link = "epicdinner.com" },
+]
+boxes = [
+	{ src = "banner/3.gif", link = "" },
+	{ src = "banner/4.gif", link = "haremonline.se" },
+	{ src = "banner/9.gif", link = "" },
+	{ src = "banner/10.gif", link = "" },
+	{ src = "banner/12.gif", link = "fanfactions.net/users/16504555033190034514" }, # TODO: update to a work
+	{ src = "banner/13.gif", link = "" },
+	{ src = "banner/17.gif", link = "" },
+]
+# things that should be made:
+#- women solvers, 
+#- a new ff work,
+#- www.betterconnection.com/download,
+#- usa conspiracy missiles,
+#- overleaf gun,
+#- moon?,
+#- cancer scam,
+#- 1000 visitor shit,
+#- homo quiz
