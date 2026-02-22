@@ -19,6 +19,7 @@ pub struct Site {
     pub domain: String,
     pub pages: HashMap<String, Page>,
     pub global_css: String,
+    pub header: Option<String>,
 }
 
 #[derive(Debug, Deserialize)]
@@ -99,13 +100,14 @@ fn read_site(path: &Path, ads: &Adverts) -> Site {
         //todo!()
     });
     Site {
+        header: None,
         domain,
         pages,
         global_css,
     }
 }
 
-trait SelectionExt {
+pub(crate) trait SelectionExt {
     fn inner_html(&self) -> String;
     fn outer_html(&self) -> String;
 }

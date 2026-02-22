@@ -2,7 +2,10 @@ use std::{fs, path::Path};
 
 use crate::{
     config::{BuildResult, HashedExt},
-    deploy::{ao3_html_css_compressor::compress_html_css_for_ao3, css_var_remove::css_var_remove},
+    deploy::{
+        ao3_html_css_compressor::{compress_html_css_for_ao3, remove_to_much_whitespace},
+        css_var_remove::css_var_remove,
+    },
     resource_resolver::{ResouceKind, get_resource_path, resolve_resources},
 };
 
@@ -31,10 +34,12 @@ fn do_shit_for_res_type(resource_kind: ResouceKind, name: &str) -> String {
 
 pub fn deploy(build_result: &BuildResult) -> BuildResult {
     let css = css_var_remove(&build_result.css);
-    // let (html, css) = compress_html_css_for_ao3(build_result.html.clone(), css);
     let (html, css) = (build_result.html.clone(), css);
+    let (html, css) = compress_html_css_for_ao3(html, css);
     let res = resolve_resources(&BuildResult { html, css }, |kind, res| {
         do_shit_for_res_type(kind, res)
     });
-    res
+    let (html, css) = (res.html, res.css);
+    let (html, css) = remove_to_much_whitespace(html, css);
+    BuildResult { html, css }
 }

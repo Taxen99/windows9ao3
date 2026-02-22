@@ -151,7 +151,6 @@ fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut Stri
         ));
     }
     emit_div(html, "body ff-fic", |html| {
-        html.push_str("@header@");
         emit_fic_blurb(fic, html, css, data);
         if let Some(sn) = &chapter.start_notes {
             emit_div(html, "ff-fic-start", |html| {
@@ -225,7 +224,6 @@ fn emit_profile(user: &User, html: &mut String, css: &mut String, data: &FfData)
         user.name
     ));
     emit_div(html, "body ff-profile", |html| {
-        html.push_str("@header@");
         emit_div(html, "ff-profile-info", |html| {
             emit_img(html, "ff-profile-logo", user.realpic());
             emit_p(html, "ff-profile-name", &user.name);
@@ -246,7 +244,7 @@ pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
     let mut global_css = read_to_string(path.join("style.css")).unwrap();
     let mut pages = HashMap::new();
     let domain: String = "fanfactions.net".into();
-    let header_html = read_to_string(path.join("_header.html")).unwrap();
+    let header_htmlllll = read_to_string(path.join("_header.html")).unwrap();
     path.read_dir_recurse(&mut |filepath| {
         let mut page_path = filepath.strip_prefix(path).unwrap().to_owned();
         if page_path.extension().unwrap().to_str().unwrap() == "html"
@@ -262,8 +260,8 @@ pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
             if page_path == "index" {
                 page_path = "".into();
             }
-            let html = read_to_string(filepath).unwrap();
-            let mut html = html.replace("@header@", &header_html);
+            let mut html = read_to_string(filepath).unwrap();
+            // let mut html = html.replace("@header@", &header_html);
             {
                 if html.contains("@@books@@") {
                     let mut books = String::new();
@@ -320,7 +318,7 @@ pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
         for (i, _) in fic.chapters.iter().enumerate() {
             let mut html = String::new();
             emit_chapter(&fic, i, &mut html, &mut global_css, &data);
-            let html = html.replace("@header@", &header_html);
+            // let html = html.replace("@header@", &header_html);
             pages.insert(
                 fic.chapter_path(i),
                 read_page(&domain, html, &fic.chapter_path(i), ads, &mut global_css),
@@ -330,13 +328,17 @@ pub fn generate_fanfactions_net(path: &Path, ads: &Adverts) -> Site {
     for user in &data.users {
         let mut html = String::new();
         emit_profile(user, &mut html, &mut global_css, &data);
-        let html = html.replace("@header@", &header_html);
+        // let html = html.replace("@header@", &header_html);
         pages.insert(
             user.path(),
             read_page(&domain, html, &user.path(), ads, &mut global_css),
         );
     }
+    // shitty hack to make urls work for the header!
+    let header_htmlllll =
+        read_page(&domain, header_htmlllll, "header", ads, &mut String::new()).html;
     Site {
+        header: Some(header_htmlllll),
         domain,
         pages,
         global_css,

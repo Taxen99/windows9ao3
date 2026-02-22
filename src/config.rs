@@ -18,7 +18,7 @@ use crate::config::vertical_select::emit_vertical_select;
 use crate::config::window::{Dialog, DialogueKind, DialogueSymbol, Window};
 
 mod history;
-mod internet_explorer;
+pub mod internet_explorer;
 mod menubar_builder;
 mod startmenu_content;
 mod toolbar_builder;
@@ -1084,7 +1084,7 @@ impl Config {
                                 ));
                                 html.push_str(&format!(
                                     r##"
-                                        <p>{}</p>
+                                        <p preservewhitespace>{}</p>
                                     "##,
                                     content.replace("<", "&lt;").replace(">", "&gt;")
                                 ));
@@ -1524,6 +1524,11 @@ impl Config {
                                     html,
                                     &format!("ie-site ie-site-{}", domain.hashed()),
                                     |html| {
+                                        if let Some(site_header) = site.header.as_deref() {
+                                            emit_div(html, "ie-site-header", |html| {
+                                                html.push_str(site_header);
+                                            });
+                                        }
                                         for (page_path, page) in &site.pages {
                                             emit_div(
                                                 html,

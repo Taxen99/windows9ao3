@@ -26,7 +26,11 @@
 	font-size: larger;
 }
 
-.ie-page .body {
+.ie-site-header {
+	z-index: 2147483647;
+	position: relative;
+}
+.ie-page :is(.body, .ie-site-header) {
 	/* width: fit-content; */
 	transition: opacity 0s linear 0.2s;
 	opacity: 1;
@@ -66,7 +70,7 @@
 	background-color: black;
 }
 
-/*@onpageload@*/ .main:has(:is(.history-item:hover, .ie-tb-refresh:active)) .body {
+/*@onpageload@*/ .main:has(:is(.history-item:hover, .ie-tb-refresh:active)) :is(.body, .ie-site-header) {
 	max-height: 0px !important;
 	overflow: clip;
 	opacity: 0 !important;
