@@ -1,6 +1,6 @@
 banners = [
 	{ src = "banner/1.gif", link = "youareourluckyvisitor.com" },
-	{ src = "banner/2.gif", link = "#" },
+	{ src = "banner/2.gif", link = "takethisquirqyquiz.com/homo" },
 	{ src = "banner/5.gif", link = "geometryfactzz.net/hyper" },
 	{ src = "banner/6.gif", link = "youareourluckyvisitor.com" },
 	{ src = "banner/7.gif", link = "youareourluckyvisitor.com" },
@@ -23,15 +23,11 @@ boxes = [
 	{ src = "banner/9.gif", link = "overleafpatronsolutions.com" },
 	{ src = "banner/10.gif", link = "#" },
 	{ src = "banner/12.gif", link = "fanfactions.net/users/16504555033190034514" }, # TODO: update to a work
-	{ src = "banner/13.gif", link = "#" },
+	{ src = "banner/13.gif", link = "www.betterconnection.com/download" },
 	{ src = "banner/17.gif", link = "#" },
 ]
 # things that should be made:
 #- women solvers, 
 #- a new ff work,
-#- www.betterconnection.com/download,
 #- usa conspiracy missiles,
 #- moon?,
-#- cancer scam,
-#- 1000 visitor shit,
-#- homo quiz
