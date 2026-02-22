@@ -10,12 +10,16 @@ use crate::config::{
 #[derive(Debug, Clone, Deserialize)]
 struct User {
     name: String,
-    pic: String,
+    pic: Option<String>,
     id: u64,
 }
 impl User {
     fn path(&self) -> String {
         format!("users/{}", self.name.hashed())
+    }
+    fn realpic(&self) -> &str {
+        assert!(self.pic.is_none() || self.pic.as_deref().unwrap().len() > 0);
+        self.pic.as_deref().unwrap_or("@img:profiles/guest.png")
     }
 }
 
@@ -186,11 +190,8 @@ fn emit_chapter(fic: &Fic, chapter_idx: usize, html: &mut String, css: &mut Stri
             for comment in &chapter.comments {
                 let user = data.user(comment.user);
                 emit_div(html, "ff-comment", |html| {
-                    let pic = &user.pic;
                     emit_div(html, "ff-comment-top", |html| {
-                        if pic.len() > 0 {
-                            emit_img(html, "ff-comment-logo", pic);
-                        }
+                        emit_img(html, "ff-comment-logo", user.realpic());
                         emit_p(
                             html,
                             "ff-comment-name",
@@ -210,9 +211,7 @@ fn emit_profile(user: &User, html: &mut String, css: &mut String, data: &FfData)
     emit_div(html, "body ff-profile", |html| {
         html.push_str("@header@");
         emit_div(html, "ff-profile-info", |html| {
-            if user.pic.len() > 0 {
-                emit_img(html, "ff-profile-logo", &user.pic);
-            }
+            emit_img(html, "ff-profile-logo", user.realpic());
             emit_p(html, "ff-profile-name", &user.name);
         });
         emit_div(html, "ff-profile-fics", |html| {
