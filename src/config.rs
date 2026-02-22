@@ -561,17 +561,25 @@ impl Config {
                         emit_div(html, "tb-sm-content", |html| {
                             StartmenuContent::new()
                                 .group(|group| {
-                                    group.item("Windows Update", "@icon:windows-update-medium", "")
+                                    group.item(
+                                        "Windows Update",
+                                        "@icon:windows-update-medium",
+                                        "sm-errunk",
+                                    )
                                 })
                                 .group(|group| {
                                     group
-                                        .item("Programs", "@icon:programs-medium", "")
-                                        .item("Favorites", "@icon:directory-favorites-medium", "")
-                                        .item("Documents", "@icon:documents-medium", "")
-                                        .item("Settings", "@icon:settings-medium", "")
-                                        .item("Find", "@icon:search-file-medium", "sm-find")
-                                        .item("Help", "@icon:help-medium", "sm-help")
-                                        .item("Run", "@icon:run-medium", "sm-run")
+                                        .item("Programs", "@icon:programs-medium", "sm-errunk")
+                                        .item(
+                                            "Favorites",
+                                            "@icon:directory-favorites-medium",
+                                            "sm-errunk",
+                                        )
+                                        .item("Documents", "@icon:documents-medium", "sm-errunk")
+                                        .item("Settings", "@icon:settings-medium", "sm-errunk")
+                                        .item("Find", "@icon:search-file-medium", "sm-errunk")
+                                        .item("Help", "@icon:help-medium", "sm-errunk")
+                                        .item("Run", "@icon:run-medium", "sm-errunk")
                                 })
                                 .group(|group| {
                                     group
@@ -591,7 +599,7 @@ impl Config {
                                     window::DialogueKind::Ok,
                                     "Error: Unknown error.",
                                 )
-                                .trigger(":is(.sm-find, .sm-help, .sm-run):active"),
+                                .trigger(".sm-errunk:active"),
                             );
                         });
                     });
@@ -1445,6 +1453,16 @@ impl Config {
                             )
                         })
                         .build(html, css, self);
+                    self.add_dialog(
+                                Dialog::new(
+                                    "ie-mail-err".hashed(),
+                                    "Internet Explorer",
+                                    window::DialogueSymbol::Error,
+                                    window::DialogueKind::Ok,
+                                    "Error: Could not load mail.",
+                                )
+                                .trigger(".ie-tb-mail:active"),
+                            );
                     emit_div(html, "ie-address-bar border-style-light-1", |html| {
                         // html.push_str(&format!(
                         //     r##"
