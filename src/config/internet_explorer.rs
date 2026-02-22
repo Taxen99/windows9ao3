@@ -128,13 +128,28 @@ fn read_page(domain: &str, html: String, path: &str, ads: &Adverts, css: &mut St
     let doc = nipper::Document::from(&html);
     for mut ad in doc.select("advert").iter() {
         let kind = ad.attr("type").expect("advert without type").to_string();
+        let name = ad.attr("name").map(|x| x.to_string());
         let marquee = ad.attr("marquee").unwrap_or_default().to_string();
         let pool = match kind.as_ref() {
             "banner" => &ads.banners,
             "box" => &ads.boxes,
             _ => panic!("invalid ad type"),
         };
-        let selected_ad = pool.choose(&mut rand::rng()).unwrap();
+        let selected_ad = if let Some(name) = name {
+            pool.iter()
+                .find(|x| {
+                    Path::new(&x.src)
+                        .with_extension("")
+                        .file_name()
+                        .unwrap()
+                        .to_str()
+                        .unwrap()
+                        == name
+                })
+                .unwrap()
+        } else {
+            pool.choose(&mut rand::rng()).unwrap()
+        };
 
         let classlist = &format!(
             "history-trigger-{} history-trigger",
