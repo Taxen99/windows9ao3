@@ -24,7 +24,7 @@ boxes = [
 	{ src = "banner/10.gif", link = "#" },
 	{ src = "banner/12.gif", link = "fanfactions.net/users/16504555033190034514" }, # TODO: update to a work
 	{ src = "banner/13.gif", link = "www.betterconnection.com/download" },
-	{ src = "banner/17.gif", link = "#" },
+	{ src = "banner/17.gif", link = "womensolvers.com/join" },
 ]
 # things that should be made:
 #- women solvers, 
