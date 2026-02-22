@@ -4,3 +4,4 @@ beta
 update bookmarks
 update fs
 make errors on dummy buttons
+make a home page!

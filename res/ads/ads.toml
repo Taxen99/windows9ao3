@@ -1,9 +1,9 @@
 banners = [
-	{ src = "banner/1.gif", link = "#" },
+	{ src = "banner/1.gif", link = "youareourluckyvisitor.com" },
 	{ src = "banner/2.gif", link = "#" },
 	{ src = "banner/5.gif", link = "geometryfactzz.net/hyper" },
-	{ src = "banner/6.gif", link = "#" },
-	{ src = "banner/7.gif", link = "#" },
+	{ src = "banner/6.gif", link = "youareourluckyvisitor.com" },
+	{ src = "banner/7.gif", link = "youareourluckyvisitor.com" },
 	{ src = "banner/8.gif", link = "haremonline.se" }, # TODO: change?
 	{ src = "banner/11.gif", link = "haremonline.se" }, # TODO: change?
 	{ src = "banner/14.gif", link = "www.prowebb.com" },
