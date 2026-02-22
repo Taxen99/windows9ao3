@@ -1219,7 +1219,7 @@ impl Config {
             .trigger(".ie-tb-print:active")
             .long(true)
         );
-        let home_domain = "foo.bar";
+        let home_domain = "kurtkurtson.ljxii.com";
         let sites = read_sites();
         let mut history_items = Vec::new();
         for (_, site) in &sites {

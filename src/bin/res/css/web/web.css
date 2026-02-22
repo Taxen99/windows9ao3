@@ -22,6 +22,9 @@
 	border: 3px double orange;
 	border-radius: 1px;
 }
+.ie-page .big {
+	font-size: larger;
+}
 
 .ie-page .body {
 	/* width: fit-content; */
