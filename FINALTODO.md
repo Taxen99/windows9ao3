@@ -5,3 +5,5 @@ update bookmarks
 update fs
 make errors on dummy buttons
 make a home page!
+fanfaction pfps
+fanfactions featured tab

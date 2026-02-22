@@ -39,6 +39,12 @@ name = "LJXII"
 pic = ""
 id = 10
 
+# victims of leo
+[[users]]
+name = "Guest User"
+pic = ""
+id = 500
+
 
 # starryjellyfishies
 [[users]]
@@ -840,3 +846,54 @@ text = """<p>Pacifica was alone.<br>She had never been alone so this was a new e
 # dramatic irony is a literary device
 end_notes = "this is my first work on here please dont be rude!"
 comments = []
+[[fics]]
+title = "why you should kill yourself"
+authorid = 4
+date = "2001/03/27"
+fandom = "Original Work"
+tags = ["no one misses you", "i'd be better to just jump", "you're disgusting, you know that?", "you leave a room colder than it was when you entered it"]
+summary = "there's a reason why everyone leaves you"
+language = "English"
+views = 16002
+category = "Comic"
+
+[[fics.chapters]]
+text = """
+<p>do you know what they said of platos cave, that it was a fools device to fool the foolish, that nothing could ever be real when everything wasn't, this is how everyone feels about you, you don't make sense, you talk in circles, in some faux-intellegece pulled out of your ass and wasted college degree, and they all see trhough it, just staying to humour you, but even then, no one can stand being around you for longer than a few months, that's why they leave, they leave you because you're a coward, hiding behind a saccharine mask, hiding from your dirtied self, your hands a stained with filth, and every time you force another sould to touch them, they recoil, vomiting the second you leave them alone, and that's what you deserve for being such a blight, such a disease, a plauge, and you know that you can fix it, don't you, you just need a few simple tools, for one you could jumo off a building just book a hotel and climb out on the balcony and jump or call me up if you're too cowardly to even do that and i'll push you free of charge, but there are other options such a slitting your wrists or stabbing out your heart, and don't forget about mixing bleach and ammonia or eating some bitter almost it's a quick way to go, so what are you waiting for just do it, are you scared, do you want me to hold your hand, well i can do that if you just leave your phone number and location in the comments, i'll help you kys so you won't have to lol xd
+"""
+# dramatic irony is a literary device
+end_notes = "this is my first fic on here uwu please be nice!!!!!!!"
+[[fics.chapters.comments]]
+user = 1
+text = "yo leo this is awesome omg i adore your writing, im glad you decided to post somthing after all!"
+[[fics.chapters.comments]]
+user = 4
+text = "well why thank you, stalin, i must say that i am flattered"
+[[fics.chapters.comments]]
+user = 500
+text = "+46 72 842 02 232, Jan Waldenströms gata 35, 205 02 Malmö. Please"
+[[fics.chapters.comments]]
+user = 5
+text = "What. The Fuck are you doing Leo?<br>This has to violate rule 5! Can the mods please delete this immediatly."
+[[fics.chapters.comments]]
+user = 6
+text = "Calm down everyone. Leo is an esteemed author on this website, and such hasty actions as removal will not be considered! If you have any issues, please contact the moderation team."
+[[fics.chapters.comments]]
+user = 5
+text = "Yes, hello Mod Team, WHAT THE FUCK ARE YOU DOING????? There is quite literally a person begging for help commiting suicide right above my first comment. Is this not a cause for concern?"
+[[fics.chapters.comments]]
+user = 5
+text = "Hello???"
+[[fics.chapters.comments]]
+user = 500
+text = "phone: +46 76 929 60 067 address: Svartbäcksgatan 37 B, lgh 1201, 753 32 Uppsala"
+[[fics.chapters.comments]]
+user = 5
+text = "PLEASE DO <i>NOT</i> LISTEN TO LEO! If you need help, call 90101 immediatly!"
+[[fics.chapters.comments]]
+user = 6
+text = "Please stop spamming, Sunne. You are henceforth blocked from posting additional comments on this fic."
+[[fics.chapters.comments]]
+user = 500
+text = "What is the best way to do it?"
+
