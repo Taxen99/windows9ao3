@@ -1601,7 +1601,7 @@ impl Config {
                                                         if count > 0 && count <= 30 {
                                                             emit_p(html, "", &format!("{count}"));
                                                         } else {
-                                                            emit_p(html, "", "");
+                                                            emit_p(html, "", "&nbsp;");
                                                         }
                                                         count+= 1;
                                                     }

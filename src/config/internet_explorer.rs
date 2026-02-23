@@ -275,6 +275,7 @@ fn read_page(domain: &str, html: String, path: &str, ads: &Adverts, css: &mut St
     if title.is_empty() {
         title = Path::new(domain).join(path).to_str().unwrap().into();
     }
+    doc.select("title").remove();
     Page {
         // TODO: shit!
         html: (Into::<String>::into(doc.select("body").html())
