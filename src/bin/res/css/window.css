@@ -63,17 +63,17 @@
 	position: absolute;
 	width: 1000px;
 	height: 1000px;
-	background: teal;
+	/* background: teal; */
 }
 
 .mover-hand-S {
 	z-index: -100;
-	background: red;
+	/* background: red; */
 }
 
 .mover-hand {
 	z-index: 9999;
-	background: plum;
+	/* background: plum; */
 	opacity: 0;
 }
 

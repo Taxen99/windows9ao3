@@ -130,7 +130,7 @@
 .fe-sideview:has(.fe-sideview-resizer-left:hover) {
 	width: 0.001px;
 	transition: 0.6s linear;
-	background-color: blue !important;
+	/* background-color: blue !important; */
 }
 .fe-sideview:has(.fe-sideview-resizer-right:hover) {
 	width: 2000px;

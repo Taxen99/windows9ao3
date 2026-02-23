@@ -143,16 +143,16 @@
 	height: 16px;
 }
 
-.tb-ql-item:not(.tb-ql-item-close) {
+/* .tb-ql-item:not(.tb-ql-item-close) {
 	background-color: aqua;
-}
+} */
 
 .tb-ql-item.tb-ql-item-close {
 	position: absolute;
 	z-index: -1;
 	transition: z-index 10s linear 2147483640s;
 	transition-behavior: allow-discrete;
-	background-color: red;
+	/* background-color: red; */
 	top: 0;
 	left: 0;
 }

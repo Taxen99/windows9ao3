@@ -49,7 +49,7 @@
 }
 
 .menubar-item-state:hover {
-	background-color: green !important;
+	/* background-color: green !important; */
 }
 
 /* .menubar-item-state:hover {
