@@ -127,16 +127,96 @@ details summary::marker {
 	z-index: -1000000;
 }
 
+/* reset ao3's shitty styles! */
 
-
-
-:where(h1,h2,h3,h4,h5,h6,p,hr) {
+:where(.outer-centerer) :where(h1,h2,h3,h4,h5,h6,p,hr) {
 	font: inherit;
 	word-wrap: inherit;
 	font-size: inherit;
 	line-height: inherit;
-  	/* display: initial; */
 	margin: initial;
 	padding: initial;
 	border: initial;
+}
+
+:where(.outer-centerer) :where(h1) {
+	display: block;
+	font-size: 2em;
+	margin-block-start: 0.67em;
+	margin-block-end: 0.67em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	font-weight: bold;
+	unicode-bidi: isolate;
+	text-align: inherit;
+}
+:where(.outer-centerer) :where(h2) {
+	display: block;
+	font-size: 1.5em;
+	margin-block-start: 0.83em;
+	margin-block-end: 0.83em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	font-weight: bold;
+	unicode-bidi: isolate;
+}
+:where(.outer-centerer) :where(h3) {
+	display: block;
+	font-size: 1.17em;
+	margin-block-start: 1em;
+	margin-block-end: 1em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	font-weight: bold;
+	unicode-bidi: isolate;
+}
+:where(.outer-centerer) :where(h4) {
+	display: block;
+	margin-block-start: 1.33em;
+	margin-block-end: 1.33em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	font-weight: bold;
+	unicode-bidi: isolate;
+}
+:where(.outer-centerer) :where(h5) {
+	display: block;
+	font-size: 0.83em;
+	margin-block-start: 1.67em;
+	margin-block-end: 1.67em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	font-weight: bold;
+	unicode-bidi: isolate;
+}
+:where(.outer-centerer) :where(h6) {
+	display: block;
+	font-size: 0.67em;
+	margin-block-start: 2.33em;
+	margin-block-end: 2.33em;
+	margin-inline-start: 0px;
+	margin-inline-end: 0px;
+	font-weight: bold;
+	unicode-bidi: isolate;
+}
+:where(.outer-centerer) :where(p) {
+	display: block;
+	margin: unset;
+	unicode-bidi: isolate;
+}
+:where(.outer-centerer) :where(hr) {
+	display: block;
+	margin-block-start: 0.5em;
+	margin-block-end: 0.5em;
+	margin-inline-start: auto;
+	margin-inline-end: auto;
+	color: gray;
+	unicode-bidi: isolate;
+	overflow: hidden;
+	border-style: inset;
+	border-width: 1px;
+}
+:where(.outer-centerer) :where(sub) {
+	vertical-align: super;
+	font-size: smaller;
 }
