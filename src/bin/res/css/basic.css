@@ -4,7 +4,7 @@
 	box-sizing: border-box;
 }
 
-.outer-centerer *, .outer-centerer {
+:where(.outer-centerer *), .outer-centerer {
 	margin: 0;
 	padding: 0;
 }
