@@ -342,7 +342,9 @@ impl Config {
             });
             emit_div(html, "boot-stage-loading-splash", |html| {
                 emit_div(html, "boot-loading-splash-cont", |html| {
-                    emit_img(html, "boot-loading-splash", "@img:boot1.jpg");
+                    let mut tmp = String::new();
+                    emit_img(&mut tmp, "boot-loading-splash", "@img:boot1.jpg");
+                    emit_p(html, "boot-loading-splash", &tmp);
                 });
             });
             emit_div(html, "boot-stage-console", |html| {

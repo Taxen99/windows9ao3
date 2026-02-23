@@ -126,3 +126,17 @@ details summary::marker {
 	transition: z-index 0s linear 0.0s;
 	z-index: -1000000;
 }
+
+
+
+
+:where(h1,h2,h3,h4,h5,h6,p,hr) {
+	font: inherit;
+	word-wrap: inherit;
+	font-size: inherit;
+	line-height: inherit;
+  	/* display: initial; */
+	margin: initial;
+	padding: initial;
+	border: initial;
+}
